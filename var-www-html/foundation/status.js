@@ -382,129 +382,127 @@ window.submitExecuteProposal = function (rowIndex) {
 
 jQuery(document).ready(function($) {
     
-$('#createNewProposal').click(function(){
-    console.log("called create new proposal");
-    var x = document.getElementById("proposalFormDiv");
-    x.style.display = "block";
-    var pBtn = document.getElementById("createNewProposal");
-    pBtn.style.display = "none";
-});
-
-    
-$('#cancleCreateNewProposal').click(function(){
-    var x = document.getElementById("proposalFormDiv");
-    x.style.display = "none";
-    var pBtn = document.getElementById("createNewProposal");
-    pBtn.style.display = "inline";
-});
-$('#submitTokenProposal').click(function(){
-    loadContract(votingContractUrl, function(data){
-        votingContract = data;
-        var mainForm = $('#dashboardForm');
-        let votingAddress = $('input[name=votingContract]', mainForm).val();
-        console.log('votingAddress:', votingAddress);
-        
-        let beneficiary = $('input[name=beneficiary]').val();
-        let amount = web3.toWei($('input[name=amount]').val(), 'ether');
-        let description = $('input[name=description]').val();
-
-        let contractObj = web3.eth.contract(votingContract.abi);
-        let contractInstance = contractObj.at(votingAddress);
-        console.log('Calling '+votingContract.contract_name+'.newTokenProposal() with parameters:\n', 
-            beneficiary, amount, description,
-            'ABI', JSON.stringify(votingContract.abi));
-
-        contractInstance.newTokenProposal(
-            beneficiary, amount, description,
-            function(error, result){
-                if(!error){
-                    console.log("Proposal tx: ",result);
-                    var x = document.getElementById("proposalFormDiv");
-                    x.style.display = "none";
-                    var pBtn = document.getElementById("createNewProposal");
-                    pBtn.style.display = "inline";
-                    // $('input[name=publishedTx]',form).val(result);
-                }else{
-                    console.error(error)
-                }
-            }
-        );
+    $('#createNewProposal').click(function(){
+        console.log("called create new proposal");
+        var x = document.getElementById("proposalFormDiv");
+        x.style.display = "block";
+        var pBtn = document.getElementById("createNewProposal");
+        pBtn.style.display = "none";
     });
-});
 
-$('#initializeSimpleVotingBtn').click(function(){
-    var mainForm = $('#dashboardForm'); 
-    var minimumQuorum = $('input[name=minimumQuorum]', mainForm).val();
-    if(minimumQuorum != ''){
-        loadContract(foundationContractUrl, function(data){
-            foundationContract = data;
+        
+    $('#cancleCreateNewProposal').click(function(){
+        var x = document.getElementById("proposalFormDiv");
+        x.style.display = "none";
+        var pBtn = document.getElementById("createNewProposal");
+        pBtn.style.display = "inline";
+    });
+    $('#submitTokenProposal').click(function(){
+        loadContract(votingContractUrl, function(data){
+            votingContract = data;
+            var mainForm = $('#dashboardForm');
             let votingAddress = $('input[name=votingContract]', mainForm).val();
-            console.log('votingAddress:', votingAddress);   
-            let foundationAddress = $('input[name=foundation]', mainForm).val();
-            console.log('foundation:', foundation);   
-            let contractObj = web3.eth.contract(foundationContract.abi);
-            let contractInstance = contractObj.at(foundationAddress);
-            console.log('Calling '+foundationContract.contract_name+'.initVotingContract() with parameters:\n', 
-                votingAddress,
-                'ABI', JSON.stringify(foundationContract.abi));
-            contractInstance.initVotingContract(
-                votingAddress,
+            console.log('votingAddress:', votingAddress);
+            
+            let beneficiary = $('input[name=beneficiary]').val();
+            let amount = web3.toWei($('input[name=amount]').val(), 'ether');
+            let description = $('input[name=description]').val();
+
+            let contractObj = web3.eth.contract(votingContract.abi);
+            let contractInstance = contractObj.at(votingAddress);
+            console.log('Calling '+votingContract.contract_name+'.newTokenProposal() with parameters:\n', 
+                beneficiary, amount, description,
+                'ABI', JSON.stringify(votingContract.abi));
+
+            contractInstance.newTokenProposal(
+                beneficiary, amount, description,
                 function(error, result){
                     if(!error){
-                        console.log("Init tx: ",result);
-                        $('input[name=publishedTx]','#initializeFoundationForm').val(result);
+                        console.log("Proposal tx: ",result);
+                        var x = document.getElementById("proposalFormDiv");
+                        x.style.display = "none";
+                        var pBtn = document.getElementById("createNewProposal");
+                        pBtn.style.display = "inline";
+                        // $('input[name=publishedTx]',form).val(result);
                     }else{
                         console.error(error)
                     }
                 }
             );
         });
-    }
-});
-
-$('#changeDebatingPeriodBtn').click(function(){
-    var x = document.getElementById("changeDebatingPeriodFormDiv");
-    x.style.display = "block";
-    var dBtn = document.getElementById("changeDebatingPeriodBtn");
-    dBtn.style.display = "none";
-});
-$('#cancleChangeVotingRules').click(function(){
-    var x = document.getElementById("changeDebatingPeriodFormDiv");
-    x.style.display = "none";
-    var dBtn = document.getElementById("changeDebatingPeriodBtn");
-    dBtn.style.display = "inline";
-});
-$('#submitChangeVotingRules').click(function(){
-    loadContract(votingContractUrl, function(data){
-        votingContract = data;
-        var mainForm = $('#dashboardForm');
-        let votingAddress = $('input[name=votingContract]', mainForm).val();
-        console.log('votingAddress:', votingAddress);
-        
-        let votesNumber = $('input[name=votesNumber]').val();
-        let votingDeadline = $('input[name=votingDeadline]').val();
-
-        let contractObj = web3.eth.contract(votingContract.abi);
-        let contractInstance = contractObj.at(votingAddress);
-        console.log('Calling '+votingContract.contract_name+'.changeVotingRules() with parameters:\n', 
-                votesNumber, votingDeadline,
-                'ABI', JSON.stringify(votingContract.abi));
-        contractInstance.changeVotingRules(
-            votesNumber, votingDeadline,
-            function(error, result){
-                if(!error){
-                    console.log("Execute voting tx: ",result);
-                    var x = document.getElementById("changeDebatingPeriodFormDiv");
-                    x.style.display = "none";
-                    var dBtn = document.getElementById("changeDebatingPeriodBtn");
-                    dBtn.style.display = "inline";
-                } else {
-                    console.error(error)
-                }
-            }
-        );
     });
-});
 
+    $('#initializeSimpleVotingBtn').click(function(){
+        var mainForm = $('#dashboardForm'); 
+        var minimumQuorum = $('input[name=minimumQuorum]', mainForm).val();
+        if(minimumQuorum != ''){
+            loadContract(foundationContractUrl, function(data){
+                foundationContract = data;
+                let votingAddress = $('input[name=votingContract]', mainForm).val();
+                console.log('votingAddress:', votingAddress);   
+                let foundationAddress = $('input[name=foundation]', mainForm).val();
+                console.log('foundation:', foundation);   
+                let contractObj = web3.eth.contract(foundationContract.abi);
+                let contractInstance = contractObj.at(foundationAddress);
+                console.log('Calling '+foundationContract.contract_name+'.initVotingContract() with parameters:\n', 
+                    votingAddress,
+                    'ABI', JSON.stringify(foundationContract.abi));
+                contractInstance.initVotingContract(
+                    votingAddress,
+                    function(error, result){
+                        if(!error){
+                            console.log("Init tx: ",result);
+                            $('input[name=publishedTx]','#initializeFoundationForm').val(result);
+                        }else{
+                            console.error(error)
+                        }
+                    }
+                );
+            });
+        }
+    });
 
-   }); 
+    $('#changeDebatingPeriodBtn').click(function(){
+        var x = document.getElementById("changeDebatingPeriodFormDiv");
+        x.style.display = "block";
+        var dBtn = document.getElementById("changeDebatingPeriodBtn");
+        dBtn.style.display = "none";
+    });
+    $('#cancleChangeVotingRules').click(function(){
+        var x = document.getElementById("changeDebatingPeriodFormDiv");
+        x.style.display = "none";
+        var dBtn = document.getElementById("changeDebatingPeriodBtn");
+        dBtn.style.display = "inline";
+    });
+    $('#submitChangeVotingRules').click(function(){
+        loadContract(votingContractUrl, function(data){
+            votingContract = data;
+            var mainForm = $('#dashboardForm');
+            let votingAddress = $('input[name=votingContract]', mainForm).val();
+            console.log('votingAddress:', votingAddress);
+            
+            let votesNumber = $('input[name=votesNumber]').val();
+            let votingDeadline = $('input[name=votingDeadline]').val();
+
+            let contractObj = web3.eth.contract(votingContract.abi);
+            let contractInstance = contractObj.at(votingAddress);
+            console.log('Calling '+votingContract.contract_name+'.changeVotingRules() with parameters:\n', 
+                    votesNumber, votingDeadline,
+                    'ABI', JSON.stringify(votingContract.abi));
+            contractInstance.changeVotingRules(
+                votesNumber, votingDeadline,
+                function(error, result){
+                    if(!error){
+                        console.log("Execute voting tx: ",result);
+                        var x = document.getElementById("changeDebatingPeriodFormDiv");
+                        x.style.display = "none";
+                        var dBtn = document.getElementById("changeDebatingPeriodBtn");
+                        dBtn.style.display = "inline";
+                    } else {
+                        console.error(error)
+                    }
+                }
+            );
+        });
+    });
+}); 
