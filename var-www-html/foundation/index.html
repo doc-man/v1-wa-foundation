@@ -59,6 +59,8 @@
 
 </head>
 <body>
+  <table><tr><td><img src=logo.png></td><td><h1>Foundation Dashboard</h1></td></tr>
+</table>
   <!-- Modal -->
   <div class="modal fade" id="pieChartModel" role="dialog">
     <div class="modal-dialog" style="width: 600px;">
@@ -80,7 +82,7 @@
     </div>
   </div>
 
-<h1 class="header" style="border-bottom: 1px solid #9e9e9e;">HCF Dashboard</h1>
+
 <!--<div id="chartContainer" style="height: 370px; width: 400px;float:right"></div>-->
 
 
@@ -140,14 +142,14 @@
         <tr><td>8. Number of proposals to the foundation:</td>
             <td>
                 <input type="text" readonly name="numProposals" value="" style="width:15%">
-                <input type="button" class="btn-c btn-primary-c" id="creatNewProposal" value="Creat new proposal" style="display:none">
+                <input type="button" class="btn-c btn-primary-c" id="createNewProposal" value="Create new proposal" style="display:none">
                 
                 <div id="proposalFormDiv" style="display:none">
                     <label style="display: block;"><strong>Beneficiary address:</strong> <input type="text" name="beneficiary" value="" class="smrt-input"></label>
                     <label style="display: block;"><strong>Amount in HLT:</strong> <input type="text" name="amount" value="" class="smrt-input"></label>
                     <label style="display: block;"><strong>Description:</strong> <input type="text" name="description" value="" class="smrt-input"></label>
                     <input type="button" id="submitTokenProposal" value="Submit Proposal" class="btn-c btn-success-c" >
-                    <input type="button" id="cancleCreatNewProposal" value="Cancle" class="btn-c btn-danger-c" >
+                    <input type="button" id="cancleCreateNewProposal" value="Cancle" class="btn-c btn-danger-c" >
                 </div>
             </td>
         </tr>

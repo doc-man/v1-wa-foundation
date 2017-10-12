@@ -33,9 +33,9 @@ jQuery(document).ready(function($) {
     });    
     
     var proposalRowCount = 0;
-    function creatProposalsTableRow(pContractInstance, numberOfProposals) {
+    function createProposalsTableRow(pContractInstance, numberOfProposals) {
         let proposalNumber = proposalRowCount;
-        console.log("call creatProposalsTableRow", proposalNumber, numberOfProposals);
+        console.log("call createProposalsTableRow", proposalNumber, numberOfProposals);
         if(proposalNumber < numberOfProposals) {
             pContractInstance.getProposal(proposalNumber,function(error, result){
                 if(!error){
@@ -98,7 +98,7 @@ jQuery(document).ready(function($) {
                     console.log('Can\'t find proposals', error);
                 }
                 proposalRowCount ++;
-                creatProposalsTableRow(pContractInstance, numberOfProposals);
+                createProposalsTableRow(pContractInstance, numberOfProposals);
             });
         } else {
             $('#proposalsTable')
@@ -204,7 +204,7 @@ jQuery(document).ready(function($) {
                         pContractInstance.getProposalsCount(function(error, result){
                             if(!error){
                                 $('input[name=numProposals]','#dashboardForm').val(result);
-                                var pBtn = document.getElementById("creatNewProposal");
+                                var pBtn = document.getElementById("createNewProposal");
                                 pBtn.style.display = "inline";
                                 numberOfProposals = $('input[name=numProposals]','#dashboardForm').val();
                                 console.log(numberOfProposals);
@@ -236,7 +236,7 @@ jQuery(document).ready(function($) {
                                     proposalsTable += "</table>";
                                     $("div[id=viewProposalsTable]").html(proposalsTable);
                                     
-                                    creatProposalsTableRow(pContractInstance, numberOfProposals);
+                                    createProposalsTableRow(pContractInstance, numberOfProposals);
                                 }     
                             } else {
                                 console.log('Can\'t find numProposals', error);
@@ -378,16 +378,16 @@ jQuery(document).ready(function($) {
             );
         });
     }
-    $('#creatNewProposal').click(function(){
+    $('#createNewProposal').click(function(){
         var x = document.getElementById("proposalFormDiv");
         x.style.display = "block";
-        var pBtn = document.getElementById("creatNewProposal");
+        var pBtn = document.getElementById("createNewProposal");
         pBtn.style.display = "none";
     });
-    $('#cancleCreatNewProposal').click(function(){
+    $('#cancleCreateNewProposal').click(function(){
         var x = document.getElementById("proposalFormDiv");
         x.style.display = "none";
-        var pBtn = document.getElementById("creatNewProposal");
+        var pBtn = document.getElementById("createNewProposal");
         pBtn.style.display = "inline";
     });
     $('#submitTokenProposal').click(function(){
@@ -414,7 +414,7 @@ jQuery(document).ready(function($) {
                         console.log("Proposal tx: ",result);
                         var x = document.getElementById("proposalFormDiv");
                         x.style.display = "none";
-                        var pBtn = document.getElementById("creatNewProposal");
+                        var pBtn = document.getElementById("createNewProposal");
                         pBtn.style.display = "inline";
                         // $('input[name=publishedTx]',form).val(result);
                     }else{
