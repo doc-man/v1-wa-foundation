@@ -1,0 +1,73 @@
+<style>
+    .modal-header {
+        background-color: #5cb85c;
+        color:white !important;
+        text-align: center;
+        font-size: 22px;
+    }
+    .modal-footer {
+        background-color: #f9f9f9;
+    }
+</style>
+<script>
+    $(document).ready(function(){
+        $('#divFocus').click(function(){
+            $('#submitbtn').focus();
+        });
+        $('#assignMedicine').hover(function(){
+            $('#close').focus();
+        });
+    });
+</script>
+
+<div id="divFocus" data-ng-if="isMedicineNotAssign">
+<div class="modal-header" style="padding:5px 10px;">
+    <h4><span class="glyphicon glyphicon-info-sign"></span> Confirm Delete.</h4>
+</div>
+<div class="modal-body" style="padding:10px 20px 40px 20px">
+    <form role="form" >
+        <div class="alert alert-danger" style="margin-top: 15px;">
+            <p style="text-align: left;"> Are you sure to delete this <span data-ng-if="medicineData.id == null">empty</span> medication?</p>
+        </div>
+        <div>
+            <button type="submit" id="submitbtn" autofocus data-ng-click="confirmTrue(medicineData)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+            <button type="submit"  class="btn btn-danger btn-default pull-right" data-ng-click="cancelDelete()"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<div id="assignMedicine" data-ng-if="isMedicineAssign">
+    <div class="modal-header" style="padding:5px 10px;">
+        <h4><span class="glyphicon glyphicon-info-sign"></span> Error message.</h4>
+    </div>
+    <div class="modal-body" style="padding:10px 20px 40px 20px">
+        <form role="form" >
+            <div class="alert alert-danger" style="margin-top: 15px;">
+                <p style="text-align: left;"> This medication is assigned to {{assignToNumberOfPatient}} <span data-ng-if="assignToNumberOfPatient >1">patients</span><span data-ng-if="assignToNumberOfPatient == 1">patient</span>, you can not delete it.</p>{{name}}
+                <div style="margin-top: 5px;">
+                    <p style="margin: 0px !important;" ng-repeat="name in patientName">{{$index+1}}. <a class="cPointer backgroundFocusNone" title="click to user detail" href="/u7/#/{{name.uidOfPatient}}" target="/u7/#/{{name.uidOfPatient}}">{{name.name}}</a> </p>
+                </div>
+            </div>
+            <div>
+                <button type="submit" id="close" autofocus style="margin-right: 235px;" class="btn btn-success btn-default pull-right" data-ng-click="cancelDelete()"><span class="glyphicon glyphicon-ok"></span> Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="assignMedicine" data-ng-if="addNewMedicine">
+    <div class="modal-header" style="padding:5px 10px;">
+        <h4><span class="glyphicon glyphicon-info-sign"></span> Confirm add.</h4>
+    </div>
+    <div class="modal-body" style="padding:10px 20px 40px 20px">
+        <form role="form" >
+            <div class="alert alert-danger" style="margin-top: 15px;">
+                <p style="text-align: left;"> This medication {{medicineData.name}} does not exist in Master DB, do you want to create it?</p>
+            </div>
+            <div>
+                <button type="submit" id="submitbtn" autofocus data-ng-click="fnConfirmAddNewMedication(medicineData)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+                <button type="submit"  class="btn btn-danger btn-default pull-right" data-ng-click="cancelAdd(medicineData)"><span class="glyphicon glyphicon-remove"></span> Cancel</button>            </div>
+        </form>
+    </div>
+</div>

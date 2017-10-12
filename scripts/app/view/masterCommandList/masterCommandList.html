@@ -1,0 +1,15 @@
+
+<div>
+    <div class="fLeft">
+        <h3>Master Command list &nbsp;
+            <button class="btn btn-default themeLabel" ng-click="generateList()" type="button" title="Generate List">
+                Click here to generate
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+        </div>
+    </div>
+</div>

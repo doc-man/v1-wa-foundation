@@ -1,0 +1,110 @@
+<div>
+    <div class="fLeft">     <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Savant care matching report</h3>
+    </div>
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="arListOfPatientsInMatching.length==0">No patient found.</div>
+    <table data-ng-if="arListOfPatientsInMatching.length>0" st-table="arListOfPatientsInMatching" st-safe-src="savedListOfPatientsInMatching" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="cPointer col-md-1 sortable" st-sort="fullName"><span class="sorticon"></span>Patient name</th>
+            <th class="cPointer col-md-1 sortable" st-sort="selectedProviderFullName"><span class="sorticon"></span>Selected Provider</th>
+            <th class="cPointer col-md-1 sortable" st-sort="matchedProviderFullName"><span class="sorticon"></span>Matched Provider</th>
+            <th class="cPointer col-md-1 sortable" st-sort="providerAskedForMatching"><span class="sorticon"></span>Provider opted for matching?</th>
+            <th class="cPointer col-md-1 sortable" st-sort="currentStatus"><span class="sorticon"></span>Status</th>
+            <th class="cPointer col-md-1 sortable" st-sort="matchingStarted"><span class="sorticon"></span>Matching started</th>
+            <th class="cPointer col-md-1">Slides completed</th>
+            <th class="cPointer col-md-1 sortable" st-sort="matchingEnded"><span class="sorticon"></span>Matching ended</th>
+            <th class="cPointer col-md-1 sortable" st-sort="feedback"><span class="sorticon"></span>Feedback</th>
+        </tr>
+        <tr>
+            <th>
+                <input st-search="fullName" data-ng-model="fullName" data-ng-change="onChangeCountUsers(fullName, 'fullName');"/>
+            </th>
+            <th>
+                <input st-search="selectedProviderFullName" data-ng-model="selectedProviderFullName" data-ng-change="onChangeCountUsers(selectedProviderFullName, 'selectedProviderFullName');"/>
+            </th>
+            <th>
+                <input st-search="matchedProviderFullName" data-ng-model="matchedProviderFullName" data-ng-change="onChangeCountUsers(matchedProviderFullName, 'matchedProviderFullName');"/>
+            </th>
+            <th>
+                <input st-search="providerAskedForMatching" data-ng-model="providerAskedForMatching" data-ng-change="onChangeCountUsers(providerAskedForMatching, 'providerAskedForMatching');"/>
+            </th>
+            <th>
+                <input st-search="currentStatus" data-ng-model="currentStatus" data-ng-change="onChangeCountUsers(currentStatus, 'currentStatus');"/>
+            </th>
+            <th>
+                <a style="cursor: pointer" data-ng-click="showDateFilters=!showDateFilters"><i class="glyphicon glyphicon-filter"></i>Filter by date range</a>
+                <div data-ng-if="showDateFilters==true">
+                    <div style="width: 100%">From:<br/><input placeholder="From date" style="width: 135px;" type="date" ng-model="startFrom" data-ng-change="onChangeCountUsers(startFrom,'startDate')"></div>
+                    <div style="width: 100%">To:<br><input placeholder="To date" style="width: 135px;"  type="date" ng-model="endTo" data-ng-change="onChangeCountUsers(endTo,'endDate')"></div>
+                </div>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="cPointer reveal-elem-parent" data-ng-repeat="patient in arListOfPatientsInMatching | dateRange : startFrom : endTo">
+            <td>
+                <a ng-if="patient.fullName" class= "cPointer" href="{{patient.profilePageBaseUrl}}{{patient.uid}}" >{{patient.fullName||'empty'}}</a>
+                <span ng-if="!patient.fullName">Empty</span>
+            </td>
+            <td>
+                <a ng-if="patient.selectedProviderFullName" class= "cPointer" href="{{patient.profilePageBaseUrl}}{{patient.selectedProviderUid}}" >{{patient.selectedProviderFullName}}</a>
+                <span ng-if="!patient.selectedProviderFullName">Empty</span>
+            </td>
+            <td>
+                <a ng-if="patient.matchedProviderFullName" class= "cPointer" href="{{patient.profilePageBaseUrl}}{{patient.matchedProviderUid}}" >{{patient.matchedProviderFullName||'empty'}}</a>
+                <span ng-if="!patient.matchedProviderFullName">Empty</span>
+            </td>
+            <td>
+                {{patient.providerAskedForMatching}}
+            </td>
+            <td>
+                {{patient.currentStatus}}
+            </td>
+            <td>
+               {{patient.matchingStarted}}
+            </td>
+            <td>
+               <span ng-if="fnShowLastSlideName(patient.slidesCompleted)!=null">Last slide: <a ng-init="patient.showList=false" ng-click="patient.showList=!patient.showList" style="cursor:pointer">{{fnShowLastSlideName(patient.slidesCompleted)}}</a></span>
+                <ol ng-if="patient.showList">
+                    <li ng-repeat="slide in patient.slidesCompleted">{{slide.displayName}}</li>
+                </ol>
+            </td>
+            <td>
+                {{patient.matchingEnded}}
+            </td>
+            <td>
+                {{patient.feedback}}
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="4" class="text-center" style=" vertical-align: middle;color:#666;font-weight: bold;">
+                <div data-ng-show="paginationInfo.totalItemCount>0">Total <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> user<span data-ng-show="paginationInfo.totalItemCount>1">s</span>.
+                    Showing
+                    <span data-ng-if="paginationInfo.totalItemCount>=arListOfPatientsInMatching.length">{{arListOfPatientsInMatching.length}}</span>
+                    <span data-ng-if="paginationInfo.totalItemCount<arListOfPatientsInMatching.length">{{paginationInfo.totalItemCount}}</span>
+                    user<span data-ng-show="arListOfPatientsInMatching.length>1">s</span>.
+                    <div class="btn-group report-info">
+                        <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount<25}">25</label>
+                        <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount<26}">50</label>
+                        <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount<51}">100</label>
+                        <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount<101}">200</label>
+                    </div>
+                </div>
+                <div data-ng-show="paginationInfo.totalItemCount==0">
+                    No user found to show.
+                </div>
+            </td>
+            <td colspan="3" class="text-center">
+                <div st-pagination="" st-items-by-page="itemsByPage" st-template="directives/pagination.custom.html"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

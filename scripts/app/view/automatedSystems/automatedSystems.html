@@ -1,0 +1,89 @@
+
+<div>
+    <div class="fLeft">
+        <h3 style="cursor: default; display: inline;">Work done by automated systems</h3>
+        <span style="padding-left: 5px; padding-right: 10px">
+            <span data-ng-if="refreshData == true" >
+                <a class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></a>
+            </span>
+            <span data-ng-if="refreshData == false" >
+                <a class="glyphicon glyphicon-refresh" data-ng-click="fnRefreshDataList()" title="Refresh"></a>
+            </span>
+            <span data-ng-if="message.text" style="padding: 1px;" class="alert " data-ng-class="message.class"> {{message.text}} </span>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="textarea-initial" data-ng-if="!displayedCollection">Loading...</div>
+            <div class="textarea-initial" data-ng-if="displayedCollection.length==0">Nothing found.</div>
+            <div data-ng-if="displayedCollection.length>0">
+                <table st-table="displayedCollection" st-safe-src="storeSrcData" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th class="cPointer col-md-4 sortable" st-sort="systemName"><span class="sorticon"></span>Name of automated system</th>
+                        <th class="cPointer col-md-3 sortable" st-sort="systemWork"><span class="sorticon"></span>Work of automated system</th>
+                        <th class="cPointer col-md-2 sortable" st-sort="workStatus"><span class="sorticon"></span>Status</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="runningFrequency"><span class="sorticon"></span>Running frequency</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="today"><span class="sorticon"></span>Today</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="week"><span class="sorticon"></span>This week</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="month"><span class="sorticon"></span>This month</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="year"><span class="sorticon"></span>This year</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="allTime"><span class="sorticon"></span>All time</th>
+                    </tr>
+                    <tr>
+                        <th><input st-search="systemName"/></th>
+                        <th><input st-search="systemWork"/></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="reveal-elem-parent" data-ng-repeat="row in displayedCollection" ng-attr-title="{{row.titleMessage}}" data-ng-class="{'warning':row.titleMessage}">
+                    <td>
+                        <span>{{::row.systemName}}</span>
+                    </td>
+                    <td>
+                        <span>{{::row.systemWork}}</span>
+                    </td>
+                    <td>
+                        <div class="onOffBtnGroup">
+                            <button class="btn btn-xs btn-default outlineBtn" data-ng-class="{'activeSuc':row.workStatus != 'off'}" data-ng-click="fnUpdate(row, 'on', 'Status')">ON</button>
+                            <button class="btn btn-xs btn-default outlineBtn" data-ng-class="{'activeDan':row.workStatus == 'off'}" data-ng-click="fnUpdate(row, 'off', 'Status')">OFF</button>
+                        </div>
+                    </td>
+                    <td>
+                        <div data-ng-if="row.frequencyObj.showFrequencyTime">
+                            <a href="javascript:void(0)" class="cPointer" editable-number="row.runningFrequency" e-step="any" buttons="no" blur="submit" data-ng-model="row.runningFrequency" onkeypress="fnUpdate(row, row.runningFrequency, 'Running frequency')" onaftersave="fnUpdate(row, row.runningFrequency, 'Running frequency')">{{row.runningFrequency || 10}}</a>
+                            <span class="layerLight">min</span>
+                        </div>
+                        <div data-ng-if="!row.frequencyObj.showFrequencyTime">
+                            <span class="layerLight">{{row.frequencyObj.frequencyMessage || 'No message'}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span>{{::row.today}}</span>
+                    </td>
+                    <td>
+                        <span>{{::row.week}}</span>
+                    </td>
+                    <td>
+                        <span>{{::row.month}}</span>
+                    </td>
+                    <td>
+                        <span>{{::row.year}}</span>
+                    </td>
+                    <td>
+                        <span>{{::row.allTime}}</span>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="9" class="text-center">
+                        <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>

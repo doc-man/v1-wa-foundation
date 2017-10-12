@@ -1,0 +1,80 @@
+<!--<div ng-controller="cptCodesRatesMasterCtrl">-->
+<style>
+
+        .headcol {
+            position:absolute; 
+            left:30px;
+            top:auto;
+            width: 13%;
+            /*z-index: 10;*/
+            /*background-color: #fff;*/
+        }
+
+        .abcd { 
+            width: 87%; 
+            overflow-x:scroll;  
+            margin-left:13.3%; 
+            overflow-y:visible;
+        }
+        .backColor{
+            background-color: #f9f9f9;
+        }
+</style>
+<div>
+    <div class="fLeft">
+        <h3>Cpt Codes Rates</h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="all_cpp_codes.length==0 || all_cpp_codes.length==0">{{masterData.messageVal}}</div>
+    <div class="abcd">
+        <table class="table table-striped" st-table="displayCptCodesRatesListCollection" st-safe-src="cptCodesRatesDataSet" >       
+            <thead>
+                <tr>
+                    <th class="headcol" style="border: none"><br>Insurance Company Name</th>  
+                    <th class="text-center" style="border: none" data-ng-repeat="cppCodes in all_cpt_codes">{{cppCodes.displayName}}</th>             
+                </tr>
+                <tr>
+                    <th class="headcol">&nbsp;</th>  
+                    <th class="text-center" data-ng-repeat="cppCodes in all_cpt_codes">
+                        <table>
+                            <tr>
+                                <td class="text-center" style="padding:0 7px">Contracted</td>
+                                <td class="text-center" style="padding:0 7px">Avg&nbsp;of&nbsp;last&nbsp;10&nbsp;appts</td>
+                            </tr>
+                        </table>
+                    </th>        
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="row in displayCptCodesRatesListCollection" ng-init="$master=$index">
+                    <td class="headcol" data-ng-class="{'backColor':$index%2===0}">
+                    {{row.fullName || 'empty'}}
+                    </td>  
+                    <!--<td class="text-center" data-ng-repeat="perm in row.all_amounts">
+                    <div class="input-group" style="width:100px" >
+                            <a name="OnlyNumber" href="javascript:void(0)" editable-number="perm.amount" e-min="0" e-step="any" buttons="no" blur="submit" data-ng-model="perm.amount" onaftersave="fnSaveCptCodesRates(perm,$master,$index)" data-ng-keypress="fnSaveCptCodesRates(perm,$master,$index)">{{perm.amount||'0' | currency}}</a>
+                        </div>
+                    </td>   -->
+                    <td class="text-center" data-ng-repeat="perm in row.all_amounts">
+                        <table style="width: 100%">
+                            <tr>
+                                <td class="text-center" style="width: 85px">
+                                    <div class="input-group" style="margin: auto">
+                                        <a name="OnlyNumber" href="javascript:void(0)" editable-number="perm.amount" e-min="0" e-step="any" buttons="no" blur="submit" e-style="width:85px" data-ng-model="perm.amount" onaftersave="fnSaveCptCodesRates(perm,$master,$index)" data-ng-keypress="fnSaveCptCodesRates(perm,$master,$index)">{{perm.amount||'0' | currency}}</a>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{perm.avgOfLast10Appts || '0' | currency}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

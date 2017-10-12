@@ -1,0 +1,57 @@
+<!--<div data-ng-controller="faxMasterCtrl">-->
+<div>
+    <table data-ng-if="faxDataSet.length>0" st-table="displayFaxCollection" st-safe-src="faxDataSet" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="cPointer col-md-2 sortable padding-left-45p" st-sort="faxLabel"><span class="sorticon"></span>Fax label</th>
+            <th class="cPointer col-md-2 sortable padding-left-45p" st-sort="created_at"><span class="sorticon"></span>Date</th>
+            <th class="cPointer col-md-2 sortable" st-sort="filenames">File list</th>
+            <th class="cPointer col-md-2 sortable" >Assign patient</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="cPointer reveal-elem-parent" data-ng-repeat="fax in displayFaxCollection">
+            <td>
+                <div class="input-group">
+                    <!--<div class="pull-left width40p reveal-elem" >-->
+                        <!--<a href="" class="glyphicon glyphicon-trash text-danger"></a>-->
+                    <!--</div>-->
+                    {{fax.faxLabel || 'empty'}}
+                    <!--<a href="javascript:void(0)" editable-text="user.fullName" buttons="no" blur="submit" data-ng-model="user.fullName" onaftersave="fnSaveUser(user, 'name')" data-ng-keypress="fnSaveUser(user, 'name')">{{user.fullName || 'empty'}}</a>-->
+                </div>
+            </td>
+            <td>
+                <div class="input-group">
+                    {{fax.created_at}}
+                </div>
+            </td>
+            <td>
+                <div class="input-group">
+                    <span data-ng-repeat="(k, file) in fax.fileSet">
+                        <a class="cPointer editable" href="{{::apiUrl}}downloadFax/{{fax.fileIds[k]}}" target="_self" download="file" title="Click to download">{{::file}}</a>
+
+                    </span>
+                </div>
+            </td>
+            <td>
+                <div class="input-group">
+                    <oi-select data-ng-click="$event.stopPropagation();"
+                               oi-options="item.name disable when isItemDisabled(item.id,app) for item in masterData.patientList track by item.id"
+                               ng-model="fax.selectedPatient"
+                               placeholder="Select Patient"
+                               ng-disabled="fax.isDisabled"
+                               data-ng-change="assignFax(fax)"
+                    ></oi-select>
+                </div>
+            </td>
+
+            <!--<td>
+                <div class="input-group">
+                    <a href="javascript:void(0)" editable-email="user.emailAddress" buttons="no" blur="submit" data-ng-model="user.emailAddress" onaftersave="fnSaveUser(user, 'email')" data-ng-keypress="fnSaveUser(user, 'email')">{{user.emailAddress||'empty'}}</a>
+                </div>
+            </td>-->
+
+        </tr>
+        </tbody>
+    </table>
+</div>

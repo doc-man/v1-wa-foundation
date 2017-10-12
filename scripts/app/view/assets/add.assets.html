@@ -1,0 +1,15 @@
+<div>
+<div class="jumbotron" ng-controller="assetsMasterCtrl">
+   <h3>{{pageTitle}}</h3>
+   <form>
+   <input type="hidden" ng-model="assetsObj.id" name="id" >
+    <div class="form-group" >
+      <label for="fname">Name</label>
+      <input type="text" class="form-control" ng-model="assetsObj.name" name="name" placeholder="Enter name" id="name" required>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" ng-click="addassets(assetsObj)">Submit</button>
+    </div>
+    </form>   
+  </div> 
+</div>

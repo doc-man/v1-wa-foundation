@@ -1,0 +1,64 @@
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Codes for appointment time &nbsp;
+            <button class="btn btn-default themeLabel" data-ng-click="fnAddNewCodesForAppointmentTime()" type="button" title="Add Codes for appointment time">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass" style="margin-top: 25px !important;">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="masterData.codesForAppointmentTime.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="masterData.codesForAppointmentTime.length>0" st-table="displayCodesForAppointmentTimeCollection" st-safe-src="masterData.codesForAppointmentTime" class="table table-striped">
+        <thead>
+           <tr>
+               <th class="col-md-2" st-sort="appointmentTime"><span class="sorticon"></span>Appointment time</th>
+               <th class="col-md-2" st-sort="appointmentType"><span class="sorticon"></span>Appointment type</th>
+               <th class="col-md-2" st-sort="code"><span class="sorticon"></span>Code</th>
+               <th class="col-md-2">Created by</th>
+               <th class="col-md-2">Created on</th>
+               <th class="col-md-2">Time zone</th>
+           </tr>
+        </thead>
+        <tbody class="alternate-col">
+           <tr class="cPointer reveal-elem-parent" data-ng-repeat="codesForAppointmentTimeList in displayCodesForAppointmentTimeCollection" data-ng-class="{'warning':codesForAppointmentTimeList.id == null}">
+               <td>
+                   <a href="" class="glyphicon glyphicon-trash reveal-elem text-danger" data-ng-click="removeCodesForAppointmentTimeList(codesForAppointmentTimeList)"></a>
+                   <a style="padding-left: 5% !important;" href="javascript:void(0)" editable-text="codesForAppointmentTimeList.appointmentTime" buttons="no" blur="submit" data-ng-model="codesForAppointmentTimeList.appointmentTime" onaftersave="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'appointmentTime')" data-ng-keypress="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'appointmentTime')" >{{codesForAppointmentTimeList.appointmentTime||'empty'}}</a>
+               </td>
+               <td>
+                   <a href="javascript:void(0)" editable-select="codesForAppointmentTimeList.appointmentType" buttons="no" e-ng-options="appointmentType.name as appointmentType.name for appointmentType in masterData.appointmentTypeList" blur="submit" onaftersave="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'appointmentType')" data-ng-keypress="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'appointmentType')">{{codesForAppointmentTimeList.appointmentType||'empty'}}</a>
+               </td>
+               <td>
+                   <a href="javascript:void(0)" editable-select="codesForAppointmentTimeList.code" buttons="no" e-ng-options="cptCode.name as cptCode.name for cptCode in masterData.cptCodeList" blur="submit" onaftersave="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'code')" data-ng-keypress="fnSaveCodesForAppointmentTime(codesForAppointmentTimeList,'code')">{{codesForAppointmentTimeList.code||'empty'}}</a>
+               </td>
+               <td>
+                   <div class="input-group">
+                       <span href="javascript:void(0)" buttons="no" blur="submit" >{{codesForAppointmentTimeList.fullName ||'empty'}}</span>
+                   </div>
+               </td>
+               <td>
+                   <div class="input-group">
+                       <span href="javascript:void(0)" buttons="no" blur="submit" >{{codesForAppointmentTimeList.createdOnDateTime||'empty'}}</span>
+                   </div>
+               </td>
+               <td>
+                   <div class="input-group">
+                       <span href="javascript:void(0)" buttons="no" blur="submit" >{{codesForAppointmentTimeList.createdOnTimeZone||'empty'}}</span>
+                   </div>
+               </td>
+           </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="16" st-displayed-pages="7"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

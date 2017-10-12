@@ -1,0 +1,351 @@
+<style>
+    .btn-file:hover{
+        text-decoration: underline;
+    }
+    .modal-lg{
+        width:1200px;
+    }
+</style>
+<!--<div data-ng-controller="screensDetailMasterCtrl">-->
+<div>
+    <div class="container-fluid paddingTop5">
+        <div class="tab-pane">
+            <div class="tabContent editableDetailContainer container-fluid">
+                <ul class="nostyleList nopadding nomargin">
+                    <br/>
+                    <!--Screen Panel List-->
+                    <li>
+                        <div class="animatedPanel">
+                            <div class="panel marginBottom5 panel-info">
+                                <div class="panel-heading panelLightFocus" data-ng-click="$event.stopPropagation();" >
+                                    <h4 class="pull-left nomargin col-md-3 col-lg-2 col-xs-6 pos-static cursorAuto">Screen questions and answers</h4>
+                                    <span name="title-block" class="titleOptions pull-left" data-ng-click="$event.stopPropagation();">
+                                        <button type="button" class="btn btn-default themeLabel buttontitlebar" ng-click="addNewScreensDetailsData()" title="Click to add new questions and answer">
+                                            <a class="glyphicon glyphicon-plus nopadding"></a>
+                                        </button>
+                                        <!--<button class="btn btn-default themeLabel"  type="button"  title="Deleted activity log" data-ng-click="fnDeletedActivityStream()">
+                                            <a href="" class="glyphicon glyphicon-link nopadding"  tabindex="10"></a>
+                                        </button>-->
+                                        <button title="Deleted activity log" type="button" class="btn btn-default themeLabel buttontitlebar" data-ng-if="activityLogIconForScreens == false" data-ng-click="fnDeletedActivityStream()">
+                                            <a class="glyphicon glyphicon-link nopadding"></a>
+                                        </button>
+                                        <button title="Deleted activity log" type="button" class="btn btn-default buttontitlebar" style="background: #d8d8d8; box-shadow: inset 4px 3px 10px #aaa; border-radius: 3px!important;" data-ng-if="activityLogIconForScreens == true" data-ng-click="fnDeletedActivityStream()">
+                                            <a class="glyphicon glyphicon-link nopadding"></a>
+                                        </button>
+                                        <!-- start of showing deleted activitylog-->
+                                        <div data-ng-if="activityLogIconForScreens == true" class="popover fade bottom in" style="margin-top: 30px; display: block; left: -78px; min-width: 1330px;">
+                                            <div style="left: 140px;" class="arrow"></div>
+                                            <div style="display: block; background: #FFFFFF" class="popover-content">
+                                                <div class="textarea-initial" data-ng-if="screensActivityLogData.length==0 && showMasterScreensActivityLog">No activity log found</div>
+                                                <table data-ng-if="showMasterScreensActivityLog && screensActivityLogData.length > 0" st-table="displayScreensActivityLogCollection"  st-safe-src="screensActivityLogData" class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="cPointer col-md-1 sortable" st-sort="clientIPAddressForActivity"><span class="sorticon"></span>IP address</th>
+                                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfSection"><span class="sorticon"></span>Section</th>
+                                                        <th class="cPointer col-md-2 sortable" st-sort="doneByUserFullName"><span class="sorticon"></span>Activity done by</th>
+                                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfActivity"><span class="sorticon"></span>Type of activity</th>
+                                                        <th class="cPointer col-md-2 sortable" st-sort="timeOfActivity"><span class="sorticon"></span>Time of activity</th>
+                                                        <th class="col-md-7">Description</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><input st-search="clientIPAddressForActivity"/></th>
+                                                        <th><input st-search="typeOfSection"/></th>
+                                                        <th><input st-search="doneByUserFullName"/></th>
+                                                        <th><input st-search="typeOfActivity"/></th>
+                                                        <th>
+                                                            <input st-search="timeOfActivity" data-ng-model="filterData.timeOfActivity" />
+                                                        </th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="log in displayScreensActivityLogCollection">
+
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span>{{::log.clientIPAddressForActivity}}</span>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span>{{::log.typeOfSection}}</span>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span>{{::log.doneByUserFullName}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span>{{::log.typeOfActivity}}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span>{{::log.timeOfActivity}}</span>
+                                                                <span data-ng-if="log.timezoneAbbreviationForActivity.length > 0"> ({{::log.timezoneAbbreviationForActivity}})</span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <div data-ng-if="log.typeOfActivity == 'delete'">
+                                                                    <span data-ng-if="log.oldValue !=null ">Deleted value : {{::log.oldValue}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                    <tfoot ng-if = "screensActivityLogData.length >10">
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">
+                                                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                                                        </td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                      <!-- end of showing deleted activitylog-->
+                                    </span>
+                                     <span class="" data-ng-if="msgObj.msg.open">
+                                         <div class="pannel-message-board alert-success" data-ng-class="msgObj.msg.mclass">
+                                             <span>{{ msgObj.msg.text }}</span>
+                                         </div>
+                                     </span>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body nopadding" data-ng-init="fnLoadDataOfScreensDetailsPanel(screensTableID)">
+                                    <div class="textarea-initial" data-ng-if="!srcScreensDetailsDataSet">Loading...</div>
+                                    <div class="textarea-initial" data-ng-if="srcScreensDetailsDataSet.length==0">Nothing found.</div>
+                                    <div data-ng-if="srcScreensDetailsDataSet.length>0">
+                                        <table st-table="displayScreensDetailsData" st-safe-src="srcScreensDetailsDataSet" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="cPointer" style="min-width: 75px"></th>
+                                                    <th class="cPointer col-md-2 sortable" st-sort="question"><span class="sorticon"></span>Questions</th>
+                                                    <th class="cPointer col-md-1">Question Image</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="questionGroup"><span class="sorticon"></span>Question group</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="requiredToAnswer"><span class="sorticon"></span>Required to answer</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="answerInputType"><span class="sorticon"></span>Answer input type</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="option1"><span class="sorticon"></span>Option 1</th>
+                                                    <th class="cPointer sortable" st-sort="pointsForOption1" style="width: 75px;"><span class="sorticon"></span>Point</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="option2"><span class="sorticon"></span>Option 2</th>
+                                                    <th class="cPointer sortable" st-sort="pointsForOption2" style="width: 75px;"><span class="sorticon"></span>Point</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="option3" ><span class="sorticon"></span>Option 3</th>
+                                                    <th class="cPointer sortable" st-sort="pointsForOption3" style="width: 75px;"><span class="sorticon"></span>Point</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="option4"><span class="sorticon"></span>Option 4</th>
+                                                    <th class="cPointer sortable" st-sort="pointsForOption4" style="width: 75px;"><span class="sorticon"></span>Point</th>
+                                                    <th class="cPointer col-md-1 sortable" st-sort="option5"><span class="sorticon"></span>Option 5</th>
+                                                    <th class="cPointer sortable" st-sort="pointsForOption5" style="width: 75px;"><span class="sorticon"></span>Point</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="alternate-col">
+                                                <tr class="cPointer reveal-elem-parent" data-ng-repeat="screensDetails in displayScreensDetailsData" data-ng-class="{'warning':screensDetails.questionId == null}">
+                                                    <td style="position: relative;">
+                                                        <div class="pull-left">
+                                                            <a data-ng-if="screensDetails.isItLocked=='No'" href="" class="glyphicon glyphicon-trash text-danger reveal-elem" data-ng-click="removeScreenQuestionAndAnswers(screensDetails)"></a>
+                                                            <!--lock button-->
+                                                            <span title="Locked" data-ng-if="screensDetails.questionId!=null && screensDetails.isItLocked=='Yes'" class="glyphicon glyphicon-lock reveal-elem paddingRight3 fLeft" style="padding: 5px;"></span>
+                                                            <a href="javascript:void(0)"  title="Lock" class="fa fa-unlock-alt reveal-elem" data-ng-if="screensDetails.questionId!=null && screensDetails.isItLocked=='No'" data-ng-click="$event.stopPropagation();fnLockQuestion(screensDetails, 'lock')"></a>
+                                                            <a href="" data-ng-if="screensDetails.questionId!=null" class="glyphicon glyphicon-link depressForSingelRowActivityLog" title="Activity log"
+                                                               data-ng-class="{'reveal-elem':!screensDetails.activityLogIconForEvent, 'depressedForActivityLog':screensDetails.activityLogIconForEvent}"
+                                                               data-ng-click="fnOpenActivityStreamForMasterScreensQuestionDetails($index,screensDetails)" tabindex="7">
+                                                            </a>
+                                                            <div data-ng-if="screensDetails.activityLogIconForEvent == true" class="popover fade bottom in" style="top: 33px; display: block; min-width: 1350px">
+                                                                <div style="left: 45px;" class="arrow"></div>
+                                                                <div style="display: block; background: #FFFFFF" class="popover-content">
+                                                                    <div class="textarea-initial" data-ng-if="eventsActivityLogDataForEvent.length==0 && showEventsActivityLogForEvent" style="background-color: #CFCFD0;">No activity log found</div>
+
+                                                                    <!--activity log fo a row-->
+                                                                    <table data-ng-class="col-md-12" data-ng-if="showEventsActivityLogForEvent && eventsActivityLogDataForEvent.length > 0" st-table="displayScreensActivityLogForEvent"  st-safe-src="eventsActivityLogDataForEvent" class="table table-striped">
+
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th class="cPointer col-md-1 sortable" st-sort="clientIPAddressForActivity"><span class="sorticon"></span>IP address</th>
+                                                                            <th class="cPointer col-md-1 sortable" st-sort="typeOfSection"><span class="sorticon"></span>Section</th>
+                                                                            <th class="cPointer col-md-1 sortable" st-sort="doneByUserFullName"><span class="sorticon"></span>Activity done by</th>
+                                                                            <th class="cPointer col-md-1 sortable" st-sort="typeOfActivity"><span class="sorticon"></span>Type of activity</th>
+                                                                            <th class="cPointer col-md-1 sortable" st-sort="pluginFieldName"><span class="sorticon"></span>Field of activity</th>
+                                                                            <th class="cPointer col-md-2 sortable" st-sort="timeOfActivityDateTimeFormat"><span class="sorticon"></span>Time of activity</th>
+                                                                            <th class="col-md-5">Description</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th><input st-search="clientIPAddressForActivity"/></th>
+                                                                            <th><input st-search="typeOfSection"/></th>
+                                                                            <th><input st-search="doneByUserFullName"/></th>
+                                                                            <th><input st-search="typeOfActivity"/></th>
+                                                                            <th><input st-search="pluginFieldName"/></th>
+                                                                            <th>
+                                                                                <input st-search="timeOfActivityDateTimeFormat"/>
+                                                                            </th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                        </thead>
+
+                                                                        <tbody style="background-color: rgba(141, 144, 144, 0.19);">
+                                                                        <tr data-ng-repeat="log in displayScreensActivityLogForEvent">
+
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.clientIPAddressForActivity}}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.typeOfSection}}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.doneByUserFullName}}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.typeOfActivity}}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.pluginFieldName}}</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+                                                                                    <span>{{::log.timeOfActivity}}</span>
+                                                                                    <span data-ng-if="log.timezoneAbbreviationForActivity.length > 0"> ({{::log.timezoneAbbreviationForActivity}})</span>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="input-group">
+
+                                                                                    <div data-ng-if="log.idOfEventOnWhichAcitivtyIsDone == screensDetails.questionId ">
+                                                                                        <span data-ng-if="log.oldValue != NULL && log.oldValue !=''">Old value : {{::log.oldValue}}<br/></span>
+                                                                                        <span data-ng-if="log.newValue != NULL && log.newValue !=''">New value : {{::log.newValue}}</span>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+
+                                                                        <tfoot ng-if = "eventsActivityLogDataForEvent.length>10" style="background-color: #BFBFBF;">
+                                                                        <tr>
+                                                                            <td colspan="7" class="text-center">
+                                                                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tfoot>
+                                                                    </table>
+                                                                    <!--activity log of a row code end here -->
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No'" href editable-text="screensDetails.question" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'question')" e-style="width: 100%">{{screensDetails.question || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.question || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <img data-ng-src="{{screensDetails.imageUrl}}" title="{{screensDetails.imageName}}" data-ng-if="screensDetails.imageUrl!=''" data-ng-click="displayFullImage(screensDetails)" style="height: 100px;"><br data-ng-if="screensDetails.imageUrl!=''">
+                                                        <span class="btn-file">
+                                                            <a data-ng-if="screensDetails.imageUrl==''" title="Click to add new image">Add</a>
+                                                            <a data-ng-if="screensDetails.imageUrl!=''" title="Click to replace current image">Change</a>
+                                                            <input type="file" nv-file-select="" uploader="screensDetails.uploader"/>
+                                                        </span>
+                                                        <span style="margin-left: 10px;padding-top: 1px; position: absolute">
+                                                            <a data-ng-if="screensDetails.imageUrl!=''" title="Click to remove current image" ng-click="removeCurrentImage(screensDetails.questionId)">Remove</a>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No'" href editable-select="screensDetails.groupID" e-ng-options="objGroup.groupID as objGroup.groupName for objGroup in questionGroupList" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'questionGroup')" e-style="width: 100%">{{screensDetails.groupName || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.groupName || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href data-ng-if="screensDetails.isItLocked=='No'" editable-select="screensDetails.requiredToAnswer"  e-ng-options="requiredData for requiredData in requiredList" buttons="no" blur="submit"  onbeforesave="updateScreensDetailsData(screensDetails, $data, 'requiredToAnswer')">{{screensDetails.requiredToAnswer||'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.requiredToAnswer || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href data-ng-if="screensDetails.isItLocked=='No'" editable-select="screensDetails.answerInputType"  e-ng-options="objData for objData in answerInputTypeList" buttons="no" blur="submit"  onbeforesave="updateScreensDetailsData(screensDetails, $data, 'answerInputType')">{{screensDetails.answerInputType||'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.answerInputType || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href="javascript:void(0)" editable-text="screensDetails.option1" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'option1')" e-style="width: 100%">{{screensDetails.option1 || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.option1 || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.pointsForOption1" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'pointsForOption1')" e-style="width: 100%">{{screensDetails.pointsForOption1 || 0}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.pointsForOption1 || 0}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.option2" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'option2')" e-style="width: 100%">{{screensDetails.option2 || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.option2 || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.pointsForOption2" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'pointsForOption2')" e-style="width: 100%">{{screensDetails.pointsForOption2 || 0}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.pointsForOption2 || 0}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.option3" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'option3')" e-style="width: 100%">{{screensDetails.option3 || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.option3 || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.pointsForOption3" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'pointsForOption3')" e-style="width: 100%">{{screensDetails.pointsForOption3 || 0}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.pointsForOption3 || 0}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.option4" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'option4')" e-style="width: 100%">{{screensDetails.option4 || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.option4 || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.pointsForOption4" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'pointsForOption4')" e-style="width: 100%">{{screensDetails.pointsForOption4 || 0}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.pointsForOption4 || 0}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.option5" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'option5')" e-style="width: 100%">{{screensDetails.option5 || 'empty'}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.option5 || 'empty'}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a data-ng-if="screensDetails.isItLocked=='No' && screensDetails.answerInputType=='Select Box'" href editable-text="screensDetails.pointsForOption5" buttons="no" blur="submit" onbeforesave="updateScreensDetailsData(screensDetails, $data, 'pointsForOption5')" e-style="width: 100%">{{screensDetails.pointsForOption5 || 0}}</a>
+                                                        <span data-ng-if="screensDetails.isItLocked=='Yes'">{{screensDetails.pointsForOption5 || 0}}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td colspan="14" class="text-center">
+                                                        <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <br />
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="displayQuestionImage" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" align="center">
+                    <img data-ng-src="{{modalData.imageUrl}}" style="max-width: 1160px; border: #a2a2a2 1px solid">
+                </div>
+                <div class="modal-footer" style="margin-top: 0px; padding-top: 0px; border-top:0">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

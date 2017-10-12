@@ -1,0 +1,41 @@
+<div class="modal-header"><h3 class="modal-title">FINANCIAL POLICIES</h3></div>
+<form  name="FinancialPolicies">
+    <div class="modal-body" >
+        <div ng-bind-html="policyobj.content | to_trusted">
+            {{policyobj.content}}
+        </div>
+        <p><strong>I "<< name >>" choose the following payment option:</strong><br />
+        <em data-ng-if="policyobj.pid && policyobj.paymentoption==='option_insurance'">Insurance Track (only for those who have Aetna, Cigna or Cardinal Care)</em>
+        <em data-ng-if="policyobj.pid && policyobj.paymentoption==='option_regular'">Regular Track (out-of-pocket)</em>
+        <em data-ng-if="policyobj.pid && policyobj.paymentoption==='option_concierge'">Concierge Track (out-of-pocket)</em>
+        <em data-ng-if="policyobj.pid && policyobj.paymentoption==='option_savantcare'">If I have chosen an out-of-pocket track, I would like Savant Care to submit claims on my behalf to my insurance at no extra charge</em>
+        <div data-ng-if="!policyobj.pid">
+            <input type="radio" data-ng-model="policyobj.paymentoption" value="option_insurance" ng-required="!policyobj.paymentoption"> Insurance Track (only for those who have Aetna, Cigna or Cardinal Care)<br />
+            <input type="radio" data-ng-model="policyobj.paymentoption" value="option_regular" ng-required="!policyobj.paymentoption"> Regular Track (out-of-pocket)<br />
+            <input type="radio" data-ng-model="policyobj.paymentoption" value="option_concierge" ng-required="!policyobj.paymentoption"> Concierge Track (out-of-pocket)<br />
+            <input type="radio" data-ng-model="policyobj.paymentoption" value="option_savantcare" ng-required="!policyobj.paymentoption"> If I have chosen an out-of-pocket track, I would like Savant Care to submit claims on my behalf to my insurance at no extra charge<br />
+        </div>
+        <p></p>
+        <p><strong>I agree to the policies outlined according to the payment track I have chosen, as outlined above.</strong></p>
+        <!--<p>Signature : <input type="text" name="input" data-ng-model="policyobj.signature" data-ng-pattern="example.word" required data-ng-trim="false"><br />-->
+        <div>
+        <!--Signature : <input type="text" name="input" data-ng-model="policyobj.signature" ng-required="!policyobj.signature"/><br />
+        Print name : <input type="text" name="input" data-ng-model="policyobj.printname" ng-required="!policyobj.printname"/><br />
+        Date : <input type="date" name="dateInput" ng-required="!policyobj.signdate" close-text="Close" data-ng-model="policyobj.signdate"/><br />-->
+        Signature : <div drawing></div>
+
+        <div class="input-group">
+        <span class="input-group-addon">Print name :</span>
+        <input class="form-control col-sm-6" type="text" name="input" data-ng-model="policyobj.printname" ng-required="!policyobj.printname">
+        </div>
+        
+        <div class="input-group">
+        <span class="input-group-addon">Date :</span>
+        <input class="form-control col-sm-6" type="date" name="dateInput" ng-required="!policyobj.signdate" close-text="Close" data-ng-model="policyobj.signdate">
+        </div>
+        </div>
+    </div>
+    <div class="modal-footer" >
+        <button class="btn btn-sm btn-warning" data-ng-click="cancel()" data-ng-keypress="cancel()">Close</button>
+    </div>
+</form>

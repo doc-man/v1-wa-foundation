@@ -1,0 +1,77 @@
+<!--<div ng-controller="examLevelsMasterCtrl" >-->
+<style>
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+    .highlight
+    {
+        background: #FFE0B2;
+    }
+</style>
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Provider Specific settings
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+            <span data-ng-if="errorMessageShow == 'failed'"><a href="" data-ng-click="fnShowHideErrorDetail()">View detail</a></span>
+        </div>
+    </div>
+   <table st-safe-src="rowCollection" st-table="displayCollection"  class="table table-striped">
+        <thead>
+        <tr>
+            <th st-sort="fullname">Doctor's Name</th>
+            <th st-sort="alias">Alias Name</th>
+            <th st-sort="alias">Practice Started At Year</th>
+        </tr>
+        <tr>
+            <th>
+                <input st-search="fullname" placeholder="search for doctor's name" class="input-sm form-control" type="search"/>
+            </th>
+            <th>
+                <input st-search="alias" placeholder="search for alias name" class="input-sm form-control" type="search"/>
+            </th>
+            <th>
+                <input st-search="practiceStartedAtYear" placeholder="search for started Year" class="input-sm form-control" type="search"/>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in displayCollection">
+            <td ng-class="!row.alias? 'highlight' : ''">{{row.fullname}}</td>
+            <td ng-class="!row.alias ? 'highlight' : ''"><a style="cursor:pointer" href="javascript:void(0)"
+                   editable-text="row.alias"
+                   buttons="no"
+                   e-form="textBtnForm"
+                   blur="submit"
+                   data-ng-model="row.alias"
+                   onbeforesave="fnSaveAlias(row,$data)"
+                   ng-click="ShowConfirm(row,textBtnForm)">{{row.alias || 'empty'}}</a>
+            </td>
+
+            <td ng-class="!row.alias ? 'highlight' : ''">
+                <a href="#"
+                   editable-select="row.practiceStartedAtYear"
+                   buttons="no"
+                   blur="submit"
+
+                   onbeforesave="fnSaveYear(row,$data)"
+                   e-ng-options="s.value as s.text for s in statuses"
+                  >
+                    {{ showStatus(row.practiceStartedAtYear) }}
+
+                </a>
+            <span ng-if="totalExp(row.practiceStartedAtYear)"> &nbsp;({{totalExp(row.practiceStartedAtYear)}} years of experience)</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>

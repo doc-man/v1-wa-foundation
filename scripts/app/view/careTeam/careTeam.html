@@ -1,0 +1,50 @@
+<!--<div ng-controller="careTeamMasterCtrl" >-->
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Care team &nbsp;
+            <button class="btn btn-default themeLabel" data-ng-click="fnAddDesignation()" type="button" title="Add Designation">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="masterData.designationList.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="masterData.designationList.length>0" st-table="displayDesignationListCollection" st-safe-src="masterData.designationList" class="table table-striped">
+        <thead>
+           <tr>
+               <th class="cPointer col-md-4 sortable padding-left-45p" st-sort="designationName"><span class="sorticon"></span>Designation Name</th>
+               <th class="cPointer col-md-3 sortable" st-sort="countOfPatientWithThisDsignation"><span class="sorticon"></span>Number of patients assigned a care giver with this designation</th>
+           </tr>
+           <tr>
+                <th class="padding-left-45p"><input st-search="designationName"/></th>
+            </tr>
+        </thead>
+        <tbody>
+           <tr class="cPointer reveal-elem-parent" data-ng-repeat="designation in displayDesignationListCollection">
+               <td>
+                    <div class="input-group">
+                        <div class="pull-left width40p reveal-elem" >
+                              <a href="" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteDesignation(designation)"></a>
+                        </div>
+                        <a href="javascript:void(0)" editable-text="designation.designationName" buttons="no" blur="submit" data-ng-model="designation.designationName" onaftersave="fnSaveDesignation(designation)" data-ng-keypress="fnSaveDesignation(designation)">{{designation.designationName||'empty'}}</a>
+                    </div>
+               </td>
+               <td>
+                     {{::designation.countOfPatientWithThisDsignation}}
+               </td>
+           </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+<div class="dropdown" dropdown>
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle = 'dropdown' aria-haspopup="true" aria-expanded="true">
+    {{dropdownLabel}}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li ng-repeat="item in distinctItems" data-ng-class="{'dropdown-header disabled':item.header===true}" ng-click="prevent($event)">
+      <label data-ng-if="!item.header">
+        <input type="checkbox" ng-model="item.selected" ng-click="filterChanged()">{{item.value}}</label>
+      <label data-ng-if="item.header">{{item.value}}</label>
+    </li>
+    <li role="separator" class="divider"></li>
+    <li ng-class="{'disabled':allDeselected === true}" ng-click="deselectAll($event)" class="func">
+      <label >Deselect all</label>
+    </li>
+    <li ng-class="{'disabled':allSelected === true}" ng-click="selectAll($event)" class="func">
+      <label >Select all</label>
+    </li>
+  </ul>
+</div>

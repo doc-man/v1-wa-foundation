@@ -1,0 +1,43 @@
+<!--<div>  
+--------
+<h4>{{letterObj.templateName}}</h4>
+<div style="height: auto;">
+  <div class="panel-body">{{letterObj.letterContent}}</div>
+</div>
+</div>-->
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Letter Template<!--<span class="glyphicon glyphicon-pencil" style="float: right; cursor: pointer;" aria-hidden="true" ng-click="editableForm.$show()" ng-show="!editableForm.$visible"></span>--></h3>
+  </div>
+  <div class="panel-body">
+  <!--<form editable-form name="editableForm" onbeforesave="sds()">-->
+    <!--<div ng-if="doesHaveEvent==true"> 
+      <div style="float: left; width: 30%; margin-bottom: 5px;"><b>Event :</b></div>  
+      <div style="float: left; width: 70%; margin-bottom: 5px;">
+      <span editable-select="commDetail.eventId" e-name="eventId" e-ng-options="e.eventId as e.eventName for e in eventDropDown">
+      {{ (eventDropDown | filter:{eventId: commDetail.eventId})[0].eventName || 'Not set' }}
+      </span>
+      </div>
+    </div>-->
+    <div class="fLeft width100">
+        <div class="fLeft width30 marginBottom5"><b>Template Name :</b></div>
+        <!--<div style="float: left; width: 70%; margin-bottom: 5px;"><span editable-textarea="message.value" e-rows="4" e-cols="100">{{letterObj.templateName}}</span></div>-->
+        <div class="fLeft width70 marginBottom5">{{letterObj.templateName}}</div>
+    </div>
+    <div class="fLeft width100">
+        <div class="fLeft width30 marginBottom5"><b>Content :</b></div>
+        <div class="fLeft width70 marginBottom5">{{letterObj.letterContent}}</div>
+    </div>
+    <!--<div class="buttons">
+      <span ng-show="editableForm.$visible">
+        <button type="submit" class="btn btn-primary" ng-disabled="editableForm.$waiting">
+          Save
+        </button>
+        <button type="button" class="btn btn-default" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+          Cancel
+        </button>
+      </span>
+    </div>-->
+  <!--</form> --> 
+  </div>
+</div>

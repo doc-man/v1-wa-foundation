@@ -1,0 +1,298 @@
+<!--<div ng-controller="screensMasterCtrl">-->
+<div>
+    <!--title of the screen-->
+    <div  class="fLeft">
+        <h3>Screens list
+            <!--add new screens-->
+            <button class="btn btn-default themeLabel" ng-click="fnAddScreens()" type="button" title="Add new screens">
+                <a class="glyphicon glyphicon-plus nopadding"></a>
+            </button>
+            <!--activity log for screens -->
+            <button class="btn btn-default themeLabel"  type="button"  title="Deleted activity log" data-ng-click="fnDeletedActivityStream()">
+                <a href="" class="glyphicon glyphicon-link nopadding"  tabindex="10"></a>
+            </button>
+        </h3>
+
+        <!-- start of showing deleted activitylog-->
+        <div data-ng-if="activityLogIconForScreens == true" class="popover fade bottom in" style="margin-top: 152px; display: block; left: 75px; min-width: 1330px;">
+            <div style="left: 140px;" class="arrow"></div>
+            <div style="display: block; background: #FFFFFF" class="popover-content">
+                <div class="textarea-initial" data-ng-if="screensActivityLogData.length==0 && showMasterScreensActivityLog">No activity log found</div>
+                <table data-ng-if="showMasterScreensActivityLog && screensActivityLogData.length > 0" st-table="displayScreensActivityLogCollection"  st-safe-src="screensActivityLogData" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="cPointer col-md-1 sortable" st-sort="clientIPAddressForActivity"><span class="sorticon"></span>IP address</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="typeOfSection"><span class="sorticon"></span>Section</th>
+                        <th class="cPointer col-md-2 sortable" st-sort="doneByUserFullName"><span class="sorticon"></span>Activity done by</th>
+                        <th class="cPointer col-md-1 sortable" st-sort="typeOfActivity"><span class="sorticon"></span>Type of activity</th>
+                        <th class="cPointer col-md-2 sortable" st-sort="timeOfActivity"><span class="sorticon"></span>Time of activity</th>
+                        <th class="col-md-7">Description</th>
+                    </tr>
+                    <tr>
+                        <th><input st-search="clientIPAddressForActivity"/></th>
+                        <th><input st-search="typeOfSection"/></th>
+                        <th><input st-search="doneByUserFullName"/></th>
+                        <th><input st-search="typeOfActivity"/></th>
+                        <th>
+                            <input st-search="timeOfActivity" data-ng-model="filterData.timeOfActivity" />
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="log in displayScreensActivityLogCollection">
+
+                        <td>
+                            <div class="input-group">
+                                <span>{{::log.clientIPAddressForActivity}}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="input-group">
+                                <span>{{::log.typeOfSection}}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="input-group">
+                                <span>{{::log.doneByUserFullName}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span>{{::log.typeOfActivity}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span>{{::log.timeOfActivity}}</span>
+                                <span data-ng-if="log.timezoneAbbreviationForActivity.length > 0"> ({{::log.timezoneAbbreviationForActivity}})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <div data-ng-if="log.typeOfActivity == 'delete'">
+                                    <span data-ng-if="log.oldValue !=null"><b><u>Deleted value</u> :</b> {{::log.oldValue}}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot ng-if = "screensActivityLogData.length >10">
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- end of showing deleted activitylog-->
+
+    </div>
+    <!--show text message when any message show-->
+    <div class="col-md-9" data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="textarea-initial" data-ng-if="masterData.screensList.length==0">{{masterData.messageVal}}</div>
+
+    <br />
+
+    <div class="col-md-12 mTop20">
+        <!-- start of showing screens list in master screen in st Table -->
+        <table data-ng-if="masterData.screensList.length>0" st-table="displayScreensList" st-safe-src="masterData.screensList" class="table ">
+
+            <thead>
+                <!--add
+                1. screenName
+                2. scientificName
+                3. clinicalStudies-->
+                <tr>
+                    <th class="cPointer col-md-1" style="width: 120px !important;"></th>
+                    <th class="cPointer col-md-2 sortable" st-sort="screenName"><span class="sorticon"></span>Name of screen</th>
+                    <th class="cPointer col-md-3 sortable" st-sort="scientificName" ><span class="sorticon"></span>Scientific name</th>
+                    <th class="cPointer sortable" st-sort="clinicalStudies" ><span class="sorticon"></span>Clinical studies</th>
+                    <th class="cPointer col-md-1"><span class="sorticon"></span>Color</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th><input st-search="screenName"/></th>
+                    <th><input st-search="scientificName"/></th>
+                    <th><input st-search="clinicalStudies"/></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="alternate-col">
+                <tr class="cPointer reveal-elem-parent" data-ng-repeat="screens in displayScreensList"  data-ng-class="{'warning':screens.id == null}" >
+                <!-- start of add screens name column -->
+                <td style="position: relative;">
+                    <div class="pull-left">
+                        <!--add question ans button-->
+                        <!--<a href="javascript:void(0)" class="glyphicon glyphicon-plus reveal-elem paddingRight3 fLeft" title="Add new questions" data-ng-if="screens.id!=null" ui-sref="home.screenDetail({id :'0'+screens.id, title :'Screen details of '+screens.screenName})" style="padding: 5px;"></a>-->
+
+                        <a href="javascript:void(0)" class="glyphicon glyphicon-plus reveal-elem paddingRight3 fLeft" title="Add new questions" data-ng-if="screens.id!=null" ng-click="fnToAddNewScreenData(screens.id, screens.screenName)" style="padding: 5px;"></a>
+
+                        <!--add group button-->
+                        <a href="javascript:void(0)" class="glyphicon glyphicon-tags reveal-elem paddingRight3 fLeft" title="Add new, update, delete Question Group" data-ng-if="screens.id!=null" ui-sref="home.screenQuestionGroupDetail({id :'0'+screens.id, title :'Screen question group details of '+screens.screenName})" style="padding: 5px;"></a>
+
+                        <!--Remove button-->
+                        <a href="" class="glyphicon glyphicon-trash reveal-elem text-danger" data-ng-click="removeScreens(screens)" data-ng-if="screens.isItLocked == 'no'"></a>
+
+                        <!--lock button-->
+                        <span title="Locked" data-ng-if="screens.id!=null && screens.isItLocked=='yes'" class="glyphicon glyphicon-lock reveal-elem paddingRight3 fLeft" style="padding: 5px;"></span>
+                        <a href="javascript:void(0)"  title="Lock" class="fa fa-unlock-alt reveal-elem" data-ng-if="screens.id!=null && screens.isItLocked!='yes'" data-ng-click="$event.stopPropagation();fnLockScreens(screens, 'lock')"></a>
+
+                        <!-- start of showing activity log details for add,edit screens details -->
+                        <a href="" data-ng-if="screens.id!=null" class="glyphicon glyphicon-link depressForSingelRowActivityLog" title="Activity log"
+                           data-ng-class="{'reveal-elem':!screens.activityLogIconForEvent, 'depressedForActivityLog':screens.activityLogIconForEvent}"
+                           data-ng-click="fnOpenActivityStreamForMasterScreens($index,screens)" tabindex="7">
+                        </a>
+                        <div data-ng-if="screens.activityLogIconForEvent == true" class="popover fade bottom in" style="top: 30px; display: block; left: 27px; min-width: 1350px; position: absolute;">
+                            <div style="left: 70px;" class="arrow"></div>
+                            <div style="display: block; background: #FFFFFF" class="popover-content">
+
+                                <div class="textarea-initial" data-ng-if="eventsActivityLogDataForEvent.length==0 && showEventsActivityLogForEvent" style="background-color: #CFCFD0;">No activity log found</div>
+
+                                <!--activity log fo a row-->
+                                <table data-ng-if="showEventsActivityLogForEvent && eventsActivityLogDataForEvent.length > 0" st-table="displayScreensActivityLogForEvent"  st-safe-src="eventsActivityLogDataForEvent" class="table table-striped">
+
+                                    <thead>
+                                    <tr >
+                                        <th class="cPointer col-md-1 sortable" st-sort="clientIPAddressForActivity"><span class="sorticon"></span>IP address</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfSection"><span class="sorticon"></span>Section</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="doneByUserFullName"><span class="sorticon"></span>Activity done by</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfActivity"><span class="sorticon"></span>Type of activity</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="pluginFieldName"><span class="sorticon"></span>Field of activity</th>
+                                        <th class="cPointer col-md-2 sortable" st-sort="timeOfActivityDateTimeFormat"><span class="sorticon"></span>Time of activity</th>
+                                        <th class="col-md-6">Description</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input st-search="clientIPAddressForActivity"/></th>
+                                        <th><input st-search="typeOfSection"/></th>
+                                        <th><input st-search="doneByUserFullName"/></th>
+                                        <th><input st-search="typeOfActivity"/></th>
+                                        <th><input st-search="pluginFieldName"/></th>
+                                        <th>
+                                            <input st-search="timeOfActivityDateTimeFormat"/>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody style="background-color: rgba(141, 144, 144, 0.19);">
+                                    <tr data-ng-repeat="log in displayScreensActivityLogForEvent">
+
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.clientIPAddressForActivity}}</span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.typeOfSection}}</span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.doneByUserFullName}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.typeOfActivity}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.pluginRowNameWhereActivityIsDone}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.timeOfActivity}}</span>
+                                                <span data-ng-if="log.timezoneAbbreviationForActivity.length > 0"> ({{::log.timezoneAbbreviationForActivity}})</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+
+                                                <div data-ng-if="log.idOfEventOnWhichAcitivtyIsDone == screens.id ">
+                                                    <span data-ng-if="log.oldValue != NULL && log.oldValue !=''">Old value : {{::log.oldValue}}</span>
+                                                    <span data-ng-if="log.newValue != NULL && log.newValue !=''">New value : {{::log.newValue}}</span>
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                    <tfoot ng-if = "eventsActivityLogDataForEvent.length>10" style="background-color: #BFBFBF;">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <!--activity log of a row code end here -->
+
+                            </div>
+                        </div>
+                        <!-- end of showing activity log details for add,edit screens details -->
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group editableInputSizeChange">
+                        <a href="javascript:void(0)" editable-text="screens.screenName" buttons="no" blur="submit" data-ng-model="screens.screenName" onbeforesave="fnSaveScreens(screens, $data, 'screenName')" data-ng-if="screens.isItLocked == 'no'">{{screens.screenName||'empty'}}</a>
+                        <span data-ng-if="screens.isItLocked == 'yes'">{{screens.screenName||'empty'}}</span>
+                    </div>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" editable-text="screens.scientificName" buttons="no" blur="submit" data-ng-model="screens.scientificName" onbeforesave="fnSaveScreens(screens, $data, 'scientificName')" >{{screens.scientificName||'empty'}}</a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" editable-text="screens.clinicalStudies" buttons="no" blur="submit" data-ng-model="screens.clinicalStudies" onbeforesave="fnSaveScreens(screens, $data, 'clinicalStudies')" >{{screens.clinicalStudies||'empty'}}</a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" editable-color="screens.color" buttons="yes" blur="submit" data-ng-model="screens.color" onbeforesave="fnSaveScreens(screens, $data, 'color')">{{screens.color||'empty'}}</a>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <!-- start of footer for pagination-->
+                <tr>
+                    <td colspan="3" class="text-center" style=" vertical-align: middle;color:#666;font-weight: bold;">
+                        <div data-ng-show="paginationInfo.totalItemCount>0">Total <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> screens.
+                            Showing {{displayScreensList.length}} screen<span data-ng-show="displayUsersCollection.length>1">s</span>.
+                            <div class="btn-group report-info">
+                                <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount<25}">25</label>
+                                <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount<26}">50</label>
+                                <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount<51}">100</label>
+                                <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount<101}">200</label>
+                            </div>
+                            screens per page.
+                        </div>
+                        <div data-ng-show="paginationInfo.totalItemCount==0">
+                            No screen found to show.
+                        </div>
+                    </td>
+                    <td colspan="2" class="text-center">
+                        <div data-st-pagination="" data-st-items-by-page="itemsByPage" data-st-template="directives/pagination.custom.html"></div>
+                    </td>
+                </tr>
+            <!-- end of footer for pagination-->
+            </tfoot>
+        </table>
+        <!-- end of showing screen list in master screens in st Table -->
+    </div>
+</div>

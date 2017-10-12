@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Master DB</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" id="favicon" href="images/favicon-master-db.ico" type="image/vnd.microsoft.icon" />
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="documents-override.css">
+
+  <link rel="stylesheet" type="text/css" href="bower_components/angular-xeditable/dist/css/xeditable.css">
+  <link rel='stylesheet' href='bower_components/oi.select/dist/select.min.css' type='text/css' media='all' />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <!--<link rel="stylesheet" type="text/css" href="bower_components/jasny-bootstrap/css/jasny-bootstrap.min.css">-->
+  <link rel="stylesheet" href="bower_components/ngWYSIWYG/dist/editor.min.css">
+  <link rel="stylesheet" href="additional_components/color-picker.min.css">
+
+
+</head>
+<body>
+  <!--<ul class="menu">
+    <li><a href="#!/view1">view1</a></li>
+    <li><a href="#!/view2">view2</a></li>
+  </ul>-->
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <!--<div ng-view></div>-->
+  <div ui-view class="container-fluid"></div>
+
+  <!--<div>Angular masterdb app: v<span app-version></span></div>-->
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script type="text/javascript" src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+  <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
+  <script type="text/javascript" src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
+  <script type="text/javascript" src="bower_components/satellizer/dist/satellizer.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+  <script type="text/javascript" src="bower_components/angular-breadcrumb/dist/angular-breadcrumb.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.js"></script>
+  <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+
+  <script type="text/javascript" src='bower_components/oi.select/dist/select-tpls.min.js'></script>
+  <script type="text/javascript" src="bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+
+  <script src="/v3/app/public-media/socketio/prod-version.js"></script>
+  <script src="app.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+  <script src="directives/directives.js"></script>
+  <script src="bower_components/ngWYSIWYG/dist/wysiwyg.min.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="additional_components/fileReader.js"></script>
+  <script src="additional_components/color-picker.min.js"></script>
+
+  <script src="directives/st-table/clustered-directives.js"></script>
+  <script src="directives/st-table/clustered-filters.js"></script>
+
+<!--  Include all controller js files of master db sub-sections-->
+  <script src="view/masterDbCommonFunctions.js"></script>
+  <script src="view/userRole/userRoleMasterCtrl.js"></script>
+  <script src="view/assets/assetsMasterCtrl.js"></script>
+  <script src="view/plugins/pluginsMasterCtrl.js"></script>
+  <script src="view/eventPlugins/eventPluginsMasterCtrl.js"></script>
+  <script src="view/careTeam/careTeamMasterCtrl.js"></script>
+  <script src="view/apptNoteConfig/apptNoteConfigMasterCtrl.js"></script>
+  <script src="view/levelOfServices/levelOfServicesMasterCtrl.js"></script>
+  <script src="view/timeInPsytx/timeInPsytxMasterCtrl.js"></script>
+  <script src="view/timeInPsytxTherapist/timeInPsytxTherapistMasterCtrl.js"></script>
+  <script src="view/interactiveComplexity/interactiveComplexityMasterCtrl.js"></script>
+  <script src="view/historyLevels/historyLevelsMasterCtrl.js"></script>
+  <script src="view/examLevels/examLevelsMasterCtrl.js"></script>
+  <script src="view/MDMLevels/MDMLevelsMasterCtrl.js"></script>
+  <script src="view/eligibleDetail/eligibleDetailMasterCtrl.js"></script>
+  <script src="view/cptCodes/cptCodesMasterCtrl.js"></script>
+  <script src="view/cptCodesRates/cptCodesRatesMasterCtrl.js"></script>
+  <script src="view/eventTypes/eventTypesMasterCtrl.js"></script>
+  <script src="view/eventStatus/eventStatusMasterCtrl.js"></script>
+  <script src="view/colorList/colorListMasterCtrl.js"></script>
+  <script src="view/matchingReport/matchingReportMasterCtrl.js"></script>
+  <script src="view/syncCalendarReport/syncCalendarReportMasterCtrl.js"></script>
+  <script src="view/paymentsCustomReport/paymentsCustomReportMasterCtrl.js"></script>
+  <script src="view/eventCustomReport/eventCustomReportMasterCtrl.js"></script>
+  <script src="view/cronReportManagement/cronReportManagementMasterCtrl.js"></script>
+  <script src="view/usersAssociatedWithProvider/usersAssociatedWithProviderMasterCtrl.js"></script>
+  <script src="view/patientPortalConfigs/patientPortalConfigsMasterCtrl.js"></script>
+  <script src="view/systemHealthStatus/systemHealthStatusMasterCtrl.js"></script>
+  <script src="view/fileTagList/fileTagListMasterCtrl.js"></script>
+  <script src="view/fileExtensionRelation/fileExtensionRelationMasterCtrl.js"></script>
+  <script src="view/allowedFileExtension/allowedFileExtensionMasterCtrl.js"></script>
+  <script src="view/fileType/fileTypeMasterCtrl.js"></script>
+
+  <script src="view/users/usersMasterCtrl.js"></script>
+  <script src="view/medications/medicationsMasterCtrl.js"></script>
+  <!--<script src="view/letterTemplates/letterTemplatesMasterCtrl.js"></script>-->
+  <script src="view/notifierTemplates/notifierTemplatesMasterCtrl.js"></script>
+  <script src="view/eventReminders/eventRemindersMasterCtrl.js"></script>
+  <script src="view/contactTypes/contactTypesMasterCtrl.js"></script>
+  <script src="view/dbStatusReport/dbStatusReportMasterCtrl.js"></script>
+  <script src="view/policies/policiesMasterCtrl.js"></script>
+  <script src="view/unlock/unlockMasterCtrl.js"></script>
+  <script src="view/fax/faxMasterCtrl.js"></script>
+  <script src="view/helpdesk/helpdeskMasterCtrl.js"></script>
+  <!--<script src="view/videoTagList/videoTagListMasterCtrl.js"></script>-->
+  <script src="view/screens/screensMasterCtrl.js"></script>
+  <script src="view/screens/screensMasterCtrl.js"></script>
+  <script src="view/screenDetail/screenDetailMasterCtrl.js"></script>
+  <script src="view/therapistPatients/therapistPatientsMasterCtrl.js"></script>
+  <script src="view/appPermission/appPermissionMasterCtrl.js"></script>
+  <script src="view/scPrinter/scPrinterMasterCtrl.js"></script>
+  <script src="view/directory/directoryMasterCtrl.js"></script>
+  <script src="view/noteLockPermission/noteLockPermissionMasterCtrl.js"></script>
+  <script src="view/locations/locationsMasterCtrl.js"></script>
+  <script src="view/eventTypeDependency/eventTypeDependencyMasterCtrl.js"></script>
+  <script src="view/userServices.js"></script>
+  <script src="view/googleCalenderSetting/googleCalenderSettingMasterCtrl.js"></script>
+  <script src="view/masterCommandList/masterCommandListMasterCtrl.js"></script>
+  <script src="view/scBrainTooltipManager/scBrainTooltipManagerMasterCtrl.js"></script>
+  <script src="view/areasOfExpertise/areasOfExpertiseMasterCtrl.js"></script>
+  <script src="view/printBulkLetters/printBulkLetters.js"></script>
+  <script src="view/ssRequiredForCode/ssRequiredForCodeMasterCtrl.js"></script>
+  <script src="view/codesRequiredForCode/codesRequiredForCodeMasterCtrl.js"></script>
+  <script src="view/codesForAppointmentTime/codesForAppointmentTimeMasterCtrl.js"></script>
+  <script src="view/automatedSystems/automatedSystemsMasterCtrl.js"></script>
+  <script src="view/unlock/event/eventMasterCtrl.js"></script>
+  <script src="view/unlock/note/noteMasterCtrl.js"></script>
+  <script src="view/unlock/isCodingFinishedForAppointment/isCodingFinishedForAppointmentMasterCtrl.js"></script>
+  <script src="view/unlock/code/codeMasterCtrl.js"></script>
+  <script src="view/unlock/incomingPayment/incomingPaymentMasterCtrl.js"></script>
+  <script src="view/unlock/outgoingPayment/outgoingPaymentMasterCtrl.js"></script>
+  <script src="view/unlock/payer/payerMasterCtrl.js"></script>
+  <script src="view/unlock/redFlag/redFlagMasterCtrl.js"></script>
+
+  <!-- script files for showHideOldApp section-->
+  <script src="view/showHideOldApp/showHideOldAppMasterCtrl.js"></script>
+
+
+  <!-- script files for manageGuiFeatures section-->
+  <script src="view/manageGuiFeatures/manageGuiFeaturesMasterCtrl.js"></script>
+
+  <!-- Do not allow conflict code -->
+  <script src="view/conflictRelationBetweenCodes/conflictRelationBetweenCodeMasterCtrl.js"></script>
+
+  <!-- Mobile app -->
+  <script src="view/resetPin/resetPinMasterCtrl.js"></script>
+  <script src="view/doctorsAliasName/doctorsAliasNameMasterCtrl.js"></script>
+  <script src="view/adwordTrackingCode/adwordTrackingCodeMasterCtrl.js"></script>
+  <script src="view/profileImageManagement/profileImageManagementMasterCtrl.js"></script>
+  <script src="view/miscellaneousNoteType/miscellaneousNoteMasterCtrl.js"></script>
+
+</body>
+</html>

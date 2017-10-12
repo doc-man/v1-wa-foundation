@@ -1,0 +1,80 @@
+<!--<div ng-controller="eventStatusMasterCtrl" >-->
+<div>
+    <div class="fLeft">     <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Event status
+            <button class="btn btn-default themeLabel" data-ng-click="fnAddEventStatus()" type="button" title="Add Event Status">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="eventStatusDataSet.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="eventStatusDataSet.length>0" st-table="displayEventStatusListCollection" st-safe-src="eventStatusDataSet" class="table table-striped">
+        <thead>
+           <tr>
+               <th class="cPointer col-md-2 sortable padding-left-45p" st-sort="name"><span class="sorticon"></span>Event Status</th>
+               <th class="cPointer col-md-2 sortable" st-sort="eventTypeName"><span class="sorticon"></span>Event Type</th>
+               <th class="cPointer sortable" st-sort="countOfEventInThisStatus"><span class="sorticon"></span># of events in this status</th>
+               <th class="cPointer sortable" st-sort="noOfLockedEvent" style="background: #ffff99"><span class="sorticon"></span># of events locked</th>
+               <th class="cPointer sortable" st-sort="noOfUnlockedEvent" style="background: #ffff99"><span class="sorticon"></span># of events unlocked</th>
+               <th class="cPointer sortable" st-sort="noOfPastDateEvent" style="background: #ddffcc"><span class="sorticon"></span># of events with past start date</th>
+               <th class="cPointer sortable" st-sort="noOfFutureDateEvent" style="background: #ddffcc"><span class="sorticon"></span># of events with future start date</th>
+               <th class="cPointer sortable" st-sort="noOfNullDateEvent" style="background: #ddffcc"><span class="sorticon"></span># of events with null start date</th>
+           </tr>
+           <tr>
+                <th class="padding-left-45p"><input st-search="name"/></th>
+                <th><input st-search="eventTypeName"/></th>
+           </tr>
+        </thead>
+        <tbody>
+        <tr class="cPointer reveal-elem-parent" data-ng-repeat="eventStatus in displayEventStatusListCollection">
+            <td>
+                <div class="input-group">
+                    <div class="pull-left width40p reveal-elem" >
+                        <a href="" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteEventStatus(eventStatus)"></a>
+                    </div>
+                    <a href="javascript:void(0)" editable-text="eventStatus.name" buttons="no" blur="submit" data-ng-model="eventStatus.name" onaftersave="fnSaveEventStatus(eventStatus)" data-ng-keypress="fnSaveEventStatus(eventStatus)">{{eventStatus.name||'empty'}}</a>
+                </div>
+            </td>
+            <td>
+                <div class="input-group">
+                    <a href="javascript:void(0)" editable-select="eventStatus.eventTypeID" buttons="no" e-ng-options="eventType.id as eventType.name for eventType in eventTypesDataSet" buttons="no" blur="submit" onaftersave="fnSaveEventStatus(eventStatus)" data-ng-keypress="fnSaveEventStatus(eventStatus)">{{eventStatus.eventTypeName || 'empty'}}</a>
+                </div>
+            </td>
+            <td>{{::eventStatus.countOfEventInThisStatus}}</td>
+            <td style="background: #ffff99">{{::eventStatus.noOfLockedEvent}}</td>
+            <td style="background: #ffff99">{{::eventStatus.noOfUnlockedEvent}}</td>
+            <td style="background: #ddffcc">{{::eventStatus.noOfPastDateEvent}}</td>
+            <td style="background: #ddffcc">{{::eventStatus.noOfFutureDateEvent}}</td>
+            <td style="background: #ddffcc">{{::eventStatus.noOfNullDateEvent}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td  colspan="5" class="text-center" style=" vertical-align: middle;color:#666;font-weight: bold;">
+                   <div data-ng-show="paginationInfo.totalItemCount>0">Total <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> event status.
+                        Show  
+                        <div class="btn-group report-info">
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount<26}">25</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount<51}">50</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount<101}">100</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount<201}">200</label>
+                        </div>
+                        event status per page.
+                    </div>
+                    <div data-ng-show="paginationInfo.totalItemCount==0">
+                        No event status found to show.
+                    </div>
+                </td>
+                <td  colspan="3" class="text-center">
+                    <div data-st-pagination="" data-current-page="currentPage" data-st-items-by-page="itemsByPage" data-st-template="directives/pagination.custom.html"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

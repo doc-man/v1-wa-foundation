@@ -1,0 +1,33 @@
+<!--<div data-ng-controller="eventPluginsMasterCtrl">-->
+<div>
+<div class="fLeft"><h3>Event Plugins List</h3></div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="userRoleDataSet.length==0">{{masterData.messageVal}}</div>
+    <table class="table table-striped" st-table="pluginDataSet" st-safe-src="masterData.pluginList" >       
+        <thead>
+            <tr>
+                <th st-sort="name">Plugin name</th>
+                <th data-ng-repeat="type in all_types" class="text-center">
+                {{type.displayName}}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="row in pluginDataSet">
+                <td style="min-width: 200px;">{{row.title || 'empty'}}</td>
+                <td style="min-width: 150px;" class="text-center" data-ng-repeat="perm in row.permission[row.id]">
+                  <input type="checkbox" data-ng-model="perm.flag" data-ng-true-value="1" data-ng-false-value="0" data-ng-checked="perm.flag==1" data-ng-change="updatePerm(row,perm)">
+                </td>
+            </tr>
+        </tbody>
+    </table>    
+    
+  
+
+</div> 

@@ -1,0 +1,62 @@
+<div class="animatedPanel" ng-class="{fullscreen: fullscreen , minimized: minimized}" ng-click="fullscreen = false;"
+  ng-multi-transclude-controller >
+  <div class="panel marginBottom5 panel-{{panelcolor}}" id="heading_{{id}}">
+    <div class="panel-heading" ng-click="$event.stopPropagation();changeStateFunction({tabid : id,mini: !minimized})"> <!--cPointer-->
+      <h4 class="pull-left nomargin col-md-3 col-lg-2 col-xs-6 pos-static" >{{title}}</h4>
+      <div class="btn-group themeLabel shortableHandle" dropdown ng-click="$event.stopPropagation();">
+        <button class="btn btn-default buttontitlebar dropdown-toggle" dropdown-toggle><i class="glyphicon glyphicon-qrcode nopadding"></i></button>
+
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">Change Color</a></li>
+          <li class="divider"></li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'default'})" class="label-default"><a href="">&nbsp;</a></li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'primary'})" class="label-primary"><a href="">&nbsp;</a></li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'success'})" class="label-success"><a href="">&nbsp;</a></li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'info'})" class="label-info"><a href=""></a>&nbsp;</li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'warning'})" class="label-warning"><a href="">&nbsp;</a></li>
+          <li ng-click="changeWeightFunction({tabid : id,color : 'danger'})" class="label-danger"><a href="">&nbsp;</a></li>
+          <li ng-if="istab" class="divider"></li>
+          <li ng-if="istab"><a href="#">Change group</a></li>
+          <li ng-if="istab" ng-repeat="group in $parent.panelObj.tabGroups"  ng-click="groupAssignToggle({tabid : id, groupid : group.id})"><a href="" >{{group.title}}</a></li>
+
+          <li ng-if="isgrouped" ng-click="groupAssignToggle({tabid : id, groupid : null})"><a href="" >Remove From Group</a></li>
+          <li ng-if="!istab" ng-click="removeGroup({tabid : id})"><a href="" class="label-default">Remove this group</a></li>
+        </ul>
+      </div>
+      <span ng-multi-transclude="title-block" ng-click="$event.stopPropagation();"></span>
+      <div ng-if="title=='Screening'" class="btn-group themeLabel" >
+        <a  ng-click="$event.stopPropagation();addScreening()">Add screening</a>
+      </div>
+
+      <div class="btn-group headerbreadcrumb" ng-show="pluginBreadcrumb.showlink && pluginBreadcrumb.showlink != 'all'">
+        <div class="col-md-12" >
+          <ul class="simple breadcrumb">
+            <li ng-repeat="navitem in pluginBreadcrumb.linknav" ng-class="$last ? 'active' : ''">
+              <a ng-click="$event.stopPropagation();pluginBreadcrumbAllLink({breadcrumbObj:pluginBreadcrumb})" ng-if="navitem=='all'">All</a> 
+              <a ng-if="!$last && navitem!='all'">{{navitem}}</a> 
+              <span ng-if="$last && navitem!='all'">{{navitem}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="pull-right" ng-show="fullscreen">
+        <i class="glyphicon" ng-class="!fullscreen ? 'glyphicon-share': 'glyphicon-remove-circle'" ng-click="fullscreen = !fullscreen; minimized = false; $event.stopPropagation();"></i>
+      </div>
+
+      <div class="btn-group themeLabel groupingButton" ng-show="prsbreadcrumb.addDocument=='Yes'">
+        <div class="col-md-12" ng-click="uploadDocumentPt();$event.stopPropagation();" > Add Document </div>
+      </div>
+      <div class="pull-right" ng-show="panelmessage.text"><div class="alert-{{panelmessage.type}}" style="padding: 5px;" role="alert">{{panelmessage.text}}<a style="cursor:pointer; margin-left: 2px" ng-click="closeMessage({tabid : id})";><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a></div></div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body nopadding" ng-class="{minimized: minimized}" ng-click="$event.stopPropagation();">
+      <div ng-multi-transclude="main-block" ng-class="title!='Policies' ? 'padding10':''"></div>
+      <div class="col-md-12" id="">
+        <div style="" class="pannel-message-board" ng-show="msg.open">
+          <span ng-class="msg.mclass">{{ msg.text }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

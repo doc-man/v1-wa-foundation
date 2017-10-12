@@ -1,0 +1,54 @@
+<!--<div ng-controller="scPrinterMasterCtrl">-->
+<div>
+    <div class="panel panel-default" style="padding: 1px;">
+        <div class=" popover fade bottom in" style="z-index: 0;top: 19px; display: block; left: -20px;min-width:0px;">
+            <div style="display: block; left:65px;" class="arrow"></div>
+        </div>
+        <div class="panel-body" style="padding: 6px;">
+            <!--Load api keys data-->
+            <div data-ng-init="getLoadDataForScPrinter()"></div>
+            <div class="fLeft">
+                <h3 style="margin-top: 0px;">Printer Timezone</h3>
+            </div>
+            <div class="col-md-10" data-ng-if="msgObj.msg.open && scPrinterPanelName=='Printer Timezone'">
+                <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass" style="margin-top: 5px;">
+                    <span>{{ msgObj.msg.text }}</span>
+                </div>
+            </div>
+            <br style="clear: both;"/>
+            <div class="textarea-initial" data-ng-if="!scPrinterDataSet">Loading...</div>
+            <div class="textarea-initial" data-ng-if="scPrinterDataSet.length==0">Nothing found.</div>
+            <div data-ng-if="scPrinterDataSet.length>0">
+                <table st-table="displayScPrinterDataSet" st-safe-src="scPrinterDataSet" class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th class="cPointer col-md-3 sortable" st-sort="abbreviation"><span class="sorticon"></span>Timezone abbreviation</th>
+                        <th class="cPointer col-md-2 sortable" st-sort="updatedOn"><span class="sorticon"></span>Updated on</th>
+                        <th class="cPointer col-md-2 sortable" st-sort="updatedBy"><span class="sorticon"></span>Updated by</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="reveal-elem-parent" data-ng-repeat="printer in displayScPrinterDataSet">
+                        <td>
+                            <a href="javascript:void(0)" editable-text="printer.abbreviation" buttons="no" blur="submit" onaftersave="updateScPrinter(printer, 'abbreviation')" class="cPointer" e-style="width: 100%">{{printer.abbreviation || 'empty'}}</a>
+                        </td>
+                        <td>
+                            <span>{{printer.updatedOn}}</span>
+                        </td>
+                        <td>
+                            <span>{{printer.updatedBy}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

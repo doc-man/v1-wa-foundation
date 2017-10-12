@@ -1,0 +1,72 @@
+<style>
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+    .highlight
+    {
+        background: #FFE0B2;
+    }
+</style>
+<div>
+    <div class="fLeft">
+
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+            <span data-ng-if="errorMessageShow == 'failed'"><a href="" data-ng-click="fnShowHideErrorDetail()">View detail</a></span>
+        </div>
+    </div>
+    <table st-safe-src="rowCollection" st-table="displayCollection"  class="table table-striped">
+    <!-- <table st-table="rowCollection"  class="table table-striped">-->
+        <thead>
+            <tr>
+                <th st-sort="fullname">Name</th>
+                <th st-sort="emailAddress">Email</th>
+                <th st-sort="alias">Alias Name</th>
+                <th st-sort="role">Role Name</th>
+                <th st-sort="adwordCode">Google Adword Code</th>
+            </tr>
+            <tr>
+                <th>
+                    <input st-search="fullname" placeholder="search for Name" class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="emailAddress" placeholder="search for Email" class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="alias" placeholder="search for Alias Name" class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="role" placeholder="search for Role" class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="adwordCode" placeholder="search for Adword Code" class="input-sm form-control" type="search"/>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in displayCollection">
+            <!--  <tr ng-repeat="row in rowCollection">-->
+                <td ng-class="!row.adwordCode ? 'highlight' : ''">{{row.fullname}}</td>
+                <td ng-class="!row.adwordCode ? 'highlight' : ''" ng-if="row.emailAddress">{{row.emailAddress}}</td>
+                <td ng-class="!row.adwordCode ? 'highlight' : ''" ng-if="!row.emailAddress">--</td>
+                <td ng-class="!row.adwordCode ? 'highlight' : ''"  ng-if="row.alias">{{row.alias}}</td>
+                <td ng-class="!row.adwordCode ? 'highlight' : ''" ng-if="!row.alias">--</td>
+                <td ng-class="!row.adwordCode ? 'highlight' : ''">{{row.role}}</td>
+
+                <td ng-class="!row.adwordCode ? 'highlight' : ''">
+                    <div class="popover-wrapper">
+                        <a style="cursor:pointer" onaftersave="fnUpdateAdwordCode(row)" ng-click="confirmEdit(textBtnForm,row.adwordCode)" e-form="textBtnForm" buttons="no" blur="submit" editable-text="row.adwordCode">{{row.adwordCode || 'empty' }}</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

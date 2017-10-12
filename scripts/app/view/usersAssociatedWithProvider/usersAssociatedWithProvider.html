@@ -1,0 +1,73 @@
+<!--<div ng-controller="usersAssociatedWithDoctorMasterCtrl" >-->
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Association between Provider and it's team list</h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div>
+    <table st-table="displayedRowCollection" st-safe-src="confObj.allDoctorAssociatedList" data-ng-if="confObj.allDoctorAssociatedList.length>0" class="table table-striped table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th class="col-md-2">Provider name</th>
+                <th class="col-md-1" data-ng-repeat="type in confObj.allUserAssociationMasterTypes">{{type.name}} name</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr data-ng-repeat="row in displayedRowCollection" class="reveal-elem-parent">
+                <td>{{row.fullNameOfUser}}</td>
+                <td data-ng-repeat="type in confObj.allUserAssociationMasterTypes">
+                    <oi-select data-ng-if="type.name == 'Backup provider'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allProvidersList track by item.uidOfUser"
+                               ng-model="row.Backupprovider"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Provider\'s admin'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allDoctorsAdminList track by item.uidOfUser"
+                               ng-model="row.Providersadmin"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Backup provider\'s admin'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allUserList track by item.uidOfUser"
+                               ng-model="row.Backupprovidersadmin"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Coder'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allUserList track by item.uidOfUser"
+                               ng-model="row.Coder"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Payment processor'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allUserList track by item.uidOfUser"
+                               ng-model="row.Paymentprocessor"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Health coach'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allHealthCoachList track by item.uidOfUser"
+                               ng-model="row.Healthcoach"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <oi-select data-ng-if="type.name == 'Intake co-ordinator'" data-ng-click="$event.stopPropagation();"
+                               oi-options="item.fullNameOfUser for item in confObj.allUserList track by item.uidOfUser"
+                               ng-model="row.Intakecoordinator"
+                               placeholder="Select" data-ng-change="saveChange(row)"
+                    ></oi-select>
+                    <!--<oi-select data-ng-if="type.name == 'Therapist'" data-ng-click="$event.stopPropagation();"-->
+                               <!--oi-options="item.fullNameOfUser for item in confObj.allTherapistList track by item.uidOfUser"-->
+                               <!--ng-model="row.Therapist"-->
+                               <!--placeholder="Select" data-ng-change="saveChange(row)"-->
+                    <!--&gt;</oi-select>-->
+                </td>
+            </tr>
+        </tbody>
+        <tfoot ng-if="confObj.allDoctorsListWithDoctorAdminInfo.length>25">
+            <tr>
+                <td colspan="7" class="text-center">
+                    <div data-st-pagination="" data-st-items-by-page="25" data-st-displayed-pages="7"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

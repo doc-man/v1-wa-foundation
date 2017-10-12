@@ -1,0 +1,372 @@
+<!--<div ng-controller="usersMasterCtrl">-->
+<div>
+    <div data-ng-if="forAddNewUser == false">
+        <div class="fLeft">
+            <h3>Users list &nbsp;
+                <button id="addUserFromMdb" class="btn btn-default themeLabel" ng-click="adduser()" type="button" title="Add User">
+                    <i class="glyphicon glyphicon-plus nopadding"></i>
+                </button>
+
+
+
+                <button title="Help" type="button" class="btn btn-default buttontitlebar" style="background: #d8d8d8; box-shadow: inset 4px 3px 10px #aaa; border-radius: 3px!important;" data-ng-if="activityLogIcon == true" data-ng-click="fnShowSiteWideHelpData(siteWideHelpData[14].helpID)">
+                    <a class="glyphicon glyphicon-info-sign nopadding"></a>
+                </button>
+
+                <button title="Help" type="button" class="btn btn-default themeLabel buttontitlebar"  data-ng-if="activityLogIcon == false" data-ng-click="fnShowSiteWideHelpData(siteWideHelpData[14].helpID)">
+                    <a class="glyphicon glyphicon-info-sign nopadding"></a>
+                </button>
+
+                <div data-ng-if="siteWideHelpData[14].isVissible" class="popover fade bottom in btnClicked" style="top: 52px; display: block; left: 28px;">
+                    <div style="display: block;margin-left: -53px !important;" class="arrow"></div>
+                    <h3 class="popover-title"><b><font style="color:#00006B">Help:</font></b>
+                        <a class="glyphicon glyphicon-pencil cPointer" data-ng-if="!siteWideHelpData[14].editable" data-ng-click="fnEditSiteWideHelpData(siteWideHelpData[14].helpID)" style="float: right;"></a>
+                        <a class="glyphicon glyphicon-ok cPointer" data-ng-if="siteWideHelpData[14].editable" data-ng-click="fnUpdateSiteWideHelpData(siteWideHelpData[14])" style="float: right;"></a></h3>
+                    <div style="display: block; background: #F4FFF4" data-ng-if="!siteWideHelpData[14].editable" class="popover-content">
+                        <span style="width: 100%;" ng-bind-html="siteWideHelpData[14].context | to_trusted">{{siteWideHelpData[14].context}}</span>
+                        <span style="color: #6e7774; width:100%;background-color: #F4FFF4; font-size: 12px;"><span style="float: right;">Last edited by {{siteWideHelpData[14].firstNameofUser}} on {{siteWideHelpData[14].updated_at}}</span></span>
+                    </div>
+
+                    <textarea style="margin: 2px; width: 542px; height: 300px;" data-ng-if="siteWideHelpData[14].editable" ng-model="siteWideHelpData[14].contextForEdit">{{siteWideHelpData[14].contextForEdit}}</textarea>
+                </div>
+            </h3>
+        </div>
+        <div data-ng-if="msgObj.msg.open">
+            <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+                <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+                <span data-ng-if="errorMessageShow == 'failed'"><a href="" data-ng-click="fnShowHideErrorDetail()">View detail</a></span>
+            </div>
+        </div>
+        <div class="pannel-message-board mTop20" data-ng-if="showErrorMessage">
+            <span class="alert-danger">{{errorMessage}}</span>&nbsp;&nbsp;
+            <span><a href="" data-ng-click="fnShowHideErrorDetail()">Hide detail</a></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="textarea-initial" data-ng-if="userDataSet.length == 0">{{masterData.messageVal}}</div>
+        <table data-ng-if="userDataSet.length>0" st-table="displayUsersCollection" st-safe-src="userDataSet" class="table table-striped">
+            <thead>
+               <tr>
+                   <th class="cPointer col-md-1 sortable padding-left-45p" st-sort="nameSuffix"><span class="sorticon"></span>Suffix</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="firstName"><span class="sorticon"></span>First name</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="middleName"><span class="sorticon"></span>Middle name</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="lastName"><span class="sorticon"></span>Last name</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="emailAddress"><span class="sorticon"></span>Email</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="dateOfBirth"><span class="sorticon"></span>Date of birth</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="roleID"><span class="sorticon"></span>Role type</th>
+                   <th class="col-md-1" >Change password</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="emailValidate"><span class="sorticon"></span>Email validated</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="allowedToLogin"><span class="sorticon"></span>Allow login</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="allowedToMasterDB"><span class="sorticon"></span>Allow MasterDB</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="isUserVisibleOnBookingSystem"><span class="sorticon"></span>Show on booking system</th>
+                   <th class="cPointer col-md-1 sortable" st-sort="temporaryDisableTFACurrentStatus"><span class="sorticon"></span>TFA temporarily disabled </th>
+                   <th class="cPointer col-md-1 sortable" st-sort="temporaryDisableTFACurrentStatus"><span class="sorticon"></span>is TFA enabled</th>
+               </tr>
+               <tr>
+                    <th class="padding-left-45p">
+                        <input st-search="nameSuffix" data-ng-model="nameSuffix" data-ng-change="onChangeCountUsers(nameSuffix, 'nameSuffix');"/>
+                    </th>
+                    <th>
+                        <input st-search="firstName" data-ng-model="firstName" data-ng-change="onChangeCountUsers(firstName, 'firstName');"/>
+                    </th>
+                   <th>
+                        <input st-search="middleName" data-ng-model="middleName" data-ng-change="onChangeCountUsers(middleName, 'middleName');"/>
+                    </th>
+                   <th>
+                        <input st-search="lastName" data-ng-model="lastName" data-ng-change="onChangeCountUsers(lastName, 'lastName');"/>
+                    </th>
+                    <th>
+                        <input st-search="emailAddress" data-ng-model="emailAddress" data-ng-change="onChangeCountUsers(emailAddress, 'emailAddress');"/></th>
+                    <th></th>
+                    <th><input st-search="roleName" data-ng-model="roleName" data-ng-change="onChangeCountUsers(roleName, 'roleName');"/></th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr class="cPointer reveal-elem-parent" data-ng-repeat="user in displayUsersCollection">
+                   <td>
+                        <div class="input-group">
+                            <div class="pull-left width40p reveal-elem" >
+                                <a href="" data-ng-if="user.id == null" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteUser(user)"></a>
+                                <a data-ng-if="user.id != null" href="" class="glyphicon glyphicon-link depressForSingelRowActivityLog" data-ng-class="{'reveal-elem':!user.activityLogIconForUsers, 'depressedForActivityLog':user.activityLogIconForUsers}" data-ng-click="fnOpenActivityStreamForUsers($index, user.id)"></a>
+                            </div>
+
+                            <span data-ng-if="user.activityLogIconForUsers" class="fa fa-sort-asc fa-3x arrowForActivityLog" style="margin-left: -40px; margin-top: 20px;" data-ng-class="{'traingleLftLock':user.isItLocked=='Yes'}"></span>
+                            <div data-ng-if="user.activityLogIconForUsers" class="panel panel-default viewActivityLog" style="margin-top: 36px; border-top-width: 0px;margin-bottom: 0px !important;width: auto">
+                                <div class="textarea-initial" data-ng-if="usersActivityLogData.length==0 && showUsersActivityLog" style="background-color: #CFCFD0;">No activity log found</div>
+                                <table data-ng-if="showUsersActivityLog && usersActivityLogData.length > 0" st-table="displayUsersActivityLog"  st-safe-src="usersActivityLogData" class="table table-striped activityLogTable">
+                                    <thead style="background-color: #BFBFBF;">
+                                    <tr >
+                                        <th class="cPointer col-md-1 sortable" st-sort="clientIPAddressForActivity"><span class="sorticon"></span>IP address</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfSection"><span class="sorticon"></span>Section</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="doneByUserFullName"><span class="sorticon"></span>Activity done by</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="typeOfActivity"><span class="sorticon"></span>Type of activity</th>
+                                        <th class="cPointer col-md-1 sortable" st-sort="pluginFieldName"><span class="sorticon"></span>Field of activity</th>
+                                        <th class="cPointer col-md-2 sortable" st-sort="timeOfActivity"><span class="sorticon"></span>Time of activity</th>
+                                        <th class="col-md-6">Description</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input st-search="clientIPAddressForActivity"/></th>
+                                        <th><input st-search="typeOfSection"/></th>
+                                        <th><input st-search="doneByUserFullName"/></th>
+                                        <th><input st-search="typeOfActivity"/></th>
+                                        <th><input st-search="pluginFieldName"/></th>
+                                        <th><input st-search="timeOfActivity"/></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="background-color: rgba(141, 144, 144, 0.19);">
+
+                                    <tr data-ng-repeat="log in displayUsersActivityLog">
+
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.clientIPAddressForActivity}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.typeOfSection}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.doneByUserFullName}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.typeOfActivity}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span data-ng-if="log.pluginFieldName != 'Add'">{{::log.pluginFieldName}}</span>
+                                                <span data-ng-if="log.pluginFieldName == 'Add'"></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <span>{{::log.timeOfActivity}}</span>
+                                                <span data-ng-if="log.timezoneAbbreviationForActivity.length > 0"> ({{::log.timezoneAbbreviationForActivity}})</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group" style="width: 260px;">
+                                                <div data-ng-if="log.typeOfActivity == 'add'">{{::log.newValue}}</div>
+                                                <div data-ng-if="log.typeOfActivity == 'edit'">
+                                                    <span>
+                                                        Old value: "{{::log.oldValue}}" New value: "{{::log.newValue}}"
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot ng-if = "usersActivityLogData.length>10" style="background-color: #BFBFBF;">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="7" class="paginationMargin"></div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <a href="javascript:void(0)" editable-text="user.nameSuffix" buttons="no" blur="submit" data-ng-model="user.nameSuffix" onaftersave="fnSaveUser(user, 'nameSuffix')" data-ng-keypress="fnSaveUser(user, 'nameSuffix')">{{user.nameSuffix || 'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-text="user.firstName" buttons="no" blur="submit" data-ng-model="user.firstName" onaftersave="fnSaveUser(user, 'firstName')" data-ng-keypress="fnSaveUser(user, 'firstName')">{{user.firstName||'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-text="user.middleName" buttons="no" blur="submit" data-ng-model="user.middleName" onaftersave="fnSaveUser(user, 'middleName')" data-ng-keypress="fnSaveUser(user, 'middleName')">{{user.middleName||'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-text="user.lastName" buttons="no" blur="submit" data-ng-model="user.lastName" onaftersave="fnSaveUser(user, 'lastName')" data-ng-keypress="fnSaveUser(user, 'lastName')">{{user.lastName||'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-email="user.emailAddress" buttons="no" blur="submit" data-ng-model="user.emailAddress" onaftersave="fnSaveUser(user, 'email')" data-ng-keypress="fnSaveUser(user, 'email')">{{user.emailAddress||'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" e-style="width:141px;" ng-model="user.dateOfBirth" editable-bsdate="user.dateOfBirth" e-uib-datepicker-popup="{{format}}" buttons="no" e-is-open="status.isOpen" ng-focus="status.isOpen=true" e-ng-click="opencal($event)" e-placeholder="Enter date" e-datepicker-options="dateOptions" e-ng-change="fnSaveUser(user, 'dob', $data)" onbeforesave="fnSaveUser(user, 'dob', $data)" e-datepicker-mode="'day'">{{(user.dateOfBirth|date:"MMM dd, yyyy")||'0000-00-00'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-select="user.roleID" buttons="no" e-ng-options="role.roleID as role.roleName for role in masterData.userRolelistDataSet" buttons="no" blur="submit" onaftersave="fnSaveUser(user, 'role')" data-ng-keypress="fnSaveUser(user, 'role')">{{user.roleName || 'empty'}}</a>
+                        </div>
+                   </td>
+                   <td>
+                        <div class="input-group">
+                            <a href="javascript:void(0)" editable-password="user.newPassword" buttons="no" blur="submit" data-ng-model="user.newPassword" onaftersave="fnSaveUser(user, 'newPassword')" data-ng-keypress="fnSaveUser(user, 'newPassword')">set new password</a>
+                        </div>
+                   </td>
+                   <td>
+                         <a class="btn btn-danger btn-xs cPointer" data-ng-if="user.emailValidate == 'No'" data-ng-click="fnSaveUser(user, 'emailValidate', 'Yes')">{{user.emailValidate}}</a>
+                         <a class="btn btn-success btn-xs cPointer" data-ng-if="user.emailValidate == 'Yes'" data-ng-click="fnSaveUser(user, 'emailValidate', 'No')">{{user.emailValidate}}</a>
+                   </td>
+                   <td>
+                         <a class="btn btn-danger btn-xs cPointer" data-ng-if="user.allowedToLogin == 'No'" data-ng-click="fnSaveUser(user, 'allowedToLogin', 'Yes')">{{user.allowedToLogin}}</a>
+                         <a class="btn btn-success btn-xs cPointer" data-ng-if="user.allowedToLogin == 'Yes'" data-ng-click="fnSaveUser(user, 'allowedToLogin', 'No')">{{user.allowedToLogin}}</a>
+                   </td>
+                   <td>
+                         <a class="btn btn-danger btn-xs cPointer" data-ng-if="user.allowedToMasterDB == 'No'" data-ng-click="fnSaveUser(user, 'allowedToMasterDB', 'Yes')">{{user.allowedToMasterDB}}</a>
+                         <a class="btn btn-success btn-xs cPointer" data-ng-if="user.allowedToMasterDB == 'Yes'" data-ng-click="fnSaveUser(user, 'allowedToMasterDB', 'No')">{{user.allowedToMasterDB}}</a>
+                   </td>
+                   <td>
+                       <a class="btn btn-danger btn-xs cPointer" data-ng-if="user.isUserVisibleOnBookingSystem == 'No'" data-ng-click="fnSaveUser(user, 'isUserVisibleOnBookingSystem', 'Yes')">{{user.isUserVisibleOnBookingSystem}}</a>
+                       <a class="btn btn-success btn-xs cPointer" data-ng-if="user.isUserVisibleOnBookingSystem == 'Yes'" data-ng-click="fnSaveUser(user, 'isUserVisibleOnBookingSystem', 'No')">{{user.isUserVisibleOnBookingSystem}}</a>
+                   </td>
+                   <td>
+                       <a class="btn btn-danger btn-xs cPointer" data-ng-if="user.temporaryDisableTFACurrentStatus == 'No'" data-ng-click="fnSaveUser(user, 'temporaryDisableTFACurrentStatus', 'Yes')">{{user.temporaryDisableTFACurrentStatus}}</a>
+                       <a class="btn btn-success btn-xs cPointer" data-ng-if="user.temporaryDisableTFACurrentStatus == 'Yes'" data-ng-click="fnSaveUser(user, 'temporaryDisableTFACurrentStatus', 'No')">{{user.temporaryDisableTFACurrentStatus}}</a>
+                       <span data-ng-if="user.temporaryDisableTFACurrentStatus == null">Not applicable</span>
+                   </td>
+                   <td>
+                       <span data-ng-if="user.TFAenable=='Yes'">Yes</span>
+                       <span data-ng-if="user.TFAenable=='No'">No</span>
+                   </td>
+               </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-center" style=" vertical-align: middle;color:#666;font-weight: bold;">
+                       <div data-ng-show="paginationInfo.totalItemCount>0">Total <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> user<span data-ng-show="paginationInfo.totalItemCount>1">s</span>.
+                            Showing {{displayUsersCollection.length}} user<span data-ng-show="displayUsersCollection.length>1">s</span>.
+                           <div class="btn-group report-info">
+                               <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount<25}">25</label>
+                               <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount<26}">50</label>
+                               <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount<51}">100</label>
+                               <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount<101}">200</label>
+                           </div>
+                        </div>
+                        <div data-ng-show="paginationInfo.totalItemCount==0">
+                            No user found to show.
+                        </div>
+                    </td>
+                    <td colspan="3" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-template="directives/pagination.custom.html"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- add new user -->
+    <div data-ng-if="forAddNewUser == true" class="jumbotron">
+        <h3>{{pageTitle}}</h3>
+        <div class="col-md-4">
+            <div data-ng-if="msgObj.msg.open">
+                <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+                    <span id="forProtractorTestMessage">{{ msgObj.msg.text }}</span>
+                </div>
+            </div>
+        </div>
+        <form name="userForm" data-ng-submit="storeUser(userObj)">
+            <input type="hidden" data-ng-model="userObj.id" name="id" >
+            <div class="form-group" data-ng-class="{'has-error': userForm.fname.$invalid && !userForm.fname.$pristine}">
+                <div class="col-md-12">
+                    <label for="fname">Enter name &nbsp;</label><label class="switchOn">*</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6 protractorTestFirstName">
+                        <input type="text" class="form-control fLeft" data-ng-model="userObj.firstName" name="fname" placeholder="First name" title="First name" id="fname" data-ng-required="!userObj.lastName">
+                    </div>
+                    <div class="col-md-6 protractorTestLastName">
+                        <input type="text" class="form-control" data-ng-model="userObj.lastName" name="lname" placeholder="Last name" title="Last name" id="lname" data-ng-required="!userObj.firstName">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- <span ng-show="userForm.fname.$invalid && !userForm.fname.$pristine" class="help-block">Enter firstname.</span>-->
+                    <span data-ng-show="userForm.fname.$error || userForm.lname.$error" class="help-block">Enter either "First name" or "Last name"</span>
+                </div>
+            </div>
+            <div class="form-group" data-ng-class="{'has-error': userForm.dob.$invalid && !userForm.dob.$pristine}">
+                <div class="col-md-12">
+                    <label for="dob">Date of birth / Phone number / Email id &nbsp;</label><label style="color:red;">*</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4 protractorTestDOB">
+                        <input type="text" class="form-control" data-ng-model="userObj.dob" name="dob" placeholder="DD-MM-YYYY" id="dob" pattern="\d{2}\-\d{2}\-\d{4}" title="Date of birth" ng-required="!userObj.phone && !userObj.emailAddress">
+                        <span data-ng-show="userForm.dob.$invalid && !userForm.dob.$pristine" style="color: #a94442;" class="help-block">Enter a valid date of birth format DD-MM-YYYY</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="tel" class="form-control" data-ng-model="userObj.phone" name="phone" placeholder="Enter phone no." id="phone" title="Phone no." pattern="\d{3}\-\d{3}\-\d{4}" ng-required="!userObj.dob && !userObj.emailAddress">
+                        <span data-ng-show="userForm.phone.$invalid && !userForm.phone.$pristine" style="color: #a94442;" class="help-block">Enter a valid phone no. format xxx-xxx-xxxx</span>
+                    </div>
+                    <div class="col-md-4 protractorTestEmail">
+                        <input type="email" class="form-control" data-ng-model="userObj.emailAddress" name="email" placeholder="Enter email" id="email" title="Email id" autocomplete="false" ensure-unique="email" ng-required="!userObj.dob && !userObj.phone">
+                        <span data-ng-show="userForm.email.$invalid && !userForm.email.$pristine" style="color: #a94442;" class="help-block">Enter a valid email address.</span>
+                        <small class="error" data-ng-show="userForm.email.$error.unique" style="color: #a94442;">This email id is already taken, please try another</small>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!--<span ng-show="userForm.dob.$invalid && !userForm.dob.$pristine" class="help-block">Enter a valid date of birth.</span>-->
+                    <span data-ng-show="userForm.dob.$error || userForm.phone.$error || userForm.email.$error" class="help-block">Enter either "Date of birth / Phone number / email id"</span>
+                </div>
+            </div>
+            <!--<div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
+                <label class="control-label" for="email">Email Id &nbsp;</label><label class="switchOn">*</label>
+                <input type="email" class="form-control" ng-model="userObj.emailAddress" name="email" placeholder="Enter email" id="email" autocomplete="false" ensure-unique="email" ng-required="true">
+                <span ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email address.</span>
+                <small class="error" ng-show="userForm.email.$error.unique">That e-mail id is already taken, please try another</small>
+            </div> -->
+            <div class="form-group" data-ng-class="{'has-error': userForm.gender.$invalid && !userForm.gender.$pristine}" >
+                <div class="col-md-12">
+                    <label for="gender">Gender</label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control protractorTestGender" data-ng-model="userObj.genderTypeID" name="gender" id="gender" title="Gender">
+                        <option value=""></option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <!--<span ng-show="userForm.gender.$invalid && !userForm.gender.$pristine" class="help-block">Enter user gender.</span>-->
+                    <span data-ng-show="userForm.gender.$error" class="help-block">Select gender</span>
+                </div>
+            </div>
+            <div class="form-group" data-ng-class="{'has-error': userForm.role.$invalid && !userForm.role.$pristine}" >
+                <div class="col-md-12">
+                    <label for="faqQuestion">Roles &nbsp;</label><label style="color:red;">*</label>
+                </div>
+                <div class="col-md-12">
+                    <select class="form-control protractorTestRole" ng-model="userObj.roleId" name="role" id="role" title="Role" data-ng-required="!userObj.roleId">
+                        <option value=""></option>
+                        <option data-ng-repeat="role in masterData.userRolelistDataSet" value="{{role.roleID}}" data-ng-selected="{{userObj.roleId === role.roleID}}" > {{role.roleName}} </option>
+                    </select>
+                </div>
+                <div class="col-md-12 protractorTestRole">
+                    <!--<span ng-show="userForm.role.$invalid && !userForm.role.$pristine" class="help-block">Enter Role Type.</span>-->
+                    <span data-ng-show="userForm.role.$error" class="help-block">Select role</span>
+                </div>
+            </div>
+            <div class="form-group" data-ng-if="!userObj.id" data-ng-class="{'has-error': userForm.password.$invalid && !userForm.password.$pristine}">
+                <div class="col-md-12">
+                    <label for="email">Password</label>
+                </div>
+                <div class="col-md-12">
+                    <input type="password" class="form-control protractorTestPasswd" data-ng-model="userObj.password" autocomplete="new-password" name="password" title="Password" placeholder="Enter password" id="password">
+                </div>
+                <div class="col-md-12">
+                    <!--<span ng-show="userForm.password.$invalid && !userForm.password.$pristine" class="help-block">Enter password.</span>-->
+                    <!--<button type="button" class="btn btn-default" ng-click="generatePassword()">regenerate password</button>-->
+                    <span data-ng-show="userForm.password.$error" class="help-block">Enter Password</span>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" data-ng-disabled="status.disableAddUserButton" id="forProtractorTestSubmit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

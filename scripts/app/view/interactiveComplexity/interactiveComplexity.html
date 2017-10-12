@@ -1,0 +1,44 @@
+<!--<div ng-controller="interactiveComplexityMasterCtrl" >-->
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Codes for interactive complexity &nbsp;
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass" style="margin-top: 25px !important;">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!-- <style type="text/css">
+         .alternate-col tr:nth-child(odd){
+             background-color: #F3F3F3;
+         }
+     </style>-->
+    <div class="textarea-initial" data-ng-if="masterData.interactiveComplexityList.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="masterData.interactiveComplexityList.length>0" st-table="displayInteractiveComplexityListCollection" st-safe-src="masterData.interactiveComplexityList" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-3" style="padding-left: 5% !important;">Level</th>
+            <th class="col-md-3">Code</th>
+        </tr>
+        </thead>
+        <tbody class="alternate-col">
+        <tr class="cPointer reveal-elem-parent" data-ng-repeat="interactiveComplexity in displayInteractiveComplexityListCollection" data-ng-class="{'warning':interactiveComplexity.interactiveComplexityID == null}">
+            <td class="col-md-4" style="padding-left: 5% !important;">
+                <a href="javascript:void(0)" editable-text="interactiveComplexity.level" buttons="no" blur="submit" data-ng-model="interactiveComplexity.level" onaftersave="fnSaveInteractiveComplexity(interactiveComplexity,'level')" data-ng-keypress="fnSaveInteractiveComplexity(interactiveComplexity,'level')" >{{interactiveComplexity.level||'empty'}}</a>
+            </td>
+            <td class="col-md-2">
+                <a href="javascript:void(0)" editable-select="interactiveComplexity.code" buttons="no" e-ng-options="cptCode.name as cptCode.name for cptCode in masterData.cptCodeList" blur="submit" onaftersave="fnSaveInteractiveComplexity(interactiveComplexity,'code')"  data-ng-keypress="fnSaveInteractiveComplexity(interactiveComplexity,'code')">{{interactiveComplexity.code||'none'}}</a>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="16" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

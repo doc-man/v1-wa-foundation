@@ -1,0 +1,58 @@
+<div class="col-sm-12 form-box">
+    <div class="form-top">
+        <div class="form-top-left">
+            <h3>Unlock "Is coding finished for this appointment"
+                <button title="Help" type="button" class="btn btn-default buttontitlebar" style="background: #d8d8d8; box-shadow: inset 4px 3px 10px #aaa; border-radius: 3px!important;" data-ng-if="helpReverseIsCodingFinishedForThisAppointment" data-ng-click="fnShowSiteWideHelpData(siteWideHelpData[43].helpID)">
+                    <a class="glyphicon glyphicon-info-sign nopadding"></a>
+                </button>
+
+                <button title="Help" type="button" class="btn btn-default themeLabel buttontitlebar"  data-ng-if="!helpReverseIsCodingFinishedForThisAppointment" data-ng-click="fnShowSiteWideHelpData(siteWideHelpData[43].helpID)">
+                    <a class="glyphicon glyphicon-info-sign nopadding"></a>
+                </button>
+            </h3>
+            <div data-ng-if="siteWideHelpData[43].isVissible" class="popover fade bottom in btnClicked" style="top: 54px; display: block; left: 50px;">
+                <div style="top: -11px !important; margin-left: 279px !important;" class="arrow"></div>
+                <h3 class="popover-title"><b><font style="color:#00006B">Help:</font></b>
+                    <a class="glyphicon glyphicon-pencil cPointer" data-ng-if="!siteWideHelpData[43].editable" data-ng-click="fnEditSiteWideHelpData(siteWideHelpData[43].helpID, 'edit')" style="float: right;"></a>
+                    <a class="glyphicon glyphicon-ok cPointer" data-ng-if="siteWideHelpData[43].editable" data-ng-click="fnEditSiteWideHelpData(siteWideHelpData[43].helpID, 'save')" style="float: right;"></a></h3>
+                <div style="display: block; background: #F4FFF4" data-ng-if="!siteWideHelpData[43].editable" class="popover-content">
+                    <span style="width: 100%;" ng-bind-html="siteWideHelpData[43].context | to_trusted">{{siteWideHelpData[43].context}}</span>
+
+                    <span style="color: #6e7774; width:100%;background-color: #F4FFF4; font-size: 12px;"><span style="float: right;">Last edited by {{siteWideHelpData[43].firstNameofUser}} on {{siteWideHelpData[43].updated_at}}</span></span>
+                </div>
+
+                <textarea style="margin: 2px; width: 542px; height: 300px;" data-ng-if="siteWideHelpData[43].editable" ng-model="siteWideHelpData[43].contextForEdit">{{siteWideHelpData[43].contextForEdit}}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom col-md-5" data-ng-if="unlockDetailConfirm == 'No'">
+        <form name="unlockEventForm" data-ng-submit="fnUnlockEvent('reverseIsCodingFinishedForThisAppointment')">
+            <div class="form-group">
+                <p>Enter event id which "Is coding finished for this appointment" you want to unlock <label class="switchOn">*</label> :</p>
+                <input type="text" placeholder="Event id" class="form-control" data-ng-model="unlockData.eventID" data-ng-required="!unlockData.eventID">
+            </div>
+            <div class="form-group">
+                <p>Give reason for unlocking "Is coding finished for this appointment"<label class="switchOn">*</label> :</p>
+                <textarea placeholder="Type reason here..." class="form-control" data-ng-model="unlockData.reason" data-ng-required="!unlockData.reason"></textarea>
+            </div>
+            <button type="submit" class="btn">Unlock now</button>
+            <button ui-sref="masterDb.sectionPage({sectionName: 'unlock'})" class="btn">Go back</button>
+        </form>
+    </div>
+    <div class="form-bottom" data-ng-if="unlockDetailConfirm == 'Yes'">
+        <form name="unlockEventForm" data-ng-submit="fnSaveUnlockedEvent('reverseIsCodingFinishedForThisAppointment')">
+            <div class="form-group">
+                <p>Event id :</p>
+                <input type="text" placeholder="Event id" class="form-control" data-ng-model="unlockData.eventID" data-ng-required="!unlockData.eventID" disabled="disabled">
+            </div>
+            <div class="form-group">
+                <p>Reason :</p>
+                <textarea placeholder="Type reason here..." class="form-control" data-ng-model="unlockData.reason" data-ng-required="!unlockData.reason" disabled="disabled"></textarea>
+            </div>
+            <p>Are you sure to unlock this event "Is coding finished for this appointment"?
+                <button type="submit" class="btn">Yes</button>
+                <button data-ng-click="fnGoBack()" class="btn">No</button>
+            </p>
+        </form>
+    </div>
+</div>

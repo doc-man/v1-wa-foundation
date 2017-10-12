@@ -1,0 +1,177 @@
+<!--<div ng-controller="apptNoteConfigMasterCtrl">-->
+<div>
+    <div class="fLeft">
+        <h3>Provider specific &nbsp;
+            <button class="btn btn-default themeLabel" ng-click="fnAddNewProviderSpecificDetails()" type="button" title="Add new provider details">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board mTop20" data-ng-class="msgObj.msg.mclass" style="margin-top: 25px !important;">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <!--<div class="textarea-initial">Nothing found</div>-->
+    <div class="col-md-12">
+        <table class="table ng-scope" st-table="displayAllProviderListCollection" st-safe-src="allProviderConfigList"><!--data-ng-if="masterData.allowedFileExtensionList.length>0" -->
+            <thead>
+            <tr>
+                <th class=" col-md-1 "></th>
+                <th class=" col-md-3 ">Name</th>
+                <th class=" col-md-5 " style="text-align: center">Signature</th>
+                <th class=" col-md-3 ">NPI for provider</th>
+            </tr>
+
+            </thead>
+            <tbody class="alternate-col">
+            <tr class="cPointer reveal-elem-parent" data-ng-repeat="providers in displayAllProviderListCollection" data-ng-class="{'warning':providers.id == 0}">
+                <td>
+                    <div class="pull-left width40p reveal-elem" >
+                        <a href="" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteProviderConfig(providers.id, $index)" id="remove-pc"></a>
+                    </div>
+                </td>
+
+                <td>
+                    <oi-select  oi-options="item.name for item in allProviderMasterList track by item.id" ng-model="providers.name" placeholder="Select provider"
+                                ng-change="fnCreateNewProviderConfig(providers,'name')" ng-disabled="providers.isDisabled"
+                                oi-select-options="{newItem: true, newItemFn: ($event.which === 13)?fnCreateNewProviderConfig(providers,'name'):0}"></oi-select><!---->
+                </td>
+                <td style="text-align: center">
+                    <div class="row">
+                        <img class="thumb" alt="" data-ng-src="{{providers.currentSignatureSrc}}" width="50px"/>
+                        <span class="glyphicon cPointer glyphicon-plus btn-info btn-file" style="padding: 4px 0 4px 7px; height: 25px; width: 100px; margin-left: 20px;" data-ng-if="providers.signature==null && providers.uploader.queue.length==0">
+                            <b data-ng-if="providers.currentSignatureSrc==null">Add</b>
+                            <b data-ng-if="providers.currentSignatureSrc!=null">Change</b>
+                            <input type="file" nv-file-select="" uploader="providers.uploader" /> <!--accept="image/*"-->
+                        </span>
+                    </div>
+                    <div class="row" data-ng-if="providers.uploader.queue.length>0">
+                        <table class="table tableHeaderLight">
+                            <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th data-ng-if="providers.uploader.isHTML5">Size</th>
+                                <th data-ng-if="providers.uploader.isHTML5">Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="item in providers.uploader.queue">
+                                <td><strong>{{ item.file.name }}</strong></td>
+                                <td data-ng-if="providers.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td data-ng-if="providers.uploader.isHTML5">
+                                    <div class="progress nomargin">
+                                        <div class="progress-bar" role="progressbar" data-ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-if="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span data-ng-if="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                    <span data-ng-if="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" data-ng-click="item.upload()" data-ng-keypress="item.upload()" data-ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> Upload
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" data-ng-click="item.remove()" data-ng-keypress="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" title="NPI of Provider" e-title="NPI of Provider" data-ng-if="providers.name!=null" editable-text="providers.npi" buttons="no" class="cPointer" onaftersave="fnSaveNPI(providers, 'npi')" data-ng-keypress="fnSaveNPI(providers, 'npi')" e-placeholder="Enter NPI of provider">{{providers.npi || 'Not set'}}</a>
+                </td>
+
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="16" st-displayed-pages="7"></div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <div class="alert alert-warning" role="alert"><b>Note:</b> Format for file to upload for signature: Upload a jpg file of 50/50 pixels.</div>
+    </div>
+    <div class="col-md-12">
+        <h4>Site common settings</h4>
+        <div data-ng-repeat="common in displayAllCommonListCollection">
+            <div class="row" data-ng-if="common.name=='logo'">
+                <div class="col-md-4" style="text-align: center"><b>Website logo / Appointment note PDF logo </b></div>
+                <div class="col-md-4">
+                    <img class="thumb" alt="" data-ng-if="common.id!=null" data-ng-src="{{common.currentLogoSrc}}" width="100px"/>
+                    <span class="glyphicon cPointer glyphicon-plus btn-info btn-file" style="padding: 4px 0 4px 7px; height: 25px; width: 100px; margin-left: 20px;" data-ng-if="common.logo==null && common.uploader.queue.length==0">
+                                <b data-ng-if="common.currentLogoSrc==null">Add</b>
+                                <b data-ng-if="common.currentLogoSrc!=null">Change</b>
+                                <input type="file" nv-file-select="" uploader="common.uploader" />
+                    </span>
+                </div>
+                <div class="col-md-4">
+                    <div class="row" data-ng-if="common.name=='logo' &&common.uploader.queue.length>0">
+                        <table class="table tableHeaderLight">
+                            <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th data-ng-if="common.uploader.isHTML5">Size</th>
+                                <th data-ng-if="common.uploader.isHTML5">Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="item in common.uploader.queue">
+                                <td><strong>{{ item.file.name }}</strong></td>
+                                <td data-ng-if="providers.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td data-ng-if="providers.uploader.isHTML5">
+                                    <div class="progress nomargin">
+                                        <div class="progress-bar" role="progressbar" data-ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span data-ng-if="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span data-ng-if="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                    <span data-ng-if="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" data-ng-click="item.upload()" data-ng-keypress="item.upload()" data-ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> Upload
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" data-ng-click="item.remove()" data-ng-keypress="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-4" style="text-align: center"><b>Website configuration / <br> Appointment note PDF footer section details </b></div>
+            <div class="col-md-8">
+                <div ng-repeat="settings in allFooterSectionSettings">
+                    <div class="col-md-6">{{settings.name}}</div>
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" data-ng-if="settings.value!=null"
+                           editable-text="settings.value" buttons="no" class="cPointer"
+                           onaftersave="fnSaveSettings(settings)" data-ng-keypress="fnSaveSettings(settings)" e-placeholder="Empty">
+                            {{settings.value || 'Not set'}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

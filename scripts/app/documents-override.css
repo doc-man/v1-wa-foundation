@@ -1,0 +1,77 @@
+#userDocumentsPanel .table>thead>tr>th,
+#userDocumentsPanel .table>tbody>tr>th,
+#userDocumentsPanel .table>tfoot>tr>th,
+#userDocumentsPanel .table>thead>tr>td,
+#userDocumentsPanel .table>tbody>tr>td,
+#userDocumentsPanel .table>tfoot>tr>td{padding:1px!important;border-top:none!important; vertical-align: middle;}
+.modal-header {
+    background-color: #5cb85c;
+    color:white !important;
+    text-align: center;
+    font-size: 22px;
+}
+.modal-footer {
+    background-color: #f9f9f9;
+}
+.traingleLftLock{
+    margin-left: -46px !important;
+}
+.faxmsg {
+    color: green;
+    font-weight: bold;
+}
+.custom-upload {
+
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    padding: 4px 10px;
+}
+.custom-upload input {
+    left: -9999px;
+    position: absolute;
+}
+
+.onOffBtnGroup {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+.onOffBtnGroup > .btn {
+    position: relative;
+    float: left;
+}
+.onOffBtnGroup>.btn:last-child:not(:first-child) {
+    border-radius: 0px 9px 8px 0px;
+}
+.onOffBtnGroup>.btn:first-child:not(:last-child) {
+    border-right-width: 0px;
+    border-radius: 9px 0px 0px 8px;
+}
+.onOffBtnGroup>.btn:not(:first-child):not(:last-child) {
+    border-radius: 0px 0px 0px 0px;
+}
+.onOffBtnGroup>.activePri{
+    color: #fff !important;
+    background-color: #286090 !important;
+    border-color: #204d74 !important;
+}
+.onOffBtnGroup>.activeSuc{
+    color: #fff !important;
+    background-color: #449d44 !important;
+    border-color: #398439 !important;
+}
+.onOffBtnGroup>.activeDan{
+    color: #fff !important;
+    background-color: #ac2925 !important;
+    border-color: #761c19 !important;
+}
+.outlineBtn:focus {
+    outline: 0 !important;
+}
+.left218 {
+        left: 218px !important;
+}
+.layerLight {
+        color: #aaa;
+}

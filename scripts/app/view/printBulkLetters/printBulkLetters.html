@@ -1,0 +1,264 @@
+<style>
+    .animate-show {
+        /*line-height:20px;*/
+        opacity:1;
+        /*padding:10px;*/
+        /*border:1px solid black;*/
+        /*background:white;*/
+    }
+
+    .animate-show.ng-hide-add.ng-hide-add-active,
+    .animate-show.ng-hide-remove.ng-hide-remove-active {
+        -webkit-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+    }
+
+    .animate-show.ng-hide {
+        /*line-height:0;*/
+        opacity:0;
+        /*padding:0 10px;*/
+    }
+</style>
+<div >
+    <div data-ng-if="addBulkLetterTempDiv==true" >
+        <div class="fLeft" >
+            <h3>Add a bulk letter template &nbsp;
+                <button id="addUserFromMdb" class="btn btn-default themeLabel" ng-click="addBulkLetterTemp()" type="button" title="Add User">
+                    <i class="glyphicon glyphicon-plus nopadding"></i>
+                </button>
+                <button title="Help" type="button" class="btn btn-default buttontitlebar" style="background: #d8d8d8; box-shadow: inset 4px 3px 10px #aaa; border-radius: 3px!important;" data-ng-if="activityLogIcon == true" data-ng-click="fnShowSiteWideHelpData(siteWideHelpData[14].helpID)">
+                    <a class="glyphicon glyphicon-info-sign nopadding"></a>
+                </button>
+            </h3>
+        </div>
+        <div class="fLeft panel panel-primary" style="width: 100%" ng-repeat="data in masterTemplateData">
+            <div class="panel-heading" ng-click="toggleCollapse($index)" style="cursor: pointer;" ng-attr-title="{{panelHeaderTitle.appointmentReminder}}">
+                <span ng-if="data.masterSettingToCheckPanelOpen" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                <span ng-if="!data.masterSettingToCheckPanelOpen" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> {{data.templateName}}
+
+                <div ng-show="data.masterSettingToCheckPanelOpen" class="btn-group pull-right" uib-dropdown ng-click="$event.stopPropagation();" style="margin: -6px;">
+                    <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                        <i class="glyphicon glyphicon-wrench nopadding"></i>
+                    </button>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                        <li data-ng-if="appointmentReminderWrenchObj.UpdateReminders" class="" data-ng-click="appointmentReminderUpdate()">
+                            <a>Rescan and modify scheduled <br>reminders using current templates.</a>
+                        </li>
+                        <li data-ng-if="!appointmentReminderWrenchObj.UpdateReminders" class="disabled" >
+                            <a>Rescan and modify scheduled <br>reminders using current templates.</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body" ng-class="{'collapse':!data.masterSettingToCheckPanelOpen}">
+                Template that will be used in sending bul letters.
+                <table class="table table-hover table-striped table-condensed ">
+
+                    <thead>
+                    <tr>
+                        <td style="min-width: 15%; width: 18%; font-weight: bold;background: #eee;">
+                            <b><i>List of place holders and meaning:</i></b>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="togglePlaceholderExample('zocdocAppointmentReminderPlaceholderHidden')" style="outline: none"><span ng-if="!zocdocAppointmentReminderPlaceholderHidden" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true" title="Click to collapse"></span><span ng-if="zocdocAppointmentReminderPlaceholderHidden" class="glyphicon glyphicon-triangle-right" aria-hidden="true" title="Click to open"></span></button>
+                        </td>
+                        <td style="width: 10%; vertical-align: middle;">
+                            <div class="animate-show" ng-show="!zocdocAppointmentReminderPlaceholderHidden">
+                                <div>%ProviderFullName%</div>
+                                <div>%PatientFullName%</div>
+                                <div>%AddressLine1%</div>
+                                <div>%AddressLine2%</div>
+                                <div>%City%</div>
+                                <div>%State%</div>
+                                <div>%Country%</div>
+                                <div>%Zip%</div>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="animate-show" ng-show="!zocdocAppointmentReminderPlaceholderHidden">
+                                <div>Name of the provider under Primary Care Team</div>
+                                <div>Name of patient to whom letter is sent.</div>
+                                <div>Patient's address line 1.</div>
+                                <div>Patient's address line 2.</div>
+                                <div>Patient's city.</div>
+                                <div>Patient's state.</div>
+                                <div>Patient's country.</div>
+                                <div>Patient's zip.</div>
+                            </div>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="background: #eee; width: 25%"><b>Template Name: </b>
+                        </td>
+                        <td colspan="3" style="width: 75%">
+                            <div style="position: relative;">
+                                <a href="#" data-editable-textarea="data.templateName" data-e-rows="2" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate(data,'name')">
+                                    <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{ data.templateName || 'No template defined' }}</div>
+                                </a>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee; width: 25%"><b>Letterhead: </b>
+                        </td>
+                        <td colspan="3" style="width: 75%">
+                            <div style="position: relative;">
+                                <a href="#" data-editable-textarea="data.templateLetterHead" data-e-rows="2" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate(data,'letterHead')">
+                                    <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{ data.templateLetterHead || 'No template defined' }}</div>
+                                </a>
+                            </div>
+
+                        </td>
+                    </tr>
+                      <tr>
+                        <td style="background: #eee; width: 25%"><b>Subject:</b>
+
+                        </td>
+                        <td colspan="3" style="width: 75%">
+                            <a href="#" data-editable-textarea="data.templateSubject" data-e-rows="7" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate(data,'subject')">                  <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{ data.templateSubject || 'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee; width: 25%"><b>Body:</b>
+
+                        </td>
+                        <td colspan="3" style="width: 75%">
+
+                            <a href="#" data-editable-textarea="data.templateBody" data-e-rows="7" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate(data,'body')">
+                                <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{ data.templateBody || 'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee;"><b>Signature:</b>
+
+                        </td>
+                        <td colspan="3" style="width: 75%">
+
+                            <a href="#" data-editable-textarea="data.templateSignature" data-e-rows="7" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate(data,'signature')">
+                                <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{ data.templateSignature || 'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="panel-footer" ng-class="{'collapse':!data.masterSettingToCheckPanelOpen}">
+                <div class="row">
+                    <div class="col-md-3">Select the list of users whom you want to send the letters:</div>
+                    <div class="col-md-6">
+
+                        <oi-select data-ng-click="$event.stopPropagation();"
+                                   oi-options="item.fullname for item in allUserList track by item.id"
+                                   ng-model="data.selectedUser"
+                                   placeholder="Select"
+                                   multiple
+                        ></oi-select>
+
+                    </div>
+                    <div class="col-md-3">
+
+                        <button class="btn btn-success" data-ng-click="fnCreateBulkLetters(data)">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    <div data-ng-if="addBulkLetterTempDiv==false">
+          <div class="panel panel-primary">
+             <div class="panel-body" >
+                Bulk letters to be sent to users.
+                <table class="table table-hover table-striped table-condensed ">
+
+                    <thead>
+                    <tr>
+                        <td style="min-width: 15%; width: 18%; font-weight: bold;background: #eee;">
+                            <b><i>List of place holders and meaning:</i></b>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="togglePlaceholderExample('zocdocAppointmentReminderPlaceholderHidden')" style="outline: none"><span ng-if="!zocdocAppointmentReminderPlaceholderHidden" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true" title="Click to collapse"></span><span ng-if="zocdocAppointmentReminderPlaceholderHidden" class="glyphicon glyphicon-triangle-right" aria-hidden="true" title="Click to open"></span></button>
+                        </td>
+                        <td style="width: 10%; vertical-align: middle;">
+                            <div class="animate-show" ng-show="!zocdocAppointmentReminderPlaceholderHidden">
+                                <div>%ProviderFullName%</div>
+                                <div>%PatientFullName%</div>
+                                <div>%AddressLine1%</div>
+                                <div>%AddressLine2%</div>
+                                <div>%City%</div>
+                                <div>%State%</div>
+                                <div>%Country%</div>
+                                <div>%Zip%</div>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="animate-show" ng-show="!zocdocAppointmentReminderPlaceholderHidden">
+                                <div>Name of the provider under Primary Care Team</div>
+                                <div>Name of patient to whom letter is sent.</div>
+                                <div>Patient's address line 1.</div>
+                                <div>Patient's address line 2.</div>
+                                <div>Patient's city.</div>
+                                <div>Patient's state.</div>
+                                <div>Patient's country.</div>
+                                <div>Patient's zip.</div>
+                            </div>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="background:#337ab7; color:#fff">Template Name</td>
+                        <td colspan="3">
+                            <a href="#" data-editable-text="bulkLetterTemplate.templateName" data-onbeforesave="bulkLetterTemplateTemplateUpdate('','name')">
+                                <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{bulkLetterTemplate.templateName|| 'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee;"><b>Letterhead: </b>
+                        </td>
+                        <td colspan="3">
+                            <div style="position: relative;">
+                                <a href="#" data-editable-textarea="bulkLetterTemplate.templateLetterHead" data-e-rows="2" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate('',letterHead)">
+                                    <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{bulkLetterTemplate.templateLetterHead|| 'No template defined' }}</div>
+                                </a>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee;"><b>Subject: </b>
+                        </td>
+                        <td colspan="3">
+                            <div style="position: relative;">
+                                <a href="#" data-editable-textarea="bulkLetterTemplate.templateSubject" data-e-rows="2" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate('',subject)">
+                                    <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{bulkLetterTemplate.templateSubject|| 'No template defined' }}</div>
+                                </a>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee;"><b>Body:</b>
+
+                        </td>
+                        <td colspan="3">
+                            <a href="#" data-editable-textarea="bulkLetterTemplate.templateBody" data-e-rows="7" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate('',body)">
+                                <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{bulkLetterTemplate.templateBody||'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #eee;"><b>Signature:</b>
+                        </td>
+                        <td colspan="3">
+                            <a href="#" data-editable-textarea="bulkLetterTemplate.templateSignature" data-e-rows="7" data-e-cols="140" data-onbeforesave="bulkLetterTemplateTemplateUpdate('','signature')">
+                                <div style="white-space: pre-wrap;color: #222;font-family: monospace; cursor: pointer;font-size: medium;" title="Click to edit">{{bulkLetterTemplate.templateSignature||'No template defined' }}</div>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+     </div>
+</div>

@@ -1,0 +1,145 @@
+<style>
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+
+
+    .help-tip{
+        text-align: center;
+        font-size: 14px;
+        cursor: default;
+    }
+
+    .help-tip:before{
+        z-index: 100001;
+    }
+
+    .help-tip:hover .help-tip-content{
+        display:block;
+        transform-origin: 100% 0%;
+
+        -webkit-animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.3s ease-in-out;
+
+    }
+
+    .help-tip .help-tip-content{
+        display: none;
+        text-align: left;
+        background-color: #1E2021;
+        padding: 5px;
+        position: absolute;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+        left: 50px;
+        color: #FFF;
+        font-size: 13px;
+        line-height: 1.4;
+        font-weight: normal;
+        margin-top: 4px;
+        border: 1px solid #fff;
+    }
+
+    .help-tip .help-tip-content:before{
+        position: absolute;
+        content: '';
+        width:0;
+        height: 0;
+        border:6px solid transparent;
+        border-bottom-color:#1E2021;
+        left:5px;
+        top:-12px;
+    }
+
+    .help-tip .help-tip-content:after{
+        width:100%;
+        height:14px;
+        content:'';
+        position: absolute;
+        top:-40px;
+        left:0;
+    }
+
+
+    .highlightedMark{
+        border-bottom: 2px solid #1d2caa;font-style: italic;border-radius: 5px;cursor: help
+    }
+</style>
+<script>
+    $("body").on("mouseenter",'.help-tip',function(){
+        var pos = $(this).position();
+        $(this).data("title", $(this).attr("title")).removeAttr("title").find(".help-tip-content").css({'left': (pos.left)-4 + 'px'}).fadeIn();
+    }).on("mouseleave",".help-tip",function(){
+        $(this).find(".help-tip-content").fadeOut();
+    });
+    /*$("body").on("click",".help-tip-content",function(event){
+        event.stopPropagation();
+    });*/
+
+</script>
+<div>
+    <div class="" style="margin-bottom: 100px;">
+        <div class="page-header">
+            <h3>This is under development <small>-Suvankar Roy.</small></h3>
+        </div>
+        <div>
+            <h4>Sample content for tooltip:</h4>
+
+            <div style="border:1px solid #aaa;white-space: pre;">       &lt;button type="button" class="btn btn-default <span ng-style="overHelpTip && {'border-bottom': '2px solid green','font-style': 'italic','border-radius': '5px'}">help-tip</span>"&gt;
+            Icon &lt;span class="glyphicon glyphicon-question-sign"&gt;&lt;/span&gt;
+            <span class="mark" ng-style="overHighlighted && {'border-bottom': '2px solid green','font-style': 'italic','border-radius': '5px'}" style="background-color: #f9e57e">&lt;span class="<span ng-style="overHelpTipContent && {'border-bottom': '2px solid green','font-style': 'italic','border-radius': '5px'}"> help-tip-content </span>"&gt;This is the inline help tip! &lt;a onclick="event.stopPropagation()" target="_blank" href="https://www.google.co.in"&gt;Google&lt;/a&gt;&lt;/span&gt;</span>
+        &lt;/button&gt;</div>
+
+            <p style="margin-top: 10px;">
+                Class <mark class="highlightedMark" ng-mouseenter="overHelpTip=true" ng-mouseleave="overHelpTip=false">help-tip</mark> should be in parent element and it is a responsibility of programmer. Hovering on this element, child element having class <mark class="highlightedMark" ng-mouseenter="overHelpTipContent=true" ng-mouseleave="overHelpTipContent=false">help-tip-content</mark> will be shown as a tooltip.
+            </p>
+            <p>
+                To edit tooltip content you need to put html string as shown in <mark class="highlightedMark" ng-mouseenter="overHighlighted=true" ng-mouseleave="overHighlighted=false">highlighted</mark> pert of above mentioned sample content.
+            </p>
+
+        </div>
+        <hr>
+        <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+            <thead>
+            <tr>
+                <th st-sort="identifier" style="width:20%">Identifier</th>
+                <th st-sort="position" style="width:20%">Position</th>
+                <th st-sort="content" style="width:40%">Tooltip content</th>
+                <th style="width:20%">Preview</th>
+            </tr>
+            <tr>
+                <th><input st-search="identifier" class="form-control" placeholder="Search ..." type="text"/></th>
+                <th><input st-search="position" class="form-control" placeholder="Search ..." type="text"/></th>
+                <th><input st-search="content" class="form-control" placeholder="Search ..." type="text"/></th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in displayedCollection">
+                <td>{{row.identifier}}</td>
+                <td>{{row.position}}</td>
+                <td>
+                    <a href="#" editable-textarea="row.content" e-rows="3" e-cols="100">
+                        <pre>{{ row.content || 'Not set' }}</pre>
+                    </a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default help-tip">
+                        Icon <span class="glyphicon glyphicon-question-sign"></span><p ng-bind-html="row.content"></p>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+        </div>
+    </div>
+</div>

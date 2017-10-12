@@ -1,0 +1,76 @@
+<style>
+
+    .st-sort-ascent:before {
+        content: '\25B2';
+    }
+
+    .st-sort-descent:before {
+        content: '\25BC';
+    }
+    .alert {
+        padding-top: 5px;
+        padding-bottom: 3px;
+    }
+</style>
+<div>
+    <div class="fLeft">
+
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span> &nbsp;&nbsp;
+            <span data-ng-if="errorMessageShow == 'failed'"><a href="" data-ng-click="fnShowHideErrorDetail()">View detail</a></span>
+        </div>
+    </div>
+
+    <table st-safe-src="rowCollection" st-table="displayCollection"  class="table table-striped">
+        <thead>
+        <tr>
+            <th width="20%" st-sort="fullname">Name</th>
+            <th width="20%" st-sort="roleName">Role</th>
+
+            <th width="10%">Thumbnail</th>
+            <th width="10">Image stored in table</th>
+            <th width="20%">Image</th>
+
+            <th width="20%">Action</th>
+
+
+
+        </tr>
+        <tr>
+            <th>
+                <input st-search="fullname" placeholder="search for Full Name" class="input-sm form-control" type="search"/>
+            </th>
+            <th>
+                <input st-search="roleName" placeholder="search for Role" class="input-sm form-control" type="search"/>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in displayCollection">
+            <td><a target="_blank" ng-href="{{adprofileUrl}}{{row.alias}}">{{row.fullname}}</a></td>
+            <td>{{row.roleName}}</td>
+
+            <td><img alt="" class="img-responsive hidden-xs hidden-sm" height="100px" width="100px" data-ng-src="{{row.url}}/{{row.doctorId}}"></td>
+<td ng-if="row.optimiseImageName">{{optimise}}</td>
+            <td ng-if="!row.optimiseImageName && row.profileImage">{{profile}}</td>
+            <td ng-if="!row.optimiseImageName && !row.profileImage">{{notfoundImage}}</td>
+
+
+            <td> <input type="file"  ngf-select file-model="{{'myFile' + $index}}"  onchange="angular.element(this).scope().setFile(this)" />  </td>
+
+            <td><button ng-click="uploadFile('myFile' + $index,row.doctorId)">Upload</button>&nbsp; &nbsp;<span ng-class="{'alert alert-success': row.msgStatus == 'Updated' , 'alert alert-danger': row.msgStatus == 'fail'} " ng-hide="isCheck">{{row.msg}}</span></td>
+
+
+        </tr>
+        </tbody>
+    </table>
+    <div ng-if= "imagePriviewStatus">
+        <P>Image Preview</P>
+        <img  data-ng-src="{{image_source}}" height="100px" width="100px" />
+    </div>
+</div>
+
+
+

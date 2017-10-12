@@ -1,0 +1,20 @@
+version: '2'
+services:
+  nginx:
+    build: .
+    volumes:
+       - /gt/hc-prog-repos/v1-wa-foundation:/gt/hc-prog-repos/v1-wa-foundation
+       - /gt/hc-prog-repos/v1-wa-foundation/etc-supervisor-conf.d-services.conf:/etc/supervisor/conf.d/services.conf
+       - /gt/hc-prog-repos/v1-wa-foundation/var-www-html/foundation/:/var/www/html/foundation/
+       - /gt/hc-prog-repos/v1-wa-foundation/etc-supervisor-supervisord.conf:/etc/supervisor/supervisord.conf          # this is to disable logging during production
+#Why mount nginx.conf file?
+# Because lots of unecessary logs and options are enabled in default nginx.conf file, therefore fast loading process is effected. Thats why mount custom nginx.conf file instead of default nginx.conf file.
+# Also we have followed the checklist of fast loading process mentioned in Sc Wiki (https://www.savantcare.com/v3/app/dokuwiki/doku.php?id=7-teams:tech:sysadmin-dept:checklist:fast-loading:savantcare).
+       - /gt/hc-prog-repos/v1-wa-foundation/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+       - emr
+  
+networks:
+  emr:
+    external:
+      name: emr_default

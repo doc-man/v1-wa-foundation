@@ -1,0 +1,902 @@
+<style>
+    .modal-header {
+        background-color: #5cb85c;
+        color:white !important;
+        text-align: center;
+        font-size: 22px;
+    }
+    .modal-footer {
+        background-color: #f9f9f9;
+    }
+
+    .cond{
+        height: 12px; width: 100%; left: 0px; position: absolute; bottom: 0px; cursor: context-menu;
+        -webkit-transition: background 1s;
+        transition: background 1s;
+    }
+    td:hover .cond{
+        background: #aaa none repeat scroll 0px 0px;
+        -webkit-transition: background 1s;
+        transition: background 1s;
+    }
+    .cond .clrTmpltBasic{
+        margin-right: 2px;width: 30px;
+        border: none;
+        cursor: pointer;
+    }
+    .oi-select-multiple-height oi-select .select-dropdown
+    {
+        max-height: 300px;
+    }
+    .custom-upload {
+
+        border-radius: 4px;
+        cursor: pointer;
+        color: #fff;
+        padding: 4px 10px;
+    }
+    .custom-upload input {
+        left: -9999px;
+        position: absolute;
+    }
+    .drag-and-drop {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #fafafa;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-color: -moz-use-text-color #ccc #ccc;
+        border-image: none;
+        border-style: none solid solid;
+        border-width: 0 1px 1px;
+        color: #767676;
+        font-size: 13px;
+        line-height: 16px;
+        margin: 0;
+        padding: 7px 10px;
+    }
+    .manual-file-chooser {
+        cursor: pointer;
+        margin-left: -80px;
+        opacity: 0.0001;
+        padding: 5px;
+        position: absolute;
+        width: 240px;
+    }
+   .tinyeditor-footer{display:none !important}
+
+</style>
+
+<div data-ng-controller="helpdeskMasterCtrl">
+    <div data-st-table="rowCollection" data-st-pipe="callServer" class="reports panel panel-default">
+
+        <div data-ng-if="workspace.type=='module'">
+            <div class="alert alert-success" data-ng-show="msgForCreate">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{msgForCreate}}
+            </div>
+            <a id="createTkt" class="btn btn-info" ng-click="show()"><i class="glyphicon glyphicon-plus-sign"></i>
+                Create request
+            </a>
+            <div class="modal fade" id="createTicket">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">New Request</h4>
+                        </div>
+                        <div class="modal-body">
+
+
+
+                            <form class="form-horizontal modal-body" name="userForm"  novalidate>
+
+
+
+
+                                <!--<div class="form-group" ng-class="{ 'has-error' : userForm.type.$invalid && !userForm.type.$pristine }">
+
+                                    <label class="col-sm-3">Request Type <sup> *</sup></label>
+
+                                    <div class="col-sm-6">
+                                        <select name="type" class="form-control dropdown-select" data-style="btn-warning" ng-model="newHelpdesk.type" required>
+                                            <option value="">[&#45;&#45; Select Type &#45;&#45;]</option>
+                                            <option ng-repeat="option in availableOptions" value="{{option.id}}">{{option.typeName}}</option>
+                                        </select>
+                                        &lt;!&ndash;<p ng-show="userForm.type.$invalid && !userForm.type.$pristine" class="help-block">Please select type.</p>&ndash;&gt;
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group" ng-class="{ 'has-error' : userForm.priority.$invalid && !userForm.priority.$pristine }">
+
+                                    <label class="col-sm-3">Priority <sup> *</sup></label>
+
+                                    <div class="col-sm-6">
+                                        <select name="type" class="form-control dropdown-select" data-style="btn-warning" ng-model="newHelpdesk.priority" required>
+                                            <option value="">[&#45;&#45; Select Priority &#45;&#45;]</option>
+                                            <option ng-repeat="option in availableOptions3" value="{{option.id}}">{{option.name}}</option>
+                                        </select>
+                                        &lt;!&ndash;<p ng-show="userForm.type.$invalid && !userForm.type.$pristine" class="help-block">Please select type.</p>&ndash;&gt;
+
+                                    </div>
+
+                                </div>-->
+
+                                <div class="form-group" ng-class="{ 'has-error' : userForm.type.$invalid && !userForm.type.$pristine }">
+
+                                    <label class="col-sm-3">Request Type <sup> *</sup></label>
+
+                                    <!--<div class="col-sm-6">
+                                        <select name="type" class="form-control dropdown-select" data-style="btn-warning" ng-model="newHelpdesk.type" required>
+                                            <option value="">[&#45;&#45; Select Type &#45;&#45;]</option>
+                                            <option ng-repeat="option in availableOptions" value="{{option.id}}">{{option.typeName}}</option>
+                                        </select>
+                                        &lt;!&ndash;<p ng-show="userForm.type.$invalid && !userForm.type.$pristine" class="help-block">Please select type.</p>&ndash;&gt;
+
+                                    </div>
+-->
+                                    <div class="col-sm-6">
+                                        <div ng-repeat="option in availableOptions">
+                                            <span>
+                                                <input type="radio" name="type" ng-model="newHelpdesk.type" value="{{option.id}}" required /> {{option.typeName | capitalize}}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-class="{ 'has-error' : userForm.priority.$invalid && !userForm.priority.$pristine }">
+
+                                    <label class="col-sm-3">Priority <sup> *</sup></label>
+
+                                    <div class="col-sm-6">
+                                        <!--   <select name="type" class="form-control dropdown-select" data-style="btn-warning" ng-model="newHelpdesk.priority" required>
+                                               <option value="">[&#45;&#45; Select Priority &#45;&#45;]</option>
+                                               <option ng-repeat="option in availableOptions3" value="{{option.id}}">{{option.name}}</option>
+                                           </select>
+                                           </select>-->
+                                        <!--<p ng-show="userForm.type.$invalid && !userForm.type.$pristine" class="help-block">Please select type.</p>-->
+
+                                        <div ng-repeat="option in availableOptions3">
+                                            <span>
+                                                <input type="radio" name="priority" ng-model="newHelpdesk.priority" value="{{option.id}}" required /> {{option.name | capitalize}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : userForm.title.$invalid && !userForm.title.$pristine }">
+                                    <label class="col-sm-3">Title<sup> *</sup></label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" name="title" class="form-control" ng-model="newHelpdesk.title" required>
+                                        <!--<p ng-show="userForm.title.$invalid && !userForm.title.$pristine" class="help-block">You Title is required.</p>-->
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group" ng-class="{ 'has-error' : userForm.description.$invalid && !userForm.description.$pristine }">
+                                    <label class="col-sm-3">Description <sup> *</sup></label>
+                                    <div class="col-sm-9">
+                                        <!--<textarea name="description" class="form-control" ng-model="newHelpdesk.description" ng-minlength="3" ng-maxlength="65000" required>Enter text here...</textarea>-->
+                                        <!--<wysiwyg-edit name="description" content="newHelpdesk.description" config="editorConfig"  ng-minlength="3" ng-maxlength="65000" required></wysiwyg-edit>-->
+                                        <div text-angular  ta-toolbar="[['h1','h2','h3'],['bold','quote','ol','insertLink']]" name="description" ng-model="newHelpdesk.description"   ng-minlength="3" ng-maxlength="65000" required></div>
+
+                                        <!-- for drag & drop upload-->
+
+                                        <p class="drag-and-drop" nv-file-drop="" uploader="uploader" ng-show="uploader.isHTML5">
+                                    <span class="default" nv-file-over="" uploader="uploader" over-class="another-file-over-class">
+                                        Attach files by dragging &amp; dropping or
+                                        <label class="custom-upload btn-info"> <input type="file" nv-file-select="" uploader="uploader" multiple />selecting them</label>
+                                    </span>
+                                        </p>
+                                        <div ng-if="uploader.queue!=''">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th width="50%">Name</th>
+                                                    <th ng-show="uploader.isHTML5">Size</th>
+                                                    <th ng-show="uploader.isHTML5">Progress</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="item in uploader.queue">
+                                                    <td><strong>{{ item.file.name }}</strong></td>
+                                                    <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                                    <td ng-show="uploader.isHTML5">
+                                                        <div class="progress" style="margin-bottom: 0;">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                                        <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                                        <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                                    </td>
+                                                    <td nowrap>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()" ng-keypress="item.remove()">
+                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div>
+                                                <div>
+                                                    Queue progress:
+                                                    <div class="progress" style="">
+                                                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end uploader -->
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-primary" ng-click="submitForm(newHelpdesk)" ng-disabled="userForm.$invalid">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="panel-heading" style="border-bottom: medium none; padding-right: 0px; padding-top: 0px;">
+            &nbsp;
+            <div class="btn-group themeLabel pull-right" uib-dropdown data-ng-click="$event.stopPropagation();">
+                <div class="btn btn-default buttontitlebar uib-dropdown-toggle " uib-dropdown-toggle>
+                    <i class="glyphicon glyphicon-wrench nopadding"></i>
+                </div>
+                <ul class="uib-dropdown-menu" role="menu" style="min-width: 250px">
+                    <li data-ng-if="workspace.type==='helpDeskReport'" role="separator" class="divider"></li>
+                    <li data-ng-if="!workspace.promote && !rescanReport.flgCallCacheUpadteOrCreate && workspace.type==='helpDeskReport' && !promotedCustomReportID" data-ng-click="promoteForHome('promote', workspace.id)">
+                        <a>Promote to home page</a>
+                    </li>
+                    <li data-ng-if="workspace.promote  && workspace.type==='helpDeskReport' && !promotedCustomReportID" data-ng-click="promoteForHome('demote', workspace.id)">
+                        <a>Demote from home page</a>
+                    </li>
+                    <li data-ng-if="promotedCustomReportID" data-ng-click="promoteForHome('demote', promotedCustomReportID)">
+                        <a>Demote from home page</a>
+                    </li>
+
+                    <li data-ng-if="workspace.type==='module'" class="" data-ng-click="saveCurrentFilter()">
+                        <a>Save current filters as custom report</a>
+                    </li>
+                    <li data-ng-if="saveReport && workspace.type=='module'" class="disabled">
+                        <a>Save current filters as custom report</a>
+                    </li>
+                    <li data-ng-if="workspace.type=='helpDeskReport'" class="dropdown-header" >This custom report </li>
+                    <li data-ng-if="!renameReport && !saveAsReport && !updateReport && !deleteReport  && workspace.type==='helpDeskReport'" class="" data-ng-click="saveCurrentFilter()">
+                        <a>Save as new</a>
+                    </li>
+                    <li data-ng-if="(renameReport || saveAsReport || updateReport || deleteReport || rescanReport.flgCallCacheUpadteOrCreate) && workspace.type=='helpDeskReport'" class="disabled">
+                        <a>Save as new</a>
+                    </li>
+                    <li data-ng-if="!renameReport && !saveAsReport && !updateReport && !deleteReport && !rescanReport.flgCallCacheUpadteOrCreate && workspace.type=='helpDeskReport'" class="" data-ng-click="updateCurrentFilter()">
+                        <a>Update filters</a>
+                    </li>
+                    <li data-ng-if="(renameReport || saveAsReport || updateReport || deleteReport || rescanReport.flgCallCacheUpadteOrCreate) && workspace.type=='helpDeskReport'" class="disabled">
+                        <a>Update filters</a>
+                    </li>
+                    <li data-ng-if="!renameReport && !saveAsReport && !deleteReport && !updateReport && !rescanReport.flgCallCacheUpadteOrCreate && workspace.type=='helpDeskReport'" class="" data-ng-click="renameCurrentCustomReport()">
+                        <a>Rename</a>
+                    </li>
+                    <li data-ng-if="(renameReport || saveAsReport || deleteReport || updateReport || rescanReport.flgCallCacheUpadteOrCreate) && workspace.type=='helpDeskReport'" class="disabled">
+                        <a>Rename</a>
+                    </li>
+                    <li data-ng-if="!renameReport && !saveAsReport && !deleteReport && !updateReport && !rescanReport.flgCallCacheUpadteOrCreate && workspace.type=='helpDeskReport'" class="" data-ng-click="deleteCurrentFilter()">
+                        <a>Delete</a>
+                    </li>
+                    <li data-ng-if="(renameReport || saveAsReport || deleteReport || updateReport || rescanReport.flgCallCacheUpadteOrCreate) && workspace.type=='helpDeskReport'" class="disabled">
+                        <a>Delete</a>
+                    </li>
+
+
+
+
+
+
+
+                    <li role="separator" class="divider"></li>
+                    <li class="" data-ng-click="developerTools()">
+                        <a>Developer Tools</a>
+                    </li>
+                    <li role="separator" data-ng-if="workspace.type=='helpDeskReport'" class="divider"></li>
+                    <li data-ng-if="workspace.type=='helpDeskReport'" class="dropdown-header" style="padding: 3px 20px;">Summary report </li>
+                    <li data-ng-if="workspace.type=='helpDeskReport'" class="" data-ng-click="createSummaryReport()">
+                        <a>Create</a>
+                    </li>
+                    <li data-ng-if="workspace.type=='helpDeskReport'" class="" data-ng-click="displaySummaryReport()">
+                        <a>View</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header" style="padding: 3px 20px;">Visible columns</li>
+                    <li role="separator" class="divider"></li>
+                    <li class="" style="padding: 0px 20px;">
+                        <div class="checkbox" class="disabled">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.requestId" disabled="disabled" data-ng-click="visibleColumnsChanged(visibleColumns.requestId,'visibleColumns.requestId')"> Request Id
+                            </label>
+                        </div>
+                    </li>
+                    <li class="" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.title" data-ng-click="visibleColumnsChanged(visibleColumns.title,'visibleColumns.title')"> Title
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.user" data-ng-click="visibleColumnsChanged(visibleColumns.user,'visibleColumns.user')"> Created By
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.type" data-ng-click="visibleColumnsChanged(visibleColumns.type,'visibleColumns.type')"> Request Type
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.assignedTo" data-ng-click="visibleColumnsChanged(visibleColumns.assignedTo,'visibleColumns.assignedTo')"> Assigned To
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.created" data-ng-click="visibleColumnsChanged(visibleColumns.created,'visibleColumns.created')"> Created On
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.status" data-ng-click="visibleColumnsChanged(visibleColumns.status,'visibleColumns.status')"> Status
+                            </label>
+                        </div>
+                    </li>
+                    <li class="checkbox" style="padding: 0px 20px;">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-ng-model="visibleColumns.priority" data-ng-click="visibleColumnsChanged(visibleColumns.priority,'visibleColumns.priority')"> Priority
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <table id="helpdeskReport" class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr id="filterHeader" data-ng-show="filterDataSet.filtersOpen">
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.requestId">
+                    <div data-ng-if="filterDataSet.requestIdFilterOpen">
+                        <st-oi-multiselect predicate="requestId" options="allRequestIdList" model="selectedRequestIdList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.title">
+                    <div data-ng-if="filterDataSet.titleFilterOpen">
+                        <st-oi-multiselect predicate="title" options="allTitleList" model="selectedTitleList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.user">
+                    <div data-ng-if="filterDataSet.userFilterOpen">
+                        <st-oi-multiselect predicate="user" options="allUserList" model="selectedUserList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.type">
+                    <div data-ng-if="filterDataSet.typeFilterOpen">
+                        <st-oi-multiselect predicate="type" options="allTypeList" model="selectedTypeList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.assignedTo">
+                    <div data-ng-if="filterDataSet.assignedToFilterOpen">
+                        <st-oi-multiselect predicate="assignedTo" options="allAssignedToList" model="selectedAssignedToList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.created">
+                    <div data-ng-if="filterDataSet.createdFilterOpen">
+                        <st-date-range data-predicate="created" data-before="query.createdBefore" data-after="query.createdAfter" id=""></st-date-range>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.status">
+                    <div data-ng-if="filterDataSet.statusFilterOpen">
+                        <st-oi-multiselect predicate="status" options="allStatusList" model="selectedStatusList"></st-oi-multiselect>
+                    </div>
+                </td>
+                <td style="vertical-align: middle;" data-ng-show="visibleColumns.priority">
+                    <div data-ng-if="filterDataSet.priorityFilterOpen">
+                        <st-oi-multiselect predicate="priority" options="allPriorityList" model="selectedPriorityList"></st-oi-multiselect>
+                    </div>
+                </td>
+            </tr>
+
+            <tr fsm-sticky-header scroll-body="'#helpdeskReport'" scroll-stop='headerHeight.stop' content-offset='headerHeight.offset' style="background: #eee">
+
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.requestId"><span data-st-sort="requestId" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.requestIdFilterOpen === true}" aria-hidden="true" ng-click="open($event,'requestId')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Request Id </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.title"><span data-st-sort="title" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.titleFilterOpen === true}" aria-hidden="true" ng-click="open($event,'title')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Title </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.user"><span data-st-sort="user" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.userFilterOpen === true}" aria-hidden="true" ng-click="open($event,'user')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Created By </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.type"><span data-st-sort="type" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.typeFilterOpen === true}" aria-hidden="true" ng-click="open($event,'type')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Request Type </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.assignedTo"><span data-st-sort="assignedTo" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.assignedToFilterOpen === true}" aria-hidden="true" ng-click="open($event,'assignedTo')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Assigned To </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.created"><span data-st-sort="created" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.createdFilterOpen === true}" aria-hidden="true" ng-click="open($event,'created')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Created On </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.status"><span data-st-sort="status" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.statusFilterOpen === true}" aria-hidden="true" ng-click="open($event,'status')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Status </span>
+                </td>
+                <td style="width: 5%;"
+                    class="sortable"
+                    data-ng-show="visibleColumns.priority"><span data-st-sort="priority" data-st-skip-natural="true" class="sorticon" style="width: 16px;"></span>
+                    <span class="glyphicon glyphicon-filter filterIcon" ng-class="{'filterIconClicked':filterDataSet.priorityFilterOpen === true}" aria-hidden="true" ng-click="open($event,'priority')"></span>
+                    <span style="text-shadow: 0px 0px 1px #aaa;">Priority </span>
+                </td>
+            </tr>
+            </thead>
+            <tbody data-ng-show="!isLoading && !errorOccurred">
+            <tr data-ng-if="!numberOfPages">
+                <td colspan="{{visibleColumns.totalColspan}}" class="text-center">No data found.</td>
+            </tr>
+            <tr data-ng-if="numberOfPages" data-ng-repeat="row in rowCollection">
+                <td  data-ng-if="visibleColumns.requestId"><a class="cPointer" style="text-decoration: none" title="Click to go helpdesk detail page" ui-sref="home.helpDeskReport.detail({helpdeskTicketId : row.requestId})">{{::row.requestId}}</a></td>
+                <td  data-ng-if="visibleColumns.title"><a class="cPointer" style="text-decoration: none" title="Click to go helpdesk detail page" ui-sref="home.helpDeskReport.detail({helpdeskTicketId : row.requestId})">{{::row.title | capitalize}}</a></td>
+                <td  data-ng-if="visibleColumns.user">
+                    <a class="cPointer backgroundFocusNone" title="click to user detail" ui-sref="home.user.view({userId : row.userId, userName : row.user })">{{::row.user | capitalize}}</a></td>
+                <td  data-ng-if="visibleColumns.type">{{::row.type | capitalize}}</td>
+                <td  data-ng-if="visibleColumns.assignedTo">
+                    <div data-ng-if="row.assignedTo">
+                        {{::row.assignedTo | capitalize}}
+                    </div>
+                    <div data-ng-if="!row.assignedTo">
+                        {{"yet to be assigned" | capitalize}}
+                    </div>
+                </td>
+                <td  data-ng-if="visibleColumns.created">{{::row.created}}</td>
+                <td  data-ng-if="visibleColumns.status"><span class="glyphicon glyphicon-flag" style="color:{{row.color}}"></span> {{row.status | capitalize}}</td>
+                <td  data-ng-if="visibleColumns.priority">{{::row.priority | capitalize}}</td>
+
+            </tr>
+            </tbody>
+            <tbody data-ng-show="isLoading">
+            <tr>
+                <td colspan="{{visibleColumns.totalColspan}}" class="text-center">Loading ... </td>
+            </tr>
+            </tbody>
+            <tbody data-ng-show="errorOccurred">
+            <tr>
+                <td colspan="{{visibleColumns.totalColspan}}" class="text-center">Some error occurred ... </td>
+            </tr>
+            </tbody>
+            <tfoot data-ng-if="paginationInfo.totalItemCount>0">
+            <tr>
+                <td colspan="{{visibleColumns.totalColspan}}">
+                    <div  data-ng-show="paginationInfo.totalItemCount>0" class="text-center" style=" vertical-align: middle; color:#666;font-weight: bold; width: 55%; float: left;padding: 20px 0 20px 0;">
+                        Showing <span style="color: #444;">{{paginationInfo.start + 1}}</span> to <span style="color: #444;">{{paginationInfo.start + paginationInfo.currentItemCount}}</span> of <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> activities.&nbsp;&nbsp;
+                        Show
+                        <div class="btn-group report-info">
+                            <label class="btn btn-default" ng-model="itemsByPage" btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount < 25}">25</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount < 26}">50</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount < 51}">100</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount < 101}">200</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" btn-radio="{{paginationInfo.totalItemCount + 1}}">All</label>
+                        </div>
+                        activities per page.
+                    </div>
+                    <div data-st-pagination="" class="text-center" style="width: 44.5%; float: right; padding: 11px 0" data-st-items-by-page="itemsByPage" data-st-template="app/directives/pagination.custom.html"></div>
+                </td>
+
+            </tr>
+            </tfoot>
+        </table>
+
+
+
+
+        <!--Modal-->
+        <div class="modal fade" id="helpdeskReportSaveModal_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-check"></span> Save as a New Report</h4>
+                    </div>
+                    <div class="modal-body" style="padding:10px 20px 40px 20px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="reportName">Report Name</label>
+                                <input type="text" class="form-control" id="reportName" data-ng-model="reportNameObject" required placeholder="Enter new report name">
+                            </div>
+                            <div>
+                                <button type="submit" data-ng-click="saveCurrentFilterInDatabase(reportNameObject)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-save"></span> Save</button>
+                                <button type="submit" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportSaveSuccess_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-ok"></span> Save Success</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-saved"></span> &nbsp; '{{reportName}}' Successfully Saved.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="helpdeskReportSaveError_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-info-sign"></span> Save Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp; Some Error Occured. '{{reportName}}' Not Saved.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportExist_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-ban-circle"></span> Save Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-question-sign"></span> &nbsp;  '{{reportName}}' Not Saved. Name Already Taken.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportUpdateSuccess_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-ok"></span> Custom Report Update Success</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-saved"></span> &nbsp; Custom Report "{{reportName}}" Successfully Updated.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportUpdateError_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-info-sign"></span> Custom Report Update Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp; Some Error Occured. Custom Report not Updated.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportDelete_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-remove"></span> Existing Custom Report Delete</h4>
+                    </div>
+                    <div class="modal-body" style="padding:10px 20px 40px 20px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label> Do you really want to delete "{{reportName}}" Report from database?</label>
+                            </div>
+                            <div>
+                                <button type="submit" data-ng-click="deleteCurrentFilterfromDatabase($event)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+                                <button type="submit" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportDeleteSuccess_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-ok"></span> Custom Report Delete Success</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-saved"></span> &nbsp; Custom Report "{{reportName}}" Successfully Deleted.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportDeleteError_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-info-sign"></span> Custom Report Delete Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp; Some Error Occured. Custom Report not Deleted.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="helpdeskReportRename_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-check"></span> Rename Current Custom Report</h4>
+                    </div>
+                    <div class="modal-body" style="padding:10px 20px 40px 20px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label>Current Name : {{reportNameObject}}</label><br/><br/>
+                                <label for="reportNameRename">New Name</label>
+                                <input type="text" class="form-control" id="reportNameRename" data-ng-model="reportName" required placeholder="Enter new report name">
+                            </div>
+                            <div>
+                                <button type="submit" data-ng-click="renameCurrentCustomReportToDatabase(reportName)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-save"></span> Save</button>
+                                <button type="submit" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportRenameExist_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-ban-circle"></span> Rename Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-question-sign"></span> &nbsp;  '{{reportName}}' Not Renamed. Name Already Taken.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="helpdeskReportRenameSuccess_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-ok"></span> Remane Custom Report Success</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-saved"></span> &nbsp; '{{reportName}}' successfully Renamed.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="helpdeskReportRenameError_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-info-sign"></span> Remane Custom Report Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp; Some Error Occured. '{{reportName}}' not renamed.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="developerToolsModal_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Executed SQL Query</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            {{executedSqlQuery}}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="summaryRepoprtModal_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-check"></span> Save as a New Summary Report</h4>
+                    </div>
+                    <div class="modal-body" style="padding:10px 40px 40px 40px;">
+                        <form role="form">
+                            <div class="form-group oi-select-multiple-height">
+                                <label>What fields will be used in the summary report? </label>
+                                &lt;!&ndash;                <st-oi-multiselect predicate="summaryReportField" options="allSummaryReportFieldList" model="selectedSummaryReportField"></st-oi-multiselect>&ndash;&gt;
+                                <oi-select oi-options="item.name for item in allSummaryReportFieldList" multiple autofocus ng-model="selectedSummaryReportField" required  placeholder="Select summary report fields"></oi-select>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label for="summaryReportName">Name of the summary report: </label>
+                                <input type="text" class="form-control" id="summaryReportName" data-ng-model="summaryReportName" required placeholder="Enter new summary report name">
+                                <div class="clearfix"></div>
+                            </div>
+                            <div>
+                                <button type="submit" data-ng-click="saveNewSummaryReport(summaryReportName)" class="btn btn-success btn-default pull-left"><span class="glyphicon glyphicon-save"></span> Save</button>
+                                <button type="submit" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="summaryRepoprtModalExist_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-ban-circle"></span> Summary Report Save failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-question-sign"></span> &nbsp;  '{{reportName}}' Not Saved. Name Already Taken.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="summaryRepoprtModalSuccess_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4><span class="glyphicon glyphicon-ok"></span> Summary Report Save Success</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-saved"></span> &nbsp; '{{reportName}}' successfully saved.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="summaryRepoprtModalError_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog">
+                &lt;!&ndash; Modal content&ndash;&gt;
+                <div class="modal-content">
+                    <div class="modal-header" style="padding:5px 10px; background: #FF7373;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="background: #FF7373;"><span class="glyphicon glyphicon-info-sign"></span> Summary Report Save Failed</h4>
+                    </div>
+                    <div align="center" class="modal-body" style="padding:30px 20px; font-size: 16px;">
+                        <span class="glyphicon glyphicon-remove"></span> &nbsp; Some Error Occured. Summary report '{{reportName}}' not saved.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="summaryRepoprtExistingListModal_{{::workspace.type}}{{::workspace.id}}" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Existing Summary Report for '{{customReportName}}'</h4>
+                    </div>
+                    <div class="modal-body">
+                        <span data-ng-if="activitySummaryReportList.length==0" class="col-md-12 text-center">No Summary Report Found !!!</span>
+                        <table data-ng-if="activitySummaryReportList.length>0" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Summary Report Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="list in activitySummaryReportList">
+                                <td class="col-md-3">{{$index+1}}</td>
+                                <td class="col-md-9"><a href="" data-ng-click="displaySelectedSummaryReport(list.name,list.id)" style="cursor: pointer">{{list.name}}</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--End Modal-->
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div >
+    <div class="fLeft">     <!-- No grid classes are necessary for full-width elements. Ref: http://getbootstrap.com/examples/grid/-->
+        <h3>Reasons for visit
+            <button class="btn btn-default themeLabel" data-ng-click="fnAddReasonForVisit()" type="button" title="Add reason for visit">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="reasonForVisitDataSet.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="reasonForVisitDataSet.length>0" st-table="displayReasonForVisitCollection" st-safe-src="reasonForVisitDataSet" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="cPointer col-md-4 sortable padding-left-45p" st-sort="title"><span class="sorticon"></span>Reason</th>
+            <th class="cPointer col-md-4 sortable padding-left-45p" st-sort="hasDetail"><span class="sorticon"></span>Needs a detailed reason</th>
+            <th class="cPointer col-md-4 sortable padding-left-45p" st-sort="usedBy"><span class="sorticon"></span># of appointments using this</th>
+        </tr>
+        <tr>
+            <th class="padding-left-45p"><input st-search="title"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="cPointer reveal-elem-parent" data-ng-repeat="eachDetail in displayReasonForVisitCollection">
+            <td>
+                <div class="input-group">
+                    <div class="pull-left width40p reveal-elem" >
+                        <a href="" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteReasonsForVisit(eachDetail)"></a>
+                        <a data-ng-if="eachDetail.isLocked!=1 && eachDetail.id != null" href="javascript:void(0)" class="fa fa-unlock-alt fa-lg" style="text-decoration: none"
+                           data-ng-click="$event.stopPropagation();lockReasonForVisit(eachDetail)" data-ng-keypress="lockReasonForVisit(eachDetail)"></a>
+                        <spana data-ng-if="eachDetail.isLocked==1 && eachDetail.id != null" class="glyphicon glyphicon-lock"></spana>
+                    </div>
+                    <div class="pull-left" >
+                        <a data-ng-if="eachDetail.isLocked!=1" href="javascript:void(0)" editable-text="eachDetail.title" buttons="no" blur="submit" data-ng-model="eachDetail.title" onbeforesave="fnSaveReasonForVisitTitle(eachDetail,$data,'title')" data-ng-keypress="fnSaveReasonForVisit(eachDetail,'title')">{{eachDetail.title||'empty'}}</a>
+                        <span data-ng-if="eachDetail.isLocked==1" >{{eachDetail.title||'empty'}}</span>
+                    </div>
+                </div>
+            </td>
+            <td class="padding-left-45p">
+                <div class="input-group" style="text-align: center">
+                    <input type="checkbox" ng-model="eachDetail.hasDetail" ng-disabled="eachDetail.isLocked==1" ng-change="fnSaveReasonForVisit(eachDetail,'hasDetail')">
+                    <!--<a href="javascript:void(0)" editable-textarea="eachDetail.hasDetail" e-style="width:500px" buttons="no" blur="submit" data-ng-model="eachDetail.hasDetail" onaftersave="fnSaveReasonForVisit(eachDetail)" data-ng-keypress="fnSaveReasonForVisit(eachDetail)">{{eachDetail.hasDetail||'empty'}}</a>-->
+                </div>
+            </td>
+            <td class="padding-left-45p">
+                <span>{{eachDetail.usedBy}}</span>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

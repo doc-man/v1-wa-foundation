@@ -1,0 +1,21 @@
+<!--<div data-ng-controller="dbStatusReportMasterCtrl">-->
+<div>
+<table st-table="displaydbStatusListCollection" st-safe-src="dbStatusDataSet" class="table table-striped">
+    <thead>
+       <tr>
+           <th class="cPointer col-md-5 width10" >Entity name</th>
+           <th class="cPointer col-md-5 width30" ># of entities</th>
+           <th class="cPointer col-md-5 width30" >Date of last creation</th>
+           <th class="cPointer col-md-5 width30" >Date of last update</th>
+       </tr>
+    </thead>
+    <tbody>
+       <tr class="cPointer reveal-elem-parent" data-ng-repeat="dbRec in displaydbStatusListCollection">
+           <td>{{dbRec[0]}}</td>   
+           <td>{{dbRec[1]}}</td>
+           <td>{{dbRec[2]}}</td>
+           <td>{{dbRec[3]}}</td>
+       </tr>
+    </tbody>
+</table>
+</div>

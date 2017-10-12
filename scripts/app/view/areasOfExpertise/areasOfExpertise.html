@@ -1,0 +1,69 @@
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Areas of Expertise
+            <button class="btn btn-default themeLabel" data-ng-click="fnAddAreaOfExpertise()" type="button" title="Add new expertise">
+                <i class="glyphicon glyphicon-plus nopadding"></i>
+            </button>
+        </h3>
+        <div class="alert alert-warning" role="alert">
+            <strong>Important!</strong> You can only delete those areas of expertise which are not used by any provider.
+        </div>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+    <div class="textarea-initial" data-ng-if="areasOfExpertiseDataSet.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="areasOfExpertiseDataSet.length>0" st-table="displayAreasOfExpertiseCollection" st-safe-src="areasOfExpertiseDataSet" class="table table-striped">
+        <thead>
+           <tr>
+               <th class="cPointer col-md-6 sortable padding-left-45p" st-sort="name"><span class="sorticon"></span>Name</th>
+               <th class="cPointer col-md-6 sortable" st-sort="usersCount"><span class="sorticon"></span>Number of providers using this</th>
+           </tr>
+           <tr>
+                <th class="padding-left-45p"><input st-search="name"/></th>
+            </tr>
+        </thead>
+        <tbody>
+           <tr class="cPointer reveal-elem-parent" data-ng-repeat="areaOfExpertise in displayAreasOfExpertiseCollection">
+               <td>
+                    <div class="input-group">
+                        <div class="pull-left width40p reveal-elem" >
+                              <a href="" class="glyphicon glyphicon-trash text-danger" data-ng-click="fnDeleteAreaOfExpertise(areaOfExpertise)"></a>
+                        </div>
+                        <div class="pull-left">
+                            <a href="javascript:void(0)" editable-text="areaOfExpertise.name" buttons="no" blur="submit" data-ng-model="areaOfExpertise.name" onaftersave="fnSaveAreaOfExpertise(areaOfExpertise)" data-ng-keypress="fnSaveAreaOfExpertise(areaOfExpertise)">{{areaOfExpertise.name||'empty'}}</a>
+                        </div>
+                    </div>
+               </td>
+               <td>
+                     <span>{{::areaOfExpertise.usersCount}}</span>  
+               </td>
+           </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-center" style=" vertical-align: middle;color:#666;font-weight: bold;">
+                   <div data-ng-show="paginationInfo.totalItemCount>0">Total <span style="color: #444;">{{paginationInfo.totalItemCount}}</span> areas of expertise<span data-ng-show="paginationInfo.totalItemCount>1">s</span>.
+                        Show  
+                        <div class="btn-group report-info">
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="25" ng-class="{'disabled':paginationInfo.totalItemCount<26}">25</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="50" ng-class="{'disabled':paginationInfo.totalItemCount<51}">50</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="100" ng-class="{'disabled':paginationInfo.totalItemCount<101}">100</label>
+                            <label class="btn btn-default" ng-model="itemsByPage" uib-btn-radio="200" ng-class="{'disabled':paginationInfo.totalItemCount<201}">200</label>
+                        </div>
+                       areas of expertise per page.
+                    </div>
+                    <div data-ng-show="paginationInfo.totalItemCount==0">
+                        No areas of expertise found to show.
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div data-st-pagination="" data-current-page="currentPage" data-st-items-by-page="itemsByPage" data-st-template="directives/pagination.custom.html"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

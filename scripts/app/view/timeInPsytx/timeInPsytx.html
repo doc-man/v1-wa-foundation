@@ -1,0 +1,48 @@
+<!--<div ng-controller="timeInPsytxMasterCtrl" >-->
+<div>
+    <div class="fLeft">  <!-- No grid classes are necessary for full-width elements. http://getbootstrap.com/examples/grid/-->
+        <h3>Codes for time spent in psychotherapy &nbsp;
+        </h3>
+    </div>
+    <div data-ng-if="msgObj.msg.open">
+        <div class="pannel-message-board alert-success mTop20" data-ng-class="msgObj.msg.mclass" style="margin-top: 25px !important;">
+            <span>{{ msgObj.msg.text }}</span>
+        </div>
+    </div> 
+    <div class="clearfix"></div>
+   <!-- <style type="text/css">
+        .alternate-col tr:nth-child(odd){
+            background-color: #F3F3F3;
+        }
+    </style>-->
+    <div class="textarea-initial" data-ng-if="masterData.timeInPsytxList.length==0">{{masterData.messageVal}}</div>
+    <table data-ng-if="masterData.timeInPsytxList.length>0" st-table="displayTimeInPsytxListCollection" st-safe-src="masterData.timeInPsytxList" class="table table-striped">
+        <thead>
+           <tr>
+               <th class="col-md-4" style="padding-left: 5% !important;">Level</th>
+               <th class="col-md-4">Code with los</th>
+               <th class="col-md-4">Code without los</th>
+           </tr>
+        </thead>
+        <tbody class="alternate-col">
+           <tr class="cPointer reveal-elem-parent" data-ng-repeat="timeInPsytx in displayTimeInPsytxListCollection" data-ng-class="{'warning':timeInPsytx.timeInPsytxID == null}">
+               <td class="col-md-4" style="padding-left: 5% !important;">
+                   <a href="javascript:void(0)" editable-text="timeInPsytx.level" buttons="no" blur="submit" data-ng-model="timeInPsytx.level" onaftersave="fnSaveTimeInPsytx(timeInPsytx,'level')" data-ng-keypress="fnSaveTimeInPsytx(timeInPsytx,'level')" >{{timeInPsytx.level||'empty'}}</a>
+               </td>
+               <td class="col-md-2">
+                   <a href="javascript:void(0)" editable-select="timeInPsytx.codeWithLos" buttons="no" e-ng-options="cptCode.name as cptCode.name for cptCode in masterData.cptCodeList" blur="submit" onaftersave="fnSaveTimeInPsytx(timeInPsytx,'codeWithLos')"  data-ng-keypress="fnSaveTimeInPsytx(timeInPsytx,'codeWithLos')">{{timeInPsytx.codeWithLos||'empty'}}</a>
+               </td>
+               <td class="col-md-2">
+                   <a href="javascript:void(0)" editable-select="timeInPsytx.codeWithoutLos" buttons="no" e-ng-options="cptCode.name as cptCode.name for cptCode in masterData.cptCodeList" blur="submit" onaftersave="fnSaveTimeInPsytx(timeInPsytx,'codeWithoutLos')"  data-ng-keypress="fnSaveTimeInPsytx(timeInPsytx,'codeWithoutLos')">{{timeInPsytx.codeWithoutLos||'empty'}}</a>
+               </td>
+           </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="" st-items-by-page="16" st-displayed-pages="7"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,64 @@
+<div class="col-sm-5 form-box">
+    <div class="form-top">
+        <div class="form-top-left">
+            <h3>Unlock outgoing payments for a event</h3>
+        </div>
+    </div>
+    <div class="form-bottom" data-ng-if="!eventIDPayments">
+        <form name="unlockEventForm" data-ng-submit="fnShowEventCodes('outgoingPayments')">
+            <div class="form-group">
+                <p>Enter event id to get the locked payment list: <label class="switchOn">*</label> :</p>
+                <input type="text" placeholder="Event id" class="form-control" data-ng-model="unlockData.eventID" data-ng-required="!unlockData.eventID">
+            </div>
+            <!--<div class="form-group">
+                <p>Give reason for unlocking <label class="switchOn">*</label> :</p>
+                <textarea placeholder="Type reason here..." class="form-control" data-ng-model="unlockData.reason" data-ng-required="!reason"></textarea>
+            </div>-->
+            <button type="submit" class="btn">Submit</button>
+            <button ui-sref="masterDb.sectionPage({sectionName: 'unlock'})" class="btn">Go back</button>
+        </form>
+    </div>
+    <div class="form-bottom" data-ng-if="unlockDetailConfirm == 'No' &&  eventIDPayments">
+        <form name="unlockEventForm" data-ng-submit="fnUnlockEvent('outgoingPayments')">
+            <div class="form-group">
+                <p>Event id: <label class="switchOn">*</label> :</p>
+                <input type="text" placeholder="Event id" class="form-control" data-ng-model="unlockData.eventID" data-ng-required="!unlockData.eventID" disabled="disabled">
+            </div>
+            <div data-ng-if="outgoingPaymentList.length==0">
+                No locked payment found for this event.
+            </div>
+            <div data-ng-if="outgoingPaymentList.length>0">
+                <div class="form-group">
+                    <p>Choose the payment (Payment sent by SC) from the list: <label class="switchOn">*</label> :</p>
+                    <select class="form-control" ng-options="item as item.paymentAmountInSCAccount for item in outgoingPaymentList track by item.id" ng-model="unlockData.paymentID" data-ng-required="!unlockData.paymentID"></select>
+                </div>
+                <div class="form-group">
+                    <p>Give reason for unlocking <label class="switchOn">*</label> :</p>
+                    <textarea placeholder="Type reason here..." class="form-control" data-ng-model="unlockData.reason" data-ng-required="!unlockData.reason"></textarea>
+                </div>
+            </div>
+            <button data-ng-if="outgoingPaymentList.length>0" type="submit" class="btn">Unlock now</button>
+            <button ui-sref="masterDb.sectionPage({sectionName: 'unlock'})" class="btn">Go back</button>
+        </form>
+    </div>
+    <div class="form-bottom" data-ng-if="unlockDetailConfirm == 'Yes'">
+        <form name="unlockEventForm" data-ng-submit="fnSaveUnlockedEvent('outgoingPayments')">
+            <div class="form-group">
+                <p>Event id :</p>
+                <input type="text" placeholder="Event id" class="form-control" data-ng-model="unlockData.eventID" data-ng-required="!unlockData.eventID" disabled="disabled">
+            </div>
+            <div class="form-group">
+                <p>Payment : <label class="switchOn">*</label> :</p>
+                <select class="form-control" ng-options="item as item.paymentAmountInSCAccount for item in outgoingPaymentList track by item.id" ng-model="unlockData.paymentID" data-ng-required="!unlockData.paymentID" disabled="disabled"></select>
+            </div>
+            <div class="form-group">
+                <p>Reason :</p>
+                <textarea placeholder="Type reason here..." class="form-control" data-ng-model="unlockData.reason" data-ng-required="!unlockData.reason" disabled="disabled"></textarea>
+            </div>
+            <p>Are you sure to unlock this payment?
+                <button type="submit" class="btn">Yes</button>
+                <button data-ng-click="fnGoBack()" class="btn">No</button>
+            </p>
+        </form>
+    </div>
+</div>
