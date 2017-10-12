@@ -1,5 +1,7 @@
 var $ = jQuery;
 
+
+let canUserInteractWithContract = false;
 // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
 window.addEventListener('load', function() {
     console.log("inside window addevent listerner load");
@@ -9,10 +11,12 @@ window.addEventListener('load', function() {
         let Web3 = require('web3');
         web3 = new Web3();
         web3.setProvider(window.web3.currentProvider);
+	canUserInteractWithContract = true;
     } else {
         console.log('No web3? You should consider trying MetaMask!')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
+	canUserInteractWithContract = false;
     }
     
     // Now you can start your app & access web3 freely:
