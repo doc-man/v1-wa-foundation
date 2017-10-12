@@ -142,15 +142,32 @@ function startApp(){
             if(!error){
                 var accounts = web3.eth.accounts;
                 eathAccountsAddress = accounts[0];
-                $('#showAdress').text(eathAccountsAddress);
-                console.log(eathAccountsAddress);
+                if(eathAccountsAddress){
+                    $('#showAdress').text(eathAccountsAddress);
+                } else {
+                    $('#showAdress').html('<span style="color:#da7b7b">not detected</span>');
+                    console.log('not detected', eathAccountsAddress);
+                }
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
                 $('input[name=token]','#dashboardForm').val(result);
                 var pc = document.getElementById("pieChart");
                     pc.style.display = "";
-                    
                 var x = document.getElementById("gitGubSrcCodeToken");
                 x.style.display = "";
+                var previousBlock = 1000;
+                var options = {
+                    fromBlock: previousBlock,
+                    toBlock: previousBlock + 100,
+                    address: result,
+                };
+                var filter = web3.eth.filter(options);
+                
+                console.log('Token address');
+                filter.get(function(error, result){
+                    console.log(error, result);
+                    if (!error)
+                        console.log(JSON.stringify(result, null, 2));
+                    });
             }else{
                 console.log('Can\'t find token address', error);
             }
@@ -218,7 +235,6 @@ function startApp(){
                             var pBtn = document.getElementById("createNewProposal");
                             pBtn.style.display = "inline";
                             numberOfProposals = $('input[name=numProposals]','#dashboardForm').val();
-                            console.log(numberOfProposals);
                             // inside the for loop I am calling a async function. For loop will funish running immediately. While all your asynchronous operations are started. 
                             // Ref: https://stackoverflow.com/questions/11488014/asynchronous-process-inside-a-javascript-for-loop
                             // let proposalNumber = 0;
