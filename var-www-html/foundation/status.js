@@ -145,9 +145,37 @@ function startApp(){
                 if(eathAccountsAddress){
                     $('#showAdress').text(eathAccountsAddress);
                 } else {
-                    $('#showAdress').html('<span style="color:#da7b7b">not detected</span>');
-                    console.log('not detected', eathAccountsAddress);
+                    $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
                 }
+                var networkName = null;
+                // networkId = web3.version.network;
+                // console.log(web3.version.network);
+                web3.version.getNetwork((err, networkId) => {
+                    switch (networkId) {
+                        case "1":
+                            networkName = "Main";
+                            break;
+                        case "2":
+                            networkName = "Morden";
+                            break;
+                        case "3":
+                            networkName = "Ropsten";
+                            break;
+                        case "4":
+                            networkName = "Rinkeby";
+                            break;
+                        case "42":
+                            networkName = "Kovan";
+                            break;
+                        default:
+                            networkName = "Unknown";
+                    }
+                    if(eathAccountsAddress != null){
+                        $('#showNetwork').text(networkName);
+                    } else {
+                        $('#showNetwork').html('<span style="color:#da7b7b !important">Not detected</span>');
+                    }
+                });
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
                 $('input[name=token]','#dashboardForm').val(result);
                 var pc = document.getElementById("pieChart");
@@ -162,12 +190,12 @@ function startApp(){
                 };
                 var filter = web3.eth.filter(options);
                 
-                console.log('Token address');
-                filter.get(function(error, result){
-                    console.log(error, result);
-                    if (!error)
-                        console.log(JSON.stringify(result, null, 2));
-                    });
+                // console.log('Token address');
+                // filter.get(function(error, result){
+                //     console.log(error, result);
+                //     if (!error)
+                //         console.log(JSON.stringify(result, null, 2));
+                //     });
             }else{
                 console.log('Can\'t find token address', error);
             }
