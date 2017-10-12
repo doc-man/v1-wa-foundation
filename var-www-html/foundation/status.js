@@ -277,7 +277,7 @@ function startApp(){
                                 // + "}"
                                 // +"</script>";
                                 
-                                let proposalsTable = "<table id='proposalsTable' class='font-sm display table-sort-show-search-count'><thead style='background-color: #bdbdbd;'><tr>"
+                                let proposalsTable = "<table id='proposalsTable' class='font-sm display table-sort-show-search-count'><thead style='background-color: #bdbdbd;width: 100%;'><tr>"
                                     + "<th>Proposal ID</th>"
                                     + "<th>Recipient</th>"
                                     + "<th>Amount (HLT/Ether)</th>"
