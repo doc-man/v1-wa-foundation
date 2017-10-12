@@ -1,9 +1,9 @@
 var $ = jQuery;
 jQuery(document).ready(function($) {
     
-    var tokenContractUrl       = '../../build/contracts/HealthToken.json';
-    var foundationContractUrl  = '../../build/contracts/FoundationContract.json';
-    var votingContractUrl      = '../../build/contracts/SimpleVoting.json';
+    var tokenContractUrl       = './build/contracts/HealthToken.json';
+    var foundationContractUrl  = './build/contracts/FoundationContract.json';
+    var votingContractUrl      = './build/contracts/SimpleVoting.json';
 
     let web3;
     let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
