@@ -1,7 +1,7 @@
 var $ = jQuery;
 
 
-let canUserInteractWithContract = false;
+var canUserInteractWithContract = false;
 // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
 window.addEventListener('load', function() {
     console.log("inside window addevent listerner load");
@@ -11,12 +11,12 @@ window.addEventListener('load', function() {
         let Web3 = require('web3');
         web3 = new Web3();
         web3.setProvider(window.web3.currentProvider);
-	canUserInteractWithContract = true;
+	    canUserInteractWithContract = true;
     } else {
         console.log('No web3? You should consider trying MetaMask!')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
-	canUserInteractWithContract = false;
+	    canUserInteractWithContract = false;
     }
     
     // Now you can start your app & access web3 freely:
@@ -291,6 +291,10 @@ function timeConverter(UNIX_timestamp){
     }
 
 window.submitVoteMain = function (rowIndex) {
+    if(canUserInteractWithContract == false) {
+        alert('Please install metamask to interact with the contract.');
+        return false;
+    }
     loadContract(votingContractUrl, function(data){
         votingContract = data;
 
@@ -333,6 +337,10 @@ window.submitVoteMain = function (rowIndex) {
     });
 }
 window.submitCountVotes = function (rowIndex) {
+    if(canUserInteractWithContract == false) {
+        alert('Please install metamask to interact with the contract.');
+        return false;
+    }
     loadContract(votingContractUrl, function(data){
         votingContract = data;
 
@@ -358,6 +366,10 @@ window.submitCountVotes = function (rowIndex) {
     });
 }
 window.submitExecuteProposal = function (rowIndex) {
+    if(canUserInteractWithContract == false) {
+        alert('Please install metamask to interact with the contract.');
+        return false;
+    }
     loadContract(votingContractUrl, function(data){
         votingContract = data;
 
@@ -386,11 +398,16 @@ window.submitExecuteProposal = function (rowIndex) {
 jQuery(document).ready(function($) {
     
     $('#createNewProposal').click(function(){
+        if(canUserInteractWithContract == false) {
+            alert('Please install metamask to interact with the contract.');
+            return false;
+        }
         console.log("called create new proposal");
         var x = document.getElementById("proposalFormDiv");
         x.style.display = "block";
         var pBtn = document.getElementById("createNewProposal");
         pBtn.style.display = "none";
+        
     });
 
         
@@ -401,6 +418,10 @@ jQuery(document).ready(function($) {
         pBtn.style.display = "inline";
     });
     $('#submitTokenProposal').click(function(){
+        if(canUserInteractWithContract == false) {
+            alert('Please install metamask to interact with the contract.');
+            return false;
+        }
         loadContract(votingContractUrl, function(data){
             votingContract = data;
             var mainForm = $('#dashboardForm');
@@ -436,6 +457,10 @@ jQuery(document).ready(function($) {
     });
 
     $('#initializeSimpleVotingBtn').click(function(){
+        if(canUserInteractWithContract == false) {
+            alert('Please install metamask to interact with the contract.');
+            return false;
+        }
         var mainForm = $('#dashboardForm'); 
         var minimumQuorum = $('input[name=minimumQuorum]', mainForm).val();
         if(minimumQuorum != ''){
@@ -466,6 +491,10 @@ jQuery(document).ready(function($) {
     });
 
     $('#changeDebatingPeriodBtn').click(function(){
+        if(canUserInteractWithContract == false) {
+            alert('Please install metamask to interact with the contract.');
+            return false;
+        }
         var x = document.getElementById("changeDebatingPeriodFormDiv");
         x.style.display = "block";
         var dBtn = document.getElementById("changeDebatingPeriodBtn");
@@ -478,6 +507,10 @@ jQuery(document).ready(function($) {
         dBtn.style.display = "inline";
     });
     $('#submitChangeVotingRules').click(function(){
+        if(canUserInteractWithContract == false) {
+            alert('Please install metamask to interact with the contract.');
+            return false;
+        }
         loadContract(votingContractUrl, function(data){
             votingContract = data;
             var mainForm = $('#dashboardForm');
