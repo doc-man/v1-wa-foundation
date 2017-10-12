@@ -68,9 +68,8 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
                 var seconds = "0" + date.getSeconds();
                 var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                 proposalsTableBody+="<td>"+timeConverter(proposal.votingDeadline)+"</td>";
-                if(proposal.numberOfVotes > 0) {
-                    proposalsTableBody+="<td>"+proposal.numberOfVotes+"</td>";
-                } else if(millisecondsOfNow < millisecondsOfProposal) {
+                console.log(millisecondsOfNow, millisecondsOfProposal);
+                if(millisecondsOfNow < millisecondsOfProposal) {
                     proposalsTableBody+="<td>"+proposal.numberOfVotes+"<label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'>For</label><label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'>Against</label></div>"
                         + "<input type='button' id='submitVote_"+proposalNumber+"' onclick='submitVoteMain("+proposalNumber+")' value='Submit Vote' class='btn-c btn-primary-c'>"
                         + "</td>";
