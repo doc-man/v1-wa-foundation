@@ -104,15 +104,15 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
             createProposalsTableRow(pContractInstance, numberOfProposals);
         });
     } else {
-        // $('#proposalsTable')
-        //     .addClass( 'nowrap' )
-        //     .dataTable( {
-        //         responsive: true,
-        //         searchHighlight: true,
-        //         columnDefs: [
-        //             { targets: [-1, -3], className: 'dt-body-right' }
-        //         ]
-        //     } );
+        $('#proposalsTable')
+            .addClass( 'nowrap' )
+            .dataTable( {
+                responsive: true,
+                searchHighlight: true,
+                columnDefs: [
+                    { targets: [-1, -3], className: 'dt-body-right' }
+                ]
+            } );
     }
 }
 var eathAccountsAddress = null;
@@ -277,7 +277,7 @@ function startApp(){
                                 // + "}"
                                 // +"</script>";
                                 
-                                let proposalsTable = "<table id='proposalsTable' class='font-sm display table-sort-show-search-count' style='width: 100%;'><thead style='background-color: #bdbdbd;'><tr>"
+                                let proposalsTable = "<table id='proposalsTable' class='table font-sm display table-sort-show-search-count' style='width: 100%;'><thead style='background-color: #bdbdbd;'><tr>"
                                     + "<th>Proposal ID</th>"
                                     + "<th>Recipient</th>"
                                     + "<th>Amount (HLT/Ether)</th>"

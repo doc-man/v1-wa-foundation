@@ -218,3 +218,12 @@ a > input:hover {
         padding-left: 2% !important;
     }
 }
+#dashboardForm table tr td {
+    padding: 1px !important;
+}
+@media (max-width:1355px){
+    #dashboardForm {
+        width: 100%;
+        margin: auto;
+    }
+}
