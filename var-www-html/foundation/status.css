@@ -178,7 +178,7 @@ a > input:hover {
     color: white;
 }
 #bodyPart {
-    padding: 10px !;
+    padding: 10px !important;
 }
 .fnd-div {
     padding-left: 21% !important;
