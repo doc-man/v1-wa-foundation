@@ -119,6 +119,9 @@ table.dataTable span.highlight {
 .padding-r3 {
     padding-right: 3px;
 }
+.padding-r6 {
+    padding-right: 6px;
+}
 a > input {
     color: #007bff;
 }
