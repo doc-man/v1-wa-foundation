@@ -159,3 +159,10 @@ a > input:hover {
 .icon-st:hover {
     color: #557fff;
 }
+.logoIcon {
+    margin-top: -15px;
+    float: left;
+}
+.txt-c {
+    text-align: center;
+}
