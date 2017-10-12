@@ -140,7 +140,7 @@ a > input:hover {
     fill: currentColor;
 }
 .header-logo-invertocat {
-    margin: -1px 15px -1px -2px;
+    margin: 0px 5px 0px 0px;
     color: #000;
     white-space: nowrap;
 }
