@@ -190,8 +190,10 @@ function startApp(){
                         if(!error){
                             let amount = web3.fromWei(result, 'ether');
                             $('input[name=minimumQuorum]','#dashboardForm').val(amount);
-                            var x = document.getElementById("initializeSimpleVotingBtn");
-                            x.style.display = "";
+                            if(amount == null || amount == 0 || amount == '') {
+                                var x = document.getElementById("initializeSimpleVotingBtn");
+                                x.style.display = "";
+                            }
                             
                         }else{
                             console.log('Can\'t find minimum quorum', error);
@@ -468,7 +470,7 @@ jQuery(document).ready(function($) {
         }
         var mainForm = $('#dashboardForm'); 
         var minimumQuorum = $('input[name=minimumQuorum]', mainForm).val();
-        if(minimumQuorum != ''){
+        if(minimumQuorum == null || minimumQuorum == 0 || minimumQuorum == ''){
             loadContract(foundationContractUrl, function(data){
                 foundationContract = data;
                 let votingAddress = $('input[name=votingContract]', mainForm).val();
