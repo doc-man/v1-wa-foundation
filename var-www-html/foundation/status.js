@@ -70,11 +70,11 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
                 proposalsTableBody+="<td>"+timeConverter(proposal.votingDeadline)+"</td>";
                 console.log(millisecondsOfNow, millisecondsOfProposal);
                 if(millisecondsOfNow < millisecondsOfProposal) {
-                    proposalsTableBody+="<td>"+proposal.numberOfVotes+"<label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'>For</label><label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'>Against</label></div>"
+                    proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-info cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span>"+"<label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'>For</label><label class='form-check-label padding-r3'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'>Against</label></div>"
                         + "<input type='button' id='submitVote_"+proposalNumber+"' onclick='submitVoteMain("+proposalNumber+")' value='Submit Vote' class='btn-c btn-primary-c'>"
                         + "</td>";
                 } else {
-                    proposalsTableBody+="<td>"+proposal.numberOfVotes+"</td>";
+                    proposalsTableBody+="<td><span class='badge badge-pill badge-success cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span></td>";
                 }
                 if(proposal.numberOfVotes != 0 && proposal.proposalPassed != true && millisecondsOfNow > millisecondsOfProposal) {
                     proposalsTableBody+="<td>"+"<input type=button id='submitCountVotesBtn' onclick='submitCountVotes("+proposalNumber+")' value='count votes' class='btn-c btn-primary-c'></td>";
