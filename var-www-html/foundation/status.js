@@ -1,23 +1,11 @@
 var $ = jQuery;
-jQuery(document).ready(function($) {
-    
-    var tokenContractUrl       = './build/contracts/HealthToken.json';
-    var foundationContractUrl  = './build/contracts/FoundationContract.json';
-    var votingContractUrl      = './build/contracts/SimpleVoting.json';
 
-    let web3;
-    let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
-    let votingContractAddress; // this value is retrieved from foundation
-
-    function loadContract(url, callback){
-        $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
-    }
-   // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
-   window.addEventListener('load', function() {
-    
+    // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
+    window.addEventListener('load', function() {
+       console.log("inside window addevent listerner load");
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof window.web3 !== 'undefined') {
-            // Use Mist/MetaMask's provider
+            console.log("Using Mist/MetaMask's provider");
             let Web3 = require('web3');
             web3 = new Web3();
             web3.setProvider(window.web3.currentProvider);
@@ -32,6 +20,19 @@ jQuery(document).ready(function($) {
     
     });    
     
+
+
+    var tokenContractUrl       = './build/contracts/HealthToken.json';
+    var foundationContractUrl  = './build/contracts/FoundationContract.json';
+    var votingContractUrl      = './build/contracts/SimpleVoting.json';
+
+    let web3;
+    let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
+    let votingContractAddress; // this value is retrieved from foundation
+
+    function loadContract(url, callback){
+        $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
+    }
     var proposalRowCount = 0;
     function createProposalsTableRow(pContractInstance, numberOfProposals) {
         let proposalNumber = proposalRowCount;
@@ -498,5 +499,5 @@ jQuery(document).ready(function($) {
             );
         });
     });
-});
+
 
