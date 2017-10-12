@@ -1,4 +1,5 @@
-body{padding:20px}.error{color:red}input.ethAddress,input.ethTx,input.string{width:30em}.abi{display:block;width:100%;height:3em}.contractForm label{display:block}
+/*body{padding:20px}*/
+.error{color:red}input.ethAddress,input.ethTx,input.string{width:30em}.abi{display:block;width:100%;height:3em}.contractForm label{display:block}
 
 input[type=text] {
     width: 500px;
@@ -166,9 +167,13 @@ a > input:hover {
     color: #557fff;
 }
 .logoIcon {
-    margin-top: -25px;
-    float: left;
+    margin-top: 10px !important;
+    margin-right: 20px !important;
 }
 .txt-c {
     text-align: center;
+}
+.fnd-d {
+    margin: 5px 0px 0px 0;
+    color: white;
 }
