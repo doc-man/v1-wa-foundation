@@ -177,3 +177,6 @@ a > input:hover {
     margin: 5px 0px 0px 0;
     color: white;
 }
+#bodyPart {
+    padding: 10px !important;
+}
