@@ -178,5 +178,43 @@ a > input:hover {
     color: white;
 }
 #bodyPart {
-    padding: 10px !important;
+    padding: 10px !;
+}
+.fnd-div {
+    padding-left: 21% !important;
+}
+@media (max-width: 1480px) {
+    .fnd-div {
+        padding-left: 20% !important;
+    }
+}
+@media (max-width: 1380px) {
+    .fnd-div {
+        padding-left: 17% !important;
+    }
+}
+@media (max-width: 1300px) {
+    .fnd-div {
+        padding-left: 15% !important;
+    }
+}
+@media (max-width: 1280px) {
+    .fnd-div {
+        padding-left: 10% !important;
+    }
+}
+@media (max-width: 1180px) {
+    .fnd-div {
+        padding-left: 7% !important;
+    }
+}
+@media (max-width: 1130px) {
+    .fnd-div {
+        padding-left: 4% !important;
+    }
+}
+@media (max-width: 1090px) {
+    .fnd-div {
+        padding-left: 2% !important;
+    }
 }

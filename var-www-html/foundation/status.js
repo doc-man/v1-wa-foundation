@@ -68,7 +68,6 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
                 var seconds = "0" + date.getSeconds();
                 var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
                 proposalsTableBody+="<td>"+timeConverter(proposal.votingDeadline)+"</td>";
-                console.log(millisecondsOfNow, millisecondsOfProposal);
                 if(millisecondsOfNow < millisecondsOfProposal) {
                     proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-info cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span>"+"<label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'> For </label><label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'> Against </label></div>"
                         + "<input type='button' id='submitVote_"+proposalNumber+"' onclick='submitVoteMain("+proposalNumber+")' value='Submit Vote' class='btn-c btn-primary-c'>"
@@ -116,13 +115,15 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
             } );
     }
 }
+var eathAccountsAddress = null;
 function startApp(){
 
     let tokenContract;
     let foundationContract;
     let votingContract;
-
-
+    // var accounts = web3.eth.accounts;
+    // eathAccountsAddress = accounts;
+    // setTimeout(function(){ alert(web3.eth.accounts); }, 100);
     loadContract(tokenContractUrl, function(data){
         tokenContract = data;
     });
@@ -139,6 +140,10 @@ function startApp(){
 
         pContractInstance.token(function(error, result){
             if(!error){
+                var accounts = web3.eth.accounts;
+                eathAccountsAddress = accounts[0];
+                $('#showAdress').text(eathAccountsAddress);
+                console.log(eathAccountsAddress);
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
                 $('input[name=token]','#dashboardForm').val(result);
                 var pc = document.getElementById("pieChart");
