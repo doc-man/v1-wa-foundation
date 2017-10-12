@@ -379,12 +379,18 @@ window.submitExecuteProposal = function (rowIndex) {
         );
     });
 }
+
+jQuery(document).ready(function($) {
+    
 $('#createNewProposal').click(function(){
+    console.log("called create new proposal");
     var x = document.getElementById("proposalFormDiv");
     x.style.display = "block";
     var pBtn = document.getElementById("createNewProposal");
     pBtn.style.display = "none";
 });
+
+    
 $('#cancleCreateNewProposal').click(function(){
     var x = document.getElementById("proposalFormDiv");
     x.style.display = "none";
@@ -501,3 +507,4 @@ $('#submitChangeVotingRules').click(function(){
 });
 
 
+   }); 
