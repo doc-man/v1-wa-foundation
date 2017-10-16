@@ -42,66 +42,68 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
     let proposalNumber = proposalRowCount;
     console.log("call createProposalsTableRow", proposalNumber, numberOfProposals);
     if(proposalNumber < numberOfProposals) {
-        pContractInstance.getProposal(proposalNumber,function(error, result){
-            if(!error){
-                var proposal = {};
-                proposal.recipient = result[0];
-                proposal.amount = result[1].toString();
-                proposal.description = result[2];
-                proposal.votingDeadline = result[3];
-                proposal.numberOfVotes = result[4];
-                proposal.executed = result[5];
-                proposal.proposalPassed = result[6];
-                proposal.typeOfProposal = result[7];
+        pContractInstance.getProposalType(proposalNumber, function(error, resultPtype){
+            pContractInstance.getProposal(proposalNumber,function(error, result){
+                if(!error){
+                    var proposal = {};
+                    proposal.recipient = result[0];
+                    proposal.amount = result[1].toString();
+                    proposal.description = result[2];
+                    proposal.votingDeadline = result[3];
+                    proposal.numberOfVotes = result[4];
+                    proposal.executed = result[5];
+                    proposal.proposalPassed = result[6];
+                    proposal.typeOfProposal = resultPtype;
 
-                let proposalsTableBody ="<tr>";
-                proposalsTableBody+="<td>"+proposalNumber+"</td>";                                            
-                proposalsTableBody+="<td>"+proposal.recipient+"</td>";
-                let amount = web3.fromWei(proposal.amount, 'ether');
-                proposalsTableBody+="<td>"+amount+"</td>";
-                proposalsTableBody+="<td>"+proposal.description+"</td>";
-                var date = new Date(proposal.votingDeadline*1000);
-                var millisecondsOfProposal = date.getTime();
-                var millisecondsOfNow = new Date().getTime();
-                var hours = date.getHours();
-                var minutes = "0" + date.getMinutes();
-                var seconds = "0" + date.getSeconds();
-                var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-                proposalsTableBody+="<td>"+timeConverter(proposal.votingDeadline)+"</td>";
-                if(millisecondsOfNow < millisecondsOfProposal) {
-                    proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-info cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span>"+"<label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'> For </label><label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'> Against </label></div>"
-                        + "<input type='button' id='submitVote_"+proposalNumber+"' onclick='submitVoteMain("+proposalNumber+")' value='Submit Vote' class='btn-c btn-primary-c'>"
-                        + "</td>";
+                    let proposalsTableBody ="<tr>";
+                    proposalsTableBody+="<td>"+proposalNumber+"</td>";                                            
+                    proposalsTableBody+="<td>"+proposal.recipient+"</td>";
+                    let amount = web3.fromWei(proposal.amount, 'ether');
+                    proposalsTableBody+="<td>"+amount+"</td>";
+                    proposalsTableBody+="<td>"+proposal.description+"</td>";
+                    var date = new Date(proposal.votingDeadline*1000);
+                    var millisecondsOfProposal = date.getTime();
+                    var millisecondsOfNow = new Date().getTime();
+                    var hours = date.getHours();
+                    var minutes = "0" + date.getMinutes();
+                    var seconds = "0" + date.getSeconds();
+                    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                    proposalsTableBody+="<td>"+timeConverter(proposal.votingDeadline)+"</td>";
+                    if(millisecondsOfNow < millisecondsOfProposal) {
+                        proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-info cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span>"+"<label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='for'> For </label><label class='form-check-label padding-r6'><input type='radio' class='form-check-input' name='vote_"+proposalNumber+"' value='against'> Against </label></div>"
+                            + "<input type='button' id='submitVote_"+proposalNumber+"' onclick='submitVoteMain("+proposalNumber+")' value='Submit Vote' class='btn-c btn-primary-c'>"
+                            + "</td>";
+                    } else {
+                        proposalsTableBody+="<td><span class='badge badge-pill badge-success cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span></td>";
+                    }
+                    if(proposal.numberOfVotes != 0 && proposal.proposalPassed != true && millisecondsOfNow > millisecondsOfProposal) {
+                        proposalsTableBody+="<td>"+"<input type=button id='submitCountVotesBtn' onclick='submitCountVotes("+proposalNumber+")' value='count votes' class='btn-c btn-primary-c'></td>";
+                    } else if(proposal.proposalPassed == true) {
+                        proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-success cDefault opacity-6'>Success</span>"+"</td>";
+                    } else {
+                        proposalsTableBody+="<td>"+"</td>";
+                    }
+                    if(proposal.proposalPassed == true && proposal.executed != true) {
+                        proposalsTableBody+="<td>"+"<input type=button id='submitExecuteProposalBtn' onclick='submitExecuteProposal("+proposalNumber+")' value=execute class='btn-c btn-primary-c'></td>";
+                    } else if(proposal.executed == true){
+                        proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-success cDefault opacity-6'>Success</span>"+"</td>";
+                    } else {
+                        proposalsTableBody+="<td>"+"</td>";
+                    }
+                    if(proposal.typeOfProposal) {
+                        proposalsTableBody+="<td>"+proposal.typeOfProposal+"</td>";
+                    } else {
+                        proposalsTableBody+="<td>"+"</td>";
+                    }
+                    
+                    proposalsTableBody+="</tr>";
+                    $("table[id=proposalsTable]").find('tbody').append(proposalsTableBody);
                 } else {
-                    proposalsTableBody+="<td><span class='badge badge-pill badge-success cDefault opacity-6' style='margin-right: 5px;'>"+proposal.numberOfVotes+"</span></td>";
+                    console.log('Can\'t find proposals', error);
                 }
-                if(proposal.numberOfVotes != 0 && proposal.proposalPassed != true && millisecondsOfNow > millisecondsOfProposal) {
-                    proposalsTableBody+="<td>"+"<input type=button id='submitCountVotesBtn' onclick='submitCountVotes("+proposalNumber+")' value='count votes' class='btn-c btn-primary-c'></td>";
-                } else if(proposal.proposalPassed == true) {
-                    proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-success cDefault opacity-6'>Success</span>"+"</td>";
-                } else {
-                    proposalsTableBody+="<td>"+"</td>";
-                }
-                if(proposal.proposalPassed == true && proposal.executed != true) {
-                    proposalsTableBody+="<td>"+"<input type=button id='submitExecuteProposalBtn' onclick='submitExecuteProposal("+proposalNumber+")' value=execute class='btn-c btn-primary-c'></td>";
-                } else if(proposal.executed == true){
-                    proposalsTableBody+="<td>"+"<span class='badge badge-pill badge-success cDefault opacity-6'>Success</span>"+"</td>";
-                } else {
-                    proposalsTableBody+="<td>"+"</td>";
-                }
-                if(proposal.typeOfProposal) {
-                    proposalsTableBody+="<td>"+proposal.typeOfProposal+"</td>";
-                } else {
-                    proposalsTableBody+="<td>"+"</td>";
-                }
-                
-                proposalsTableBody+="</tr>";
-                $("table[id=proposalsTable]").find('tbody').append(proposalsTableBody);
-            } else {
-                console.log('Can\'t find proposals', error);
-            }
-            proposalRowCount ++;
-            createProposalsTableRow(pContractInstance, numberOfProposals);
+                proposalRowCount ++;
+                createProposalsTableRow(pContractInstance, numberOfProposals);
+            });
         });
     } else {
         $('#proposalsTable')
@@ -116,6 +118,49 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
     }
 }
 var eathAccountsAddress = null;
+function getTransactionsByAccount(myaccount, startBlockNumber, endBlockNumber) {
+    console.log('Get Transactions By Account');
+  if (endBlockNumber == null) {
+    endBlockNumber = web3.eth.blockNumber;
+    console.log("Using endBlockNumber: " + endBlockNumber);
+  }
+  if (startBlockNumber == null) {
+    startBlockNumber = endBlockNumber - 1000;
+    console.log("Using startBlockNumber: " + startBlockNumber);
+  }
+  console.log("Searching for transactions to/from account \"" + myaccount + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
+
+  for (var i = startBlockNumber; i <= endBlockNumber; i++) {
+    if (i % 1000 == 0) {
+      console.log("Searching block " + i);
+    }
+    web3.eth.getBlock(i, true, function(block){
+            
+        console.log(block);
+    });
+    // var block = web3.eth.getBlock(i, true);
+    // console.log(block);
+    // if (block != null && block.transactions != null) {
+    //   block.transactions.forEach( function(e) {
+    //     if (myaccount == "*" || myaccount == e.from || myaccount == e.to) {
+    //       console.log("  tx hash          : " + e.hash + "\n"
+    //         + "   nonce           : " + e.nonce + "\n"
+    //         + "   blockHash       : " + e.blockHash + "\n"
+    //         + "   blockNumber     : " + e.blockNumber + "\n"
+    //         + "   transactionIndex: " + e.transactionIndex + "\n"
+    //         + "   from            : " + e.from + "\n" 
+    //         + "   to              : " + e.to + "\n"
+    //         + "   value           : " + e.value + "\n"
+    //         + "   time            : " + block.timestamp + " " + new Date(block.timestamp * 1000).toGMTString() + "\n"
+    //         + "   gasPrice        : " + e.gasPrice + "\n"
+    //         + "   gas             : " + e.gas + "\n"
+    //         + "   input           : " + e.input);
+    //     }
+    //   })
+    // }
+  }
+  return true;
+}
 function startApp(){
 
     let tokenContract;
@@ -142,6 +187,7 @@ function startApp(){
             if(!error){
                 var accounts = web3.eth.accounts;
                 eathAccountsAddress = accounts[0];
+                console.log(getTransactionsByAccount(foundation, 1432400, 1432400));
                 if(eathAccountsAddress){
                     $('#showAdress').text(eathAccountsAddress);
                 } else {
@@ -273,13 +319,6 @@ function startApp(){
                             
                             // numberOfProposals = 1;
                             if(numberOfProposals > 0) {
-                                // proposalsTable += "<script type='text/javascript' src='status.js'></script>";
-                                // let proposalsTable = "<script type='text/javascript' src='status.js'></script><script>"
-                                // + "function submitVote(proposalNumber) {"
-                                // +    "console.log('call fn js', proposalNumber);"
-                                // +    "submitVoteMain(proposalNumber);"
-                                // + "}"
-                                // +"</script>";
                                 
                                 let proposalsTable = "<table id='proposalsTable' class='table font-sm display table-sort-show-search-count' style='width: 100%;'><thead style='background-color: #bdbdbd;'><tr>"
                                     + "<th>Proposal ID</th>"
