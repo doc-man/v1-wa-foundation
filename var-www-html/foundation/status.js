@@ -148,9 +148,11 @@ function startApp(){
                     $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
                 }
                 var networkName = null;
+                var setNetworkId = null;
                 // networkId = web3.version.network;
                 // console.log(web3.version.network);
                 web3.version.getNetwork((err, networkId) => {
+                    setNetworkId = networkId;
                     switch (networkId) {
                         case "1":
                             networkName = "Main";
@@ -167,11 +169,13 @@ function startApp(){
                         case "42":
                             networkName = "Kovan";
                             break;
-                        default:
-                            networkName = "Unknown";
                     }
-                    if(eathAccountsAddress != null){
-                        $('#showNetwork').text(networkName);
+                    if(eathAccountsAddress){
+                        if(networkName == 'Rinkeby'){
+                            $('#showNetwork').text(networkName);
+                        } else {
+                            $('#showNetwork').html('<span style="color:#da7b7b !important">Please change your MetaMask network to &ldquo;Rinkeby&rdquo;</span>');
+                        }
                     } else {
                         $('#showNetwork').html('<span style="color:#da7b7b !important">Not detected</span>');
                     }

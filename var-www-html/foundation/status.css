@@ -173,6 +173,9 @@ a > input:hover {
 .txt-c {
     text-align: center;
 }
+.txt-l {
+    text-align: left;
+}
 .fnd-d {
     margin: 5px 0px 0px 0;
     color: white;
@@ -225,5 +228,13 @@ a > input:hover {
     #dashboardForm {
         width: 100%;
         margin: auto;
+    }
+}
+.network-txt {
+    text-align: left;
+}
+@media (max-width:767px){
+    .network-txt {
+        text-align: center;
     }
 }
