@@ -345,6 +345,11 @@ window.submitVoteMain = function (rowIndex) {
         alert('Please install metamask to interact with the contract.');
         return false;
     }
+    votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
+    if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
+        alert('Since a user without HLT token cannot vote.');
+        return false;
+    }
     loadContract(votingContractUrl, function(data){
         votingContract = data;
 
@@ -446,10 +451,14 @@ window.submitExecuteProposal = function (rowIndex) {
 }
 
 jQuery(document).ready(function($) {
-    
     $('#createNewProposal').click(function(){
         if(canUserInteractWithContract == false) {
             alert('Please install metamask to interact with the contract.');
+            return false;
+        }
+        votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
+        if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
+            alert('Since a user without HLT token cannot vote.');
             return false;
         }
         var x = document.getElementById("proposalFormDiv");
@@ -457,9 +466,7 @@ jQuery(document).ready(function($) {
         var pBtn = document.getElementById("createNewProposal");
         pBtn.style.display = "none";
         
-    });
-
-        
+    });  
     $('#cancleCreateNewProposal').click(function(){
         var x = document.getElementById("proposalFormDiv");
         x.style.display = "none";
@@ -469,6 +476,11 @@ jQuery(document).ready(function($) {
     $('#submitTokenProposal').click(function(){
         if(canUserInteractWithContract == false) {
             alert('Please install metamask to interact with the contract.');
+            return false;
+        }
+        votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
+        if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
+            alert('Since a user without HLT token cannot submit proposal.');
             return false;
         }
         loadContract(votingContractUrl, function(data){
