@@ -11,7 +11,14 @@ window.addEventListener('load', function() {
         let Web3 = require('web3');
         web3 = new Web3();
         web3.setProvider(window.web3.currentProvider);
-	    canUserInteractWithContract = true;
+
+        // let us find out the network name, If the network name is not rinkeby then connect to public network
+        if (networkName != 'rinkeby'){
+            web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
+            canUserInteractWithContract = false;
+        }else{
+            canUserInteractWithContract = true;
+        }
     } else {
         console.log('No web3? You should consider trying MetaMask!')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
