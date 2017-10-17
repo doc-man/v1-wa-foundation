@@ -396,6 +396,11 @@ window.submitCountVotes = function (rowIndex) {
         alert('Please install metamask to interact with the contract.');
         return false;
     }
+    votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
+    if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
+        alert('Since a user without HLT token cannot vote.');
+        return false;
+    }
     loadContract(votingContractUrl, function(data){
         votingContract = data;
 
@@ -457,8 +462,8 @@ jQuery(document).ready(function($) {
             return false;
         }
         votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-        if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
-            alert('Since a user without HLT token cannot vote.');
+        if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
+            alert('Since a user without HLT token cannot submit proposal.');
             return false;
         }
         var x = document.getElementById("proposalFormDiv");
@@ -479,7 +484,7 @@ jQuery(document).ready(function($) {
             return false;
         }
         votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-        if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
+        if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
             alert('Since a user without HLT token cannot submit proposal.');
             return false;
         }
