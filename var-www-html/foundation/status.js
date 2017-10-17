@@ -1,48 +1,141 @@
 var $ = jQuery;
 
-
+var metaMaskExtension = {install:false};
 var canUserInteractWithContract = false;
+let web3;
 // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
 window.addEventListener('load', function() {
     console.log("inside window addevent listerner load");
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.web3 !== 'undefined') {
         console.log("Using Mist/MetaMask's provider");
+        metaMaskExtension.install = true;
         let Web3 = require('web3');
         web3 = new Web3();
         web3.setProvider(window.web3.currentProvider);
-
-        // let us find out the network name, If the network name is not rinkeby then connect to public network
-        if (networkName != 'rinkeby'){
-            web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
-            canUserInteractWithContract = false;
-        }else{
-            canUserInteractWithContract = true;
-        }
+        web3.eth.getAccounts(function(error, address){
+            metaMaskExtension.address = address[0];
+            if(metaMaskExtension.address){
+                $('#showAdress').text(metaMaskExtension.address);
+            } else {
+                $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
+            }
+        });
+        var networkName = null;
+        web3.version.getNetwork((err, networkId) => {
+            switch (networkId) {
+                case "1":
+                    networkName = "Main";
+                    break;
+                case "2":
+                    networkName = "Morden";
+                    break;
+                case "3":
+                    networkName = "Ropsten";
+                    break;
+                case "4":
+                    networkName = "Rinkeby";
+                    break;
+                case "42":
+                    networkName = "Kovan";
+                    break;
+            }
+            metaMaskExtension.network = {id:networkId,name:networkName}
+            if(metaMaskExtension.network.name != null){
+                $('#showNetwork').text(metaMaskExtension.network.name);
+                // $('#showNetwork').html('<span style="color:#da7b7b !important">Please change your MetaMask network to &ldquo;Rinkeby&rdquo;</span>');
+            } else {
+                $('#showNetwork').html('<span style="color:#da7b7b !important">Not detected</span>');
+            }
+            // let us find out the network name, If the network name is not rinkeby then connect to public network
+            if(metaMaskExtension.network.name != 'Rinkeby') {
+                web3 = new Object;
+                web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
+                
+                canUserInteractWithContract = false;
+            } else {
+                canUserInteractWithContract = true;
+            }
+            startApp();
+        });
     } else {
         console.log('No web3? You should consider trying MetaMask!')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/hvBxnkcxO7nF9ptQPkjz:8545"));
 	    canUserInteractWithContract = false;
+        $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
+        web3.eth.getAccounts(function(error, address){
+            if(address[0]){
+                $('#showAdress').text(address[0]);
+            }
+        });
+        
+        var networkName = null;
+        $('#showNetwork').html('<span style="color:#da7b7b !important">Not detected</span>');
+        web3.version.getNetwork((err, networkId) => {
+            switch (networkId) {
+                case "1":
+                    networkName = "Main";
+                    break;
+                case "2":
+                    networkName = "Morden";
+                    break;
+                case "3":
+                    networkName = "Ropsten";
+                    break;
+                case "4":
+                    networkName = "Rinkeby";
+                    break;
+                case "42":
+                    networkName = "Kovan";
+                    break;
+            }
+            if(networkName != null){
+                $('#showNetwork').text(networkName);
+            }
+        });
+        startApp();
     }
     
     // Now you can start your app & access web3 freely:
-    startApp();
+    
 
 });    
-
-
 
 var tokenContractUrl       = './build/contracts/HealthToken.json';
 var foundationContractUrl  = './build/contracts/FoundationContract.json';
 var votingContractUrl      = './build/contracts/SimpleVoting.json';
+var basicTokenUrl      = './build/contracts/BasicToken.json';
 
-let web3;
 let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
 let votingContractAddress; // this value is retrieved from foundation
 
 function loadContract(url, callback){
     $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
+}
+function bottomAlerMessage(messageText, messageClass, time) {
+    messageClass = messageClass || 'alert-danger-hlt';
+    time = time || 1000;
+    var bottomMessage = $("#bottomMessage");
+    if(messageText != '' && messageText != null) {
+        var messageHtml = '<div class="err-msg">'
+            + '<i class="fa fa-exclamation-triangle icon" aria-hidden="true"></i>'
+            + '<span class="txt"> '+messageText+'</span>'
+            + '</div>'
+            + '<div class="cross">'
+            + '<i class="fa fa-times icon" aria-hidden="true" onclick="cancleBottomAlerMessage()"></i>'
+            + '</div>';
+        bottomMessage.addClass(messageClass);
+        bottomMessage.html(messageHtml);
+        setTimeout(function(){ 
+            bottomMessage.removeClass(messageClass);
+            bottomMessage.html('');
+        }, time);
+    }
+}
+function cancleBottomAlerMessage() {
+    var bottomMessage = $("#bottomMessage");
+    bottomMessage.html('');
 }
 var proposalRowCount = 0;
 function createProposalsTableRow(pContractInstance, numberOfProposals) {
@@ -124,15 +217,10 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
             } );
     }
 }
-var eathAccountsAddress = null;
 function startApp(){
-
     let tokenContract;
     let foundationContract;
     let votingContract;
-    // var accounts = web3.eth.accounts;
-    // eathAccountsAddress = accounts;
-    // setTimeout(function(){ alert(web3.eth.accounts); }, 100);
     loadContract(tokenContractUrl, function(data){
         tokenContract = data;
     });
@@ -149,46 +237,6 @@ function startApp(){
 
         pContractInstance.token(function(error, result){
             if(!error){
-                var accounts = web3.eth.accounts;
-                eathAccountsAddress = accounts[0];
-                if(eathAccountsAddress){
-                    $('#showAdress').text(eathAccountsAddress);
-                } else {
-                    $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
-                }
-                var networkName = null;
-                var setNetworkId = null;
-                // networkId = web3.version.network;
-                // console.log(web3.version.network);
-                web3.version.getNetwork((err, networkId) => {
-                    setNetworkId = networkId;
-                    switch (networkId) {
-                        case "1":
-                            networkName = "Main";
-                            break;
-                        case "2":
-                            networkName = "Morden";
-                            break;
-                        case "3":
-                            networkName = "Ropsten";
-                            break;
-                        case "4":
-                            networkName = "Rinkeby";
-                            break;
-                        case "42":
-                            networkName = "Kovan";
-                            break;
-                    }
-                    if(eathAccountsAddress){
-                        if(networkName == 'Rinkeby'){
-                            $('#showNetwork').text(networkName);
-                        } else {
-                            $('#showNetwork').html('<span style="color:#da7b7b !important">Please change your MetaMask network to &ldquo;Rinkeby&rdquo;</span>');
-                        }
-                    } else {
-                        $('#showNetwork').html('<span style="color:#da7b7b !important">Not detected</span>');
-                    }
-                });
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
                 $('input[name=token]','#dashboardForm').val(result);
                 var pc = document.getElementById("pieChart");
@@ -348,67 +396,82 @@ function timeConverter(UNIX_timestamp){
     }
 
 window.submitVoteMain = function (rowIndex) {
-    if(canUserInteractWithContract == false) {
-        alert('Please install metamask to interact with the contract.');
+    if(!metaMaskExtension.install) {
+        bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+        return false;
+    } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+        bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
-    votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-    if(votingContractAddress == '' && votingContractAddress == null && votingContractAddress == 0){
-        alert('Since a user without HLT token cannot vote.');
-        return false;
-    }
-    loadContract(votingContractUrl, function(data){
-        votingContract = data;
+    loadContract(basicTokenUrl, function(data){
+        basicTokenContract = data;
+        let basicContractObj = web3.eth.contract(basicTokenContract.abi);
+        let basicContractInstance = basicContractObj.at();
+        basicContractInstance.balanceOf(
+                metaMaskExtension.address,
+                function(error, hltToken){
+                    if(hltToken == 0){
+                        bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
+                        return false;
+                    }
+                    loadContract(votingContractUrl, function(data){
+                        votingContract = data;
 
-        var form = $('#dashboardForm');
-        let votingAddress = $('input[name=votingContract]', form).val();
-        console.log('votingAddress:', votingAddress);
-        let proposalNumber  = rowIndex;
-        let voteRadio = $('input[name=vote_'+rowIndex+']:checked');
-        if(voteRadio.length != 1){
-            alert('No vote selected!');
-            return;
-        }
-        let vote;
-        switch(voteRadio.val()){
-            case 'for':
-                vote = true;
-                break;
-            case 'against':
-                vote = false;
-                break;
-            default:
-                alert('Unknown vote!');
-                return;
-        }
-        let contractObj = web3.eth.contract(votingContract.abi);
-        let contractInstance = contractObj.at(votingAddress);
-        console.log('Calling '+votingContract.contract_name+'.vote() with parameters:\n', 
-            proposalNumber, vote,
-            'ABI', JSON.stringify(votingContract.abi));
-        contractInstance.vote(
-            proposalNumber, vote,
-            function(error, result){
-                if(!error){
-                    console.log("Vote tx: ",result);
-                }else{
-                    console.error(error)
+                        var form = $('#dashboardForm');
+                        let votingAddress = $('input[name=votingContract]', form).val();
+                        console.log('votingAddress:', votingAddress);
+                        let proposalNumber  = rowIndex;
+                        let voteRadio = $('input[name=vote_'+rowIndex+']:checked');
+                        if(voteRadio.length != 1){
+                            bottomAlerMessage('No vote selected!', 'alert-danger-hlt', 5000);
+                            return;
+                        }
+                        let vote;
+                        switch(voteRadio.val()){
+                            case 'for':
+                                vote = true;
+                                break;
+                            case 'against':
+                                vote = false;
+                                break;
+                            default:
+                                bottomAlerMessage('Unknown vote!', 'alert-danger-hlt', 5000);
+                                return;
+                        }
+                        let contractObj = web3.eth.contract(votingContract.abi);
+                        let contractInstance = contractObj.at(votingAddress);
+                        console.log('Calling '+votingContract.contract_name+'.vote() with parameters:\n', 
+                            proposalNumber, vote,
+                            'ABI', JSON.stringify(votingContract.abi));
+                        contractInstance.vote(
+                            proposalNumber, vote,
+                            function(error, result){
+                                if(!error){
+                                    console.log("Vote tx: ",result);
+                                }else{
+                                    console.error(error)
+                                }
+                            }
+                        );
+                    });
                 }
-            }
-        );
+            );
     });
 }
 window.submitCountVotes = function (rowIndex) {
-    if(canUserInteractWithContract == false) {
-        alert('Please install metamask to interact with the contract.');
+    if(!metaMaskExtension.install) {
+        bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+        return false;
+    } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+        bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
     votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
     if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
-        alert('Since a user without HLT token cannot vote.');
+        bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
         return false;
     }
-    loadContract(votingContractUrl, function(data){
+    loadContract(votingContractUrl, function(data) {
         votingContract = data;
 
         var form = $('#dashboardForm');
@@ -433,8 +496,11 @@ window.submitCountVotes = function (rowIndex) {
     });
 }
 window.submitExecuteProposal = function (rowIndex) {
-    if(canUserInteractWithContract == false) {
-        alert('Please install metamask to interact with the contract.');
+    if(!metaMaskExtension.install) {
+        bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+        return false;
+    } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+        bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
     loadContract(votingContractUrl, function(data){
@@ -464,20 +530,32 @@ window.submitExecuteProposal = function (rowIndex) {
 
 jQuery(document).ready(function($) {
     $('#createNewProposal').click(function(){
-        if(canUserInteractWithContract == false) {
-            alert('Please install metamask to interact with the contract.');
+        if(!metaMaskExtension.install) {
+            bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+            bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-        if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
-            alert('Since a user without HLT token cannot submit proposal.');
-            return false;
-        }
-        var x = document.getElementById("proposalFormDiv");
-        x.style.display = "block";
-        var pBtn = document.getElementById("createNewProposal");
-        pBtn.style.display = "none";
         
+        loadContract(basicTokenUrl, function(data){
+            basicTokenContract = data;
+            let basicContractObj = web3.eth.contract(basicTokenContract.abi);
+            let basicContractInstance = basicContractObj.at();
+            basicContractInstance.balanceOf(
+                    metaMaskExtension.address,
+                    function(error, hltToken){
+                        if(hltToken == 0){
+                            bottomAlerMessage('Since a user without HLT token cannot submit proposal.', 'alert-danger-hlt', 5000);
+                            return false;
+                        }
+                        var x = document.getElementById("proposalFormDiv");
+                        x.style.display = "block";
+                        var pBtn = document.getElementById("createNewProposal");
+                        pBtn.style.display = "none";
+                    }
+                );
+        });
     });  
     $('#cancleCreateNewProposal').click(function(){
         var x = document.getElementById("proposalFormDiv");
@@ -486,51 +564,66 @@ jQuery(document).ready(function($) {
         pBtn.style.display = "inline";
     });
     $('#submitTokenProposal').click(function(){
-        if(canUserInteractWithContract == false) {
-            alert('Please install metamask to interact with the contract.');
+        if(!metaMaskExtension.install) {
+            bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+            bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-        if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
-            alert('Since a user without HLT token cannot submit proposal.');
-            return false;
-        }
-        loadContract(votingContractUrl, function(data){
-            votingContract = data;
-            var mainForm = $('#dashboardForm');
-            let votingAddress = $('input[name=votingContract]', mainForm).val();
-            console.log('votingAddress:', votingAddress);
-            
-            let beneficiary = $('input[name=beneficiary]').val();
-            let amount = web3.toWei($('input[name=amount]').val(), 'ether');
-            let description = $('input[name=description]').val();
+        loadContract(basicTokenUrl, function(data){
+            basicTokenContract = data;
+            let basicContractObj = web3.eth.contract(basicTokenContract.abi);
+            let basicContractInstance = basicContractObj.at();
+            basicContractInstance.balanceOf(
+                metaMaskExtension.address,
+                function(error, hltToken){
+                    if(hltToken == 0){
+                        bottomAlerMessage('Since a user without HLT token cannot submit proposal.', 'alert-danger-hlt', 5000);
+                        return false;
+                    } 
+                    loadContract(votingContractUrl, function(data) {
+                        votingContract = data;
+                        var mainForm = $('#dashboardForm');
+                        let votingAddress = $('input[name=votingContract]', mainForm).val();
+                        console.log('votingAddress:', votingAddress);
+                        
+                        let beneficiary = $('input[name=beneficiary]').val();
+                        let amount = web3.toWei($('input[name=amount]').val(), 'ether');
+                        let description = $('input[name=description]').val();
 
-            let contractObj = web3.eth.contract(votingContract.abi);
-            let contractInstance = contractObj.at(votingAddress);
-            console.log('Calling '+votingContract.contract_name+'.newTokenProposal() with parameters:\n', 
-                beneficiary, amount, description,
-                'ABI', JSON.stringify(votingContract.abi));
+                        let contractObj = web3.eth.contract(votingContract.abi);
+                        let contractInstance = contractObj.at(votingAddress);
+                        console.log('Calling '+votingContract.contract_name+'.newTokenProposal() with parameters:\n', 
+                            beneficiary, amount, description,
+                            'ABI', JSON.stringify(votingContract.abi));
 
-            contractInstance.newTokenProposal(
-                beneficiary, amount, description,
-                function(error, result){
-                    if(!error){
-                        var x = document.getElementById("proposalFormDiv");
-                        x.style.display = "none";
-                        var pBtn = document.getElementById("createNewProposal");
-                        pBtn.style.display = "inline";
-                        // $('input[name=publishedTx]',form).val(result);
-                    }else{
-                        console.error(error)
-                    }
+                        contractInstance.newTokenProposal(
+                            beneficiary, amount, description,
+                            function(error, result){
+                                if(!error){
+                                    var x = document.getElementById("proposalFormDiv");
+                                    x.style.display = "none";
+                                    var pBtn = document.getElementById("createNewProposal");
+                                    pBtn.style.display = "inline";
+                                    // $('input[name=publishedTx]',form).val(result);
+                                }else{
+                                    console.error(error)
+                                }
+                            }
+                        );
+                    });
                 }
             );
         });
     });
 
     $('#initializeSimpleVotingBtn').click(function(){
-        if(canUserInteractWithContract == false) {
-            alert('Please install metamask to interact with the contract.');
+        if(!metaMaskExtension.install) {
+            bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+            bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
         var mainForm = $('#dashboardForm'); 
@@ -563,8 +656,11 @@ jQuery(document).ready(function($) {
     });
 
     $('#changeDebatingPeriodBtn').click(function(){
-        if(canUserInteractWithContract == false) {
-            alert('Please install metamask to interact with the contract.');
+        if(!metaMaskExtension.install) {
+            bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+            bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
         var x = document.getElementById("changeDebatingPeriodFormDiv");
@@ -579,8 +675,11 @@ jQuery(document).ready(function($) {
         dBtn.style.display = "inline";
     });
     $('#submitChangeVotingRules').click(function(){
-        if(canUserInteractWithContract == false) {
-            alert('Please install metamask to interact with the contract.');
+        if(!metaMaskExtension.install) {
+            bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
+            bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
         loadContract(votingContractUrl, function(data){
