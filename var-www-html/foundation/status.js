@@ -56,6 +56,7 @@ window.addEventListener('load', function() {
             } else {
                 canUserInteractWithContract = true;
             }
+            // Now you can start your app & access web3 freely:
             startApp();
         });
     } else {
@@ -94,11 +95,9 @@ window.addEventListener('load', function() {
                 $('#showNetwork').text(networkName);
             }
         });
+        // Now you can start your app & access web3 freely:
         startApp();
     }
-    
-    // Now you can start your app & access web3 freely:
-    
 
 });    
 
@@ -106,6 +105,7 @@ var tokenContractUrl       = './build/contracts/HealthToken.json';
 var foundationContractUrl  = './build/contracts/FoundationContract.json';
 var votingContractUrl      = './build/contracts/SimpleVoting.json';
 var basicTokenUrl      = './build/contracts/BasicToken.json';
+var ownableUrl      = './build/contracts/Ownable.json';
 
 let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
 let votingContractAddress; // this value is retrieved from foundation
@@ -113,6 +113,7 @@ let votingContractAddress; // this value is retrieved from foundation
 function loadContract(url, callback){
     $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
 }
+var setTimeObjOfBtnAlertMsg;
 function bottomAlerMessage(messageText, messageClass, time) {
     messageClass = messageClass || 'alert-danger-hlt';
     time = time || 1000;
@@ -128,20 +129,21 @@ function bottomAlerMessage(messageText, messageClass, time) {
             +   '</div>'
             + '</div>';
         bottomMessage.html(messageHtml);
-        setTimeout(function(){
+        clearTimeout( setTimeObjOfBtnAlertMsg );
+        setTimeObjOfBtnAlertMsg = setTimeout(function(){
             bottomMessage.html('');
-            console.log('Close Message');
         }, time);
     }
 }
 function cancleBottomAlerMessage() {
     var bottomMessage = $("#bottomMessage");
     bottomMessage.html('');
+    clearTimeout( setTimeObjOfBtnAlertMsg );
 }
 var proposalRowCount = 0;
 function createProposalsTableRow(pContractInstance, numberOfProposals) {
     let proposalNumber = proposalRowCount;
-    console.log("call createProposalsTableRow", proposalNumber, numberOfProposals);
+    // console.log("call createProposalsTableRow", proposalNumber, numberOfProposals);
     if(proposalNumber < numberOfProposals) {
         pContractInstance.getProposalType(proposalNumber, function(error, resultPtype){
             pContractInstance.getProposal(proposalNumber,function(error, result){
@@ -222,9 +224,19 @@ function startApp(){
     let tokenContract;
     let foundationContract;
     let votingContract;
+    let ownableContract;
     loadContract(tokenContractUrl, function(data){
         tokenContract = data;
     });
+    // loadContract(ownableUrl, function(data){
+    //     ownableContract = data;
+        
+    //     let ownableContractObj = web3.eth.contract(ownableContract.abi);
+    //     let ownableContractInstance = ownableContractObj.at();
+    //     // ownableContractInstance.transferOwnership(foundation, function(error, result){
+    //     //     console.log("Owner", result);
+    //     // });
+    // });
 
     loadContract(foundationContractUrl, function(data){
         foundationContract = data;
@@ -401,7 +413,7 @@ window.submitVoteMain = function (rowIndex) {
         bottomAlerMessage('Please install MetaMask to interact with the contract.', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+        bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -453,7 +465,7 @@ window.submitVoteMain = function (rowIndex) {
                                 if(!error){
                                     console.log("Vote tx: ",result);
                                 }else{
-                                    console.error(error)
+                                    console.error(error);
                                 }
                             }
                         );
@@ -467,7 +479,7 @@ window.submitCountVotes = function (rowIndex) {
         bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+        bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -507,7 +519,7 @@ window.submitExecuteProposal = function (rowIndex) {
         bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+        bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -544,7 +556,7 @@ jQuery(document).ready(function($) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -581,7 +593,7 @@ jQuery(document).ready(function($) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -639,7 +651,7 @@ jQuery(document).ready(function($) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -679,7 +691,7 @@ jQuery(document).ready(function($) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && !metaMaskExtension.address) {
-            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            bottomAlerMessage('Please Unlock your MetaMask extension', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
