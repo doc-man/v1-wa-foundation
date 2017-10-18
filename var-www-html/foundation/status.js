@@ -118,18 +118,19 @@ function bottomAlerMessage(messageText, messageClass, time) {
     time = time || 1000;
     var bottomMessage = $("#bottomMessage");
     if(messageText != '' && messageText != null) {
-        var messageHtml = '<div class="err-msg">'
-            + '<i class="fa fa-exclamation-triangle icon" aria-hidden="true"></i>'
-            + '<span class="txt"> '+messageText+'</span>'
-            + '</div>'
-            + '<div class="cross">'
-            + '<i class="fa fa-times icon" aria-hidden="true" onclick="cancleBottomAlerMessage()"></i>'
+        var messageHtml = '<div class="btn-error '+messageClass+'">'
+            +   '<div class="err-msg">'
+            +       '<i class="fa fa-exclamation-triangle icon" aria-hidden="true"></i>'
+            +       '<span class="txt"> '+messageText+'</span>'
+            +   '</div>'
+            +   '<div class="cross">'
+            +       '<i class="fa fa-times icon" aria-hidden="true" onclick="cancleBottomAlerMessage()"></i>'
+            +   '</div>'
             + '</div>';
-        bottomMessage.addClass(messageClass);
         bottomMessage.html(messageHtml);
-        setTimeout(function(){ 
-            bottomMessage.removeClass(messageClass);
+        setTimeout(function(){
             bottomMessage.html('');
+            console.log('Close Message');
         }, time);
     }
 }
@@ -397,7 +398,10 @@ function timeConverter(UNIX_timestamp){
 
 window.submitVoteMain = function (rowIndex) {
     if(!metaMaskExtension.install) {
-        bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+        bottomAlerMessage('Please install MetaMask to interact with the contract.', 'alert-danger-hlt', 5000);
+        return false;
+    } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
         return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -462,6 +466,9 @@ window.submitCountVotes = function (rowIndex) {
     if(!metaMaskExtension.install) {
         bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
         return false;
+    } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+        return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
@@ -499,6 +506,9 @@ window.submitExecuteProposal = function (rowIndex) {
     if(!metaMaskExtension.install) {
         bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
         return false;
+    } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+        bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+        return false;
     } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
@@ -533,6 +543,9 @@ jQuery(document).ready(function($) {
         if(!metaMaskExtension.install) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
+        } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
@@ -566,6 +579,9 @@ jQuery(document).ready(function($) {
     $('#submitTokenProposal').click(function(){
         if(!metaMaskExtension.install) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
@@ -622,6 +638,9 @@ jQuery(document).ready(function($) {
         if(!metaMaskExtension.install) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
             return false;
+        } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
+            return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
@@ -658,6 +677,9 @@ jQuery(document).ready(function($) {
     $('#changeDebatingPeriodBtn').click(function(){
         if(!metaMaskExtension.install) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
+            return false;
+        } else if(metaMaskExtension.install && !metaMaskExtension.address) {
+            bottomAlerMessage('Please Unlock MetaMask', 'alert-danger-hlt', 5000);
             return false;
         } else if(metaMaskExtension.install && metaMaskExtension.network && metaMaskExtension.network.name != 'Rinkeby'){
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
