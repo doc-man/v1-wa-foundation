@@ -78,13 +78,13 @@ window.addEventListener('load', function() {
                 tokenContractInstance.balanceOf(
                     metaMaskExtension.address,
                     function(error, hltToken){
-                        let tokeBalance = web3.fromWei(hltToken.toString(10), 'ether');
-                        // console.log('My hltToken:', tokeBalance);
+                        let myTokeBalance = web3.fromWei(hltToken.toString(10), 'ether');
+                        metaMaskExtension.token = {balance: myTokeBalance};
                         let colorCode = '#ff8282';
-                        if(tokeBalance != 0){
+                        if(myTokeBalance != 0){
                             colorCode = '#7fda7f';
                         }
-                        $('#showTokenBalance').text(tokeBalance);
+                        $('#showTokenBalance').text(myTokeBalance);
                         document.getElementById("showTokenBalance").style.color = colorCode;
                     }
                 );
@@ -577,29 +577,38 @@ window.submitExecuteProposal = function (rowIndex) {
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
-    loadContract(votingContractUrl, function(data){
-        votingContract = data;
-
-        var form = $('#dashboardForm');
-        let votingAddress = $('input[name=votingContract]', form).val();
-        console.log('votingAddress:', votingAddress);
-        let proposalNumber  = rowIndex;
-        let contractObj = web3.eth.contract(votingContract.abi);
-        let contractInstance = contractObj.at(votingAddress);
-        console.log('Calling '+votingContract.contract_name+'.executeProposal() with parameters:\n', 
-            proposalNumber,
-            'ABI', JSON.stringify(votingContract.abi));
-        contractInstance.executeProposal(
-            proposalNumber,
-            function(error, result){
-                if(!error){
-                    console.log("Execute voting tx: ",result);
-                }else{
-                    console.error(error)
-                }
+    tokenContractInstance.balanceOf(
+        metaMaskExtension.address,
+        function(error, hltToken){
+            if(hltToken == 0){
+                bottomAlerMessage('You need HCT token to execute.', 'alert-danger-hlt', 5000);
+                return false;
             }
-        );
-    });
+            loadContract(votingContractUrl, function(data){
+                votingContract = data;
+
+                var form = $('#dashboardForm');
+                let votingAddress = $('input[name=votingContract]', form).val();
+                console.log('votingAddress:', votingAddress);
+                let proposalNumber  = rowIndex;
+                let contractObj = web3.eth.contract(votingContract.abi);
+                let contractInstance = contractObj.at(votingAddress);
+                console.log('Calling '+votingContract.contract_name+'.executeProposal() with parameters:\n', 
+                    proposalNumber,
+                    'ABI', JSON.stringify(votingContract.abi));
+                contractInstance.executeProposal(
+                    proposalNumber,
+                    function(error, result){
+                        if(!error){
+                            console.log("Execute voting tx: ",result);
+                        }else{
+                            console.error(error)
+                        }
+                    }
+                );
+            });
+        }
+    );
 }
 
 jQuery(document).ready(function($) {
