@@ -107,7 +107,7 @@
     <div class="row">
         <form id="dashboardForm" class="table-responsive col-sm-8 col-sm-offset-2">
             <table id="dashboardMainTable" border=0 class="table table-sm" style="border-bottom: 1px solid #ababab;">
-                <tr><td>1. Foundation address:</td><td>
+                <tr><td id="addressTool"><span data-toggle="tooltip" data-placement="bottom" title="Hooray!">1. Foundation address:</span> </td><td>
                     <a id="foundationAddressLink" target="_blank"><input type="text" readonly name="foundation" value="" size=100></a>
                     <span id="gitGubSrcCodeFun" style="display:none">
                         <a class="header-logo-invertocat" href="https://github.com/healthchain/token/blob/master/contracts/FoundationContract.sol" target="_blank" title="Source code">
@@ -180,5 +180,13 @@
   <div id="bottomMessage"></div>
   
     <script src="./canvasjs.js"></script>
+    <!-- <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();   
+            $('#addressTool').click(function(){
+                $('[data-toggle="tooltip"]').tooltip('show');
+            });
+        });
+    </script> -->
 </body>
 </html>

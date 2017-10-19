@@ -3,6 +3,7 @@ var $ = jQuery;
 var metaMaskExtension = {install:false};
 var canUserInteractWithContract = false;
 let web3;
+var basicTokenContract;
 // Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
 window.addEventListener('load', function() {
     console.log("inside window addevent listerner load");
@@ -105,9 +106,9 @@ var tokenContractUrl       = './build/contracts/HealthToken.json';
 var foundationContractUrl  = './build/contracts/FoundationContract.json';
 var votingContractUrl      = './build/contracts/SimpleVoting.json';
 var basicTokenUrl      = './build/contracts/BasicToken.json';
-var ownableUrl      = './build/contracts/Ownable.json';
 
 let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
+// let foundation  = "0x297296245d04749f5be29c0988bb0e08d85f2dd6";    
 let votingContractAddress; // this value is retrieved from foundation
 
 function loadContract(url, callback){
@@ -156,7 +157,21 @@ function createProposalsTableRow(pContractInstance, numberOfProposals) {
                     proposal.numberOfVotes = result[4];
                     proposal.executed = result[5];
                     proposal.proposalPassed = result[6];
-                    proposal.typeOfProposal = resultPtype;
+                    proposal.typeOfProposal = '';
+                    switch (resultPtype.toNumber()) {
+                        case 0:
+                            proposal.typeOfProposal = "Ether";
+                            break;
+                        case 1:
+                            proposal.typeOfProposal = "Token";
+                            break;
+                        case 2:
+                            proposal.typeOfProposal = "VotingAddress";
+                            break;
+                        case 3:
+                            proposal.typeOfProposal = "Terminate";
+                            break;
+                    }
 
                     let proposalsTableBody ="<tr>";
                     proposalsTableBody+="<td>"+proposalNumber+"</td>";                                            
@@ -228,15 +243,6 @@ function startApp(){
     loadContract(tokenContractUrl, function(data){
         tokenContract = data;
     });
-    // loadContract(ownableUrl, function(data){
-    //     ownableContract = data;
-        
-    //     let ownableContractObj = web3.eth.contract(ownableContract.abi);
-    //     let ownableContractInstance = ownableContractObj.at();
-    //     // ownableContractInstance.transferOwnership(foundation, function(error, result){
-    //     //     console.log("Owner", result);
-    //     // });
-    // });
 
     loadContract(foundationContractUrl, function(data){
         foundationContract = data;
@@ -247,7 +253,9 @@ function startApp(){
         var x = document.getElementById("gitGubSrcCodeFun");
         x.style.display = "";
         pContractInstance = contractObj.at(foundation);
-
+        pContractInstance.owner(function(error, result) {
+            console.log('Foundation', result);
+        });
         pContractInstance.token(function(error, result){
             if(!error){
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
@@ -304,7 +312,10 @@ function startApp(){
         
                     votingContractAddress = $('input[name=votingContract]','#dashboardForm').val();
                     pContractInstance = contractObj.at(votingContractAddress);
-        
+                    
+                    pContractInstance.owner(function(error, result) {
+                        console.log('Voting', result);
+                    });
                     pContractInstance.minimumQuorum(function(error, result){
                         if(!error){
                             let amount = web3.fromWei(result, 'ether');
@@ -419,59 +430,59 @@ window.submitVoteMain = function (rowIndex) {
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
-    loadContract(basicTokenUrl, function(data){
-        basicTokenContract = data;
-        let basicContractObj = web3.eth.contract(basicTokenContract.abi);
-        let basicContractInstance = basicContractObj.at();
-        basicContractInstance.balanceOf(
-                metaMaskExtension.address,
-                function(error, hltToken){
-                    if(hltToken == 0){
-                        bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
-                        return false;
-                    }
-                    loadContract(votingContractUrl, function(data){
-                        votingContract = data;
-
-                        var form = $('#dashboardForm');
-                        let votingAddress = $('input[name=votingContract]', form).val();
-                        console.log('votingAddress:', votingAddress);
-                        let proposalNumber  = rowIndex;
-                        let voteRadio = $('input[name=vote_'+rowIndex+']:checked');
-                        if(voteRadio.length != 1){
-                            bottomAlerMessage('No vote selected!', 'alert-danger-hlt', 5000);
-                            return;
-                        }
-                        let vote;
-                        switch(voteRadio.val()){
-                            case 'for':
-                                vote = true;
-                                break;
-                            case 'against':
-                                vote = false;
-                                break;
-                            default:
-                                bottomAlerMessage('Unknown vote!', 'alert-danger-hlt', 5000);
-                                return;
-                        }
-                        let contractObj = web3.eth.contract(votingContract.abi);
-                        let contractInstance = contractObj.at(votingAddress);
-                        console.log('Calling '+votingContract.contract_name+'.vote() with parameters:\n', 
-                            proposalNumber, vote,
-                            'ABI', JSON.stringify(votingContract.abi));
-                        contractInstance.vote(
-                            proposalNumber, vote,
-                            function(error, result){
-                                if(!error){
-                                    console.log("Vote tx: ",result);
-                                }else{
-                                    console.error(error);
-                                }
-                            }
-                        );
-                    });
+    loadContract(tokenContractUrl, function(data){
+        var tokenContractObjData = data;
+        let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+        let tokenContractInstance = tokenContractObj.at(foundation);
+        tokenContractInstance.balanceOf(
+            metaMaskExtension.address,
+            function(error, hltToken){
+                if(hltToken == 0){
+                    bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
+                    return false;
                 }
-            );
+                loadContract(votingContractUrl, function(data){
+                    votingContract = data;
+
+                    var form = $('#dashboardForm');
+                    let votingAddress = $('input[name=votingContract]', form).val();
+                    console.log('votingAddress:', votingAddress);
+                    let proposalNumber  = rowIndex;
+                    let voteRadio = $('input[name=vote_'+rowIndex+']:checked');
+                    if(voteRadio.length != 1){
+                        bottomAlerMessage('No vote selected!', 'alert-danger-hlt', 5000);
+                        return;
+                    }
+                    let vote;
+                    switch(voteRadio.val()){
+                        case 'for':
+                            vote = true;
+                            break;
+                        case 'against':
+                            vote = false;
+                            break;
+                        default:
+                            bottomAlerMessage('Unknown vote!', 'alert-danger-hlt', 5000);
+                            return;
+                    }
+                    let contractObj = web3.eth.contract(votingContract.abi);
+                    let contractInstance = contractObj.at(votingAddress);
+                    console.log('Calling '+votingContract.contract_name+'.vote() with parameters:\n', 
+                        proposalNumber, vote,
+                        'ABI', JSON.stringify(votingContract.abi));
+                    contractInstance.vote(
+                        proposalNumber, vote,
+                        function(error, result){
+                            if(!error){
+                                console.log("Vote tx: ",result);
+                            }else{
+                                console.error(error);
+                            }
+                        }
+                    );
+                });
+            }
+        );
     });
 }
 window.submitCountVotes = function (rowIndex) {
@@ -485,31 +496,39 @@ window.submitCountVotes = function (rowIndex) {
         bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
         return false;
     }
-    votingContractAddress = $('input[name=numberOfHLT]','#dashboardForm').val();
-    if(votingContractAddress == '' || votingContractAddress == null || votingContractAddress == 0){
-        bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
-        return false;
-    }
-    loadContract(votingContractUrl, function(data) {
-        votingContract = data;
-
-        var form = $('#dashboardForm');
-        let votingAddress = $('input[name=votingContract]', form).val();
-        console.log('votingAddress:', votingAddress);
-        let proposalNumber  = rowIndex;
-        let contractObj = web3.eth.contract(votingContract.abi);
-        let contractInstance = contractObj.at(votingAddress);
-        console.log('Calling '+votingContract.contract_name+'.executeVoting() with parameters:\n', 
-            proposalNumber,
-            'ABI', JSON.stringify(votingContract.abi));
-        contractInstance.executeVoting(
-            proposalNumber,
-            function(error, result){
-                if(!error){
-                    console.log("Execute voting tx: ",result);
-                }else{
-                    console.error(error)
+    loadContract(tokenContractUrl, function(data) {
+        var tokenContractObjData = data;
+        let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+        let tokenContractInstance = tokenContractObj.at(foundation);
+        tokenContractInstance.balanceOf(
+            metaMaskExtension.address,
+            function(error, hltToken){
+                if(hltToken == 0){
+                    bottomAlerMessage('Since a user without HLT token cannot vote.', 'alert-danger-hlt', 5000);
+                    return false;
                 }
+                loadContract(votingContractUrl, function(data) {
+                    votingContract = data;
+                    var form = $('#dashboardForm');
+                    let votingAddress = $('input[name=votingContract]', form).val();
+                    console.log('votingAddress:', votingAddress);
+                    let proposalNumber  = rowIndex;
+                    let contractObj = web3.eth.contract(votingContract.abi);
+                    let contractInstance = contractObj.at(votingAddress);
+                    console.log('Calling '+votingContract.contract_name+'.executeVoting() with parameters:\n', 
+                        proposalNumber,
+                        'ABI', JSON.stringify(votingContract.abi));
+                    contractInstance.executeVoting(
+                        proposalNumber,
+                        function(error, result){
+                            if(!error){
+                                console.log("Execute voting tx: ",result);
+                            }else{
+                                console.error(error)
+                            }
+                        }
+                    );
+                });
             }
         );
     });
@@ -562,24 +581,27 @@ jQuery(document).ready(function($) {
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        
-        loadContract(basicTokenUrl, function(data){
-            basicTokenContract = data;
-            let basicContractObj = web3.eth.contract(basicTokenContract.abi);
-            let basicContractInstance = basicContractObj.at();
-            basicContractInstance.balanceOf(
-                    metaMaskExtension.address,
-                    function(error, hltToken){
-                        if(hltToken == 0){
-                            bottomAlerMessage('Since a user without HLT token cannot submit proposal.', 'alert-danger-hlt', 5000);
-                            return false;
-                        }
-                        var x = document.getElementById("proposalFormDiv");
-                        x.style.display = "block";
-                        var pBtn = document.getElementById("createNewProposal");
-                        pBtn.style.display = "none";
+        web3.eth.getBalance(metaMaskExtension.address,function(er, balance){
+            let amountOfEther = web3.fromWei(balance.toNumber(), 'ether');
+            console.log('amountOfEther', amountOfEther);
+        });//basicTokenUrl   tokenContractUrl
+        loadContract(tokenContractUrl, function(data){
+            var tokenContractObjData = data;
+            let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+            let tokenContractInstance = tokenContractObj.at(foundation);
+            tokenContractInstance.balanceOf(
+                metaMaskExtension.address,
+                function(error, hltToken){
+                    if(hltToken == 0){
+                        bottomAlerMessage('Since a user without HLT token cannot submit proposal.', 'alert-danger-hlt', 5000);
+                        return false;
                     }
-                );
+                    var x = document.getElementById("proposalFormDiv");
+                    x.style.display = "block";
+                    var pBtn = document.getElementById("createNewProposal");
+                    pBtn.style.display = "none";
+                }
+            );
         });
     });  
     $('#cancleCreateNewProposal').click(function(){
@@ -599,11 +621,11 @@ jQuery(document).ready(function($) {
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        loadContract(basicTokenUrl, function(data){
-            basicTokenContract = data;
-            let basicContractObj = web3.eth.contract(basicTokenContract.abi);
-            let basicContractInstance = basicContractObj.at();
-            basicContractInstance.balanceOf(
+        loadContract(tokenContractUrl, function(data){
+            var tokenContractObjData = data;
+            let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+            let tokenContractInstance = tokenContractObj.at(foundation);
+            tokenContractInstance.balanceOf(
                 metaMaskExtension.address,
                 function(error, hltToken){
                     if(hltToken == 0){
