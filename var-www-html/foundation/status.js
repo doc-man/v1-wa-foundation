@@ -317,7 +317,7 @@ function startApp(){
                     });
                     pContractInstance.minimumQuorum(function(error, result){
                         if(!error){
-                            let amount = web3.toWei(result.toNumber(), 'ether');
+                            let amount = result.toNumber();
 
                             $('input[name=minimumQuorum]','#dashboardForm').val(amount);
                             if(amount == null || amount == 0 || amount == '') {
