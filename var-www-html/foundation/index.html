@@ -4,6 +4,7 @@
     <title>HCF Dashboard</title>
     <link rel="shortcut icon" id="favicon" href="icon.png" type="image/vnd.microsoft.icon" />
     <meta charset="UTF-8">
+    <!-- <link rel='stylesheet' href='https://www.healthchain.global/css/theme.css' type='text/css'/> -->
     <link rel='stylesheet' href='./style/bootstrap/css/bootstrap.min.css' type='text/css'/>
     <link rel='stylesheet' href='./style/font-awesome-4.7.0/css/font-awesome.min.css' type='text/css'/>
     <script src="./jquery.min.js"></script>
@@ -61,10 +62,10 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-inverse" style="border-radius:0px;text-align: center;">
+    <nav class="navbar navbar-inverse-hlt" style="border-radius:0px;text-align: center;">
         <div class="container-fluid">
-            <div class="navbar-header logoIcon">
-                <img src=HcNewLogo.png width="200px"> 
+            <div class="navbar-header logoIcon" style="margin: 0px">
+                <img src=logo_for-white-bg_250x108px.png width="116px"> 
             </div>
             <div class="nav navbar-nav fnd-div">
                 <h1 class="txt-c fnd-d"><span>Foundation Dashboard</span></h1>
@@ -78,6 +79,46 @@
             </ul>
         </div>
     </nav>
+
+    <!-- <div class="nav-bar">
+            <div class="module left">
+                <a href="index.html">
+                    <img class="logo logo-light" alt="Foundry" src="img/logo-light.png">
+                    <div class="vnu"><img class="logo logo-dark" alt="Health chain" src="img/logo_for-white-bg_250x108px.png"></div>
+                </a>
+            </div>
+            <div class="module widget-handle mobile-toggle right visible-sm visible-xs">
+                <i class="ti-menu"></i>
+            </div>
+            <div class="module-group right">
+                <div class="module left">
+                    <ul class="menu">
+                  <li><a href="/tokens/" target="_self">Token</a></li>
+                  <li class="vpf"><a href="/foundation/" target="_self">Foundation</a></li>
+                  <li class="vpf"><a href="https://github.com/healthchain/wiki/wiki/Whitepaper" target="_self">Whitepaper</a></li>
+                  <li class="vpf"><a href="/v4/app/login/#/login" target="_self">Login</a></li>
+                    </ul>
+                </div>
+
+                <div class="module widget-handle language left">
+                    <ul class="menu">
+                        <li class="has-dropdown">
+                            <a href="#">ENG</a>
+                            <ul>
+                                <li>
+                                    <a href="#">French</a>
+                                </li>
+                                <li>
+                                    <a href="#">Deutsch</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div> -->
+
   <!-- Modal -->
   <div id="bodyPart">
     <div class="modal fade" id="pieChartModel" role="dialog">
@@ -108,7 +149,18 @@
     <div class="row">
         <form id="dashboardForm" class="table-responsive col-sm-8 col-sm-offset-2">
             <table id="dashboardMainTable" border=0 class="table table-sm" style="border-bottom: 1px solid #ababab;">
-                <tr><td id="foundtionAddress"><span id="foundtionAddressPopover" data-toggle="popover" data-placement="bottom" data-content="Owner address"><span id="foundtionAddressTooltip" data-toggle="tooltip" data-placement="right" title="Owner address">1. Foundation address:</span></span> </td><td>
+                <tr>
+                    <td id="foundtionAddress">
+                        <span id="foundtionAddressPopover" class="ctrlPopover" data-toggle="tooltip" data-placement="right" title="click to show owner address" >
+                        1. Foundation address: 
+                        </span>
+                        <div id="foundtionAddressPopoverBlock" class="fun-popover fade bottom in" role="tooltip" style="position: absolute;max-width: 455px;top: 20px;display: none;">
+                            <div class="arrow" style="left: 80px;"></div>
+                            <h3 class="title" style="display: none;"></h3>
+                            <div class="content">Owner address: </div>
+                        </div>
+                    </td>
+                    <td>
                     <a id="foundationAddressLink" target="_blank"><input type="text" readonly name="foundation" value="" size=100></a>
                     <span id="gitHubSrcCodeFun" style="display:none">
                         <a class="header-logo-invertocat" href="https://github.com/healthchain/token/blob/master/contracts/FoundationContract.sol" target="_blank" title="Source code">
@@ -116,7 +168,17 @@
                         </a>
                     </span>
                     </td></tr>        
-                <tr><td>2. Token address:</td><td>
+                <tr>
+                    <td>
+                        <span id="tokenAddressPopover" class="ctrlPopover" data-toggle="tooltip" data-placement="right" title="click to show owner address" >
+                        2. Token address: 
+                    </span>
+                        <div id="tokenAddressPopoverBlock" class="fun-popover fade bottom in" role="tooltip" style="position: absolute;max-width: 455px;top: 55px;display: none;">
+                            <div class="arrow" style="left: 80px;"></div>
+                            <h3 class="title" style="display: none;"></h3>
+                            <div class="content">Owner address: </div>
+                        </div>
+                    </td><td>
                     <a id="tokenAddressLick" target="_blank">
                         <input type="text" readonly name="token" value="" size=100>
                     </a>
@@ -129,7 +191,16 @@
                         <i class="fa fa-pie-chart icon-st" aria-hidden="true"></i>
                     </span>
                 </td></tr>
-                <tr><td>3. Voting contract address: </td><td>
+                <tr><td>
+                    <span id="votingAddressPopover" class="ctrlPopover" data-toggle="tooltip" data-placement="right" title="click to show owner address" >
+                    3. Voting contract address: 
+                    </span>
+                    <div id="votingAddressPopoverBlock" class="fun-popover fade bottom in" role="tooltip" style="position: absolute;max-width: 455px;top: 92px;display: none;">
+                        <div class="arrow" style="left: 80px;"></div>
+                        <h3 class="title" style="display: none;"></h3>
+                        <div class="content">Owner address: </div>
+                    </div>
+                </td><td>
                     <a id="votingAddressLick" target="_blank"><input type="text" readonly name="votingContract" value=""></a>
                     <span id="gitGubSrcCodeVoting" style="display:none">
                         <a class="header-logo-invertocat" href="https://github.com/healthchain/token/blob/master/contracts/SimpleVoting.sol" target="_blank" title="Source code">
@@ -183,13 +254,7 @@
     <script src="./canvasjs.js"></script>
     <script>
         $(document).ready(function(){
-            // $('[data-toggle="tooltip"]').tooltip();   
-            $('#foundtionAddress').click(function(){
-                // $('[data-toggle="tooltip"]').tooltip('show');
-                // $('[data-toggle="popover"]').popover(); 
-                // $('[data-toggle="popover"]').popover('show');
-            });
-            $('[data-toggle="popover"]').popover();  
+            $('[data-toggle="tooltip"]').tooltip();   
         });
     </script>
 </body>

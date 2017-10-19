@@ -270,7 +270,7 @@ function startApp(){
         x.style.display = "";
         pContractInstance = contractObj.at(foundation);
         pContractInstance.owner(function(error, result) {
-            $("#foundtionAddressPopover").attr("data-content", 'Owner address: '+result);
+            $("#foundtionAddressPopoverBlock .content").text('Owner address: '+result);
             
             console.log('Foundation owner: '+result);
         });
@@ -282,6 +282,7 @@ function startApp(){
                     let tokenContractInstance = tokenContractObj.at(result);
                     console.log(result);
                     tokenContractInstance.owner(function(error, result) {
+                        $("#tokenAddressPopoverBlock .content").text('Owner address: '+result);
                         console.log('Token owner', result);
                     });
                 });
@@ -341,7 +342,8 @@ function startApp(){
                     pContractInstance = contractObj.at(votingContractAddress);
                     
                     pContractInstance.owner(function(error, result) {
-                        console.log('Voting owner', result);
+                        $("#votingAddressPopoverBlock .content").text('Owner address: '+result);
+                        // console.log('Voting owner', result);
                     });
                     pContractInstance.minimumQuorum(function(error, result){
                         if(!error){
@@ -599,6 +601,40 @@ window.submitExecuteProposal = function (rowIndex) {
 }
 
 jQuery(document).ready(function($) {
+    $('#foundtionAddressPopover').click(function(){
+        var x = document.getElementById("foundtionAddressPopoverBlock");
+        if(x.style.display == 'none') {
+            $("#foundtionAddressPopover").attr("data-original-title", '');
+            $("#foundtionAddressPopover").tooltip('hide');
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+            $("#foundtionAddressPopover").attr("data-original-title", 'click to show owner address');
+        }
+    });
+    $('#tokenAddressPopover').click(function(){
+        var x = document.getElementById("tokenAddressPopoverBlock");
+        console.log(x.style);
+        if(x.style.display == 'none') {
+            $("#tokenAddressPopover").attr("data-original-title", '');
+            $("#tokenAddressPopover").tooltip('hide');
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+            $("#tokenAddressPopover").attr("data-original-title", 'click to show owner address');
+        }
+    });
+    $('#votingAddressPopover').click(function(){
+        var x = document.getElementById("votingAddressPopoverBlock");
+        if(x.style.display == 'none') {
+            $("#votingAddressPopover").attr("data-original-title", '');
+            $("#votingAddressPopover").tooltip('hide');
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+            $("#votingAddressPopover").attr("data-original-title", 'click to show owner address');
+        }
+    });
     $('#createNewProposal').click(function(){
         if(!metaMaskExtension.install) {
             bottomAlerMessage('Please install metamask to interact with the contract.', 'alert-danger-hlt', 5000);
