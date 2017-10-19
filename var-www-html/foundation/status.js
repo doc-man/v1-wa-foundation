@@ -471,7 +471,7 @@ window.submitVoteMain = function (rowIndex) {
             metaMaskExtension.address,
             function(error, hltToken){
                 if(hltToken == 0){
-                    bottomAlerMessage('You need HLT token to submit vote.', 'alert-danger-hlt', 5000);
+                    bottomAlerMessage('You need HCT token to submit vote.', 'alert-danger-hlt', 5000);
                     return false;
                 }
                 loadContract(votingContractUrl, function(data){
@@ -537,7 +537,7 @@ window.submitCountVotes = function (rowIndex) {
             metaMaskExtension.address,
             function(error, hltToken){
                 if(hltToken == 0){
-                    bottomAlerMessage('You need HLT token to submit vote.', 'alert-danger-hlt', 5000);
+                    bottomAlerMessage('You need HCT token to submit vote.', 'alert-danger-hlt', 5000);
                     return false;
                 }
                 loadContract(votingContractUrl, function(data) {
@@ -660,7 +660,7 @@ jQuery(document).ready(function($) {
                 metaMaskExtension.address,
                 function(error, hltToken){
                     if(hltToken == 0){
-                        bottomAlerMessage('You need HLT token to create new proposal.', 'alert-danger-hlt', 5000);
+                        bottomAlerMessage('You need HCT token to create new proposal.', 'alert-danger-hlt', 5000);
                         return false;
                     }
                     var x = document.getElementById("proposalFormDiv");
@@ -696,7 +696,7 @@ jQuery(document).ready(function($) {
                 metaMaskExtension.address,
                 function(error, hltToken){
                     if(hltToken == 0){
-                        bottomAlerMessage('You need HLT token to submit proposal.', 'alert-danger-hlt', 5000);
+                        bottomAlerMessage('You need HCT token to submit proposal.', 'alert-danger-hlt', 5000);
                         return false;
                     } 
                     loadContract(votingContractUrl, function(data) {
@@ -794,7 +794,7 @@ jQuery(document).ready(function($) {
                 metaMaskExtension.address,
                 function(error, hltToken){
                     if(hltToken == 0){
-                        bottomAlerMessage('You need HLT token to change debating period.', 'alert-danger-hlt', 5000);
+                        bottomAlerMessage('You need HCT token to change debating period.', 'alert-danger-hlt', 5000);
                         return false;
                     }
                     var x = document.getElementById("changeDebatingPeriodFormDiv");
@@ -828,7 +828,7 @@ jQuery(document).ready(function($) {
                 metaMaskExtension.address,
                 function(error, hltToken){
                     if(hltToken == 0){
-                        bottomAlerMessage('You need HLT token to submit debating period.', 'alert-danger-hlt', 5000);
+                        bottomAlerMessage('You need HCT token to submit debating period.', 'alert-danger-hlt', 5000);
                         return false;
                     }
                     loadContract(votingContractUrl, function(data){
