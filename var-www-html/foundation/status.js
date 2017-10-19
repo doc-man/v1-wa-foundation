@@ -105,7 +105,6 @@ window.addEventListener('load', function() {
 var tokenContractUrl       = './build/contracts/HealthToken.json';
 var foundationContractUrl  = './build/contracts/FoundationContract.json';
 var votingContractUrl      = './build/contracts/SimpleVoting.json';
-var basicTokenUrl      = './build/contracts/BasicToken.json';
 
 let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
 // let foundation  = "0x297296245d04749f5be29c0988bb0e08d85f2dd6";    
@@ -318,7 +317,8 @@ function startApp(){
                     });
                     pContractInstance.minimumQuorum(function(error, result){
                         if(!error){
-                            let amount = web3.fromWei(result, 'ether');
+                            let amount = web3.toWei(result.toNumber(), 'ether');
+
                             $('input[name=minimumQuorum]','#dashboardForm').val(amount);
                             if(amount == null || amount == 0 || amount == '') {
                                 var x = document.getElementById("initializeSimpleVotingBtn");
@@ -417,7 +417,7 @@ function timeConverter(UNIX_timestamp){
     var sec = a.getSeconds();
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
     return time;
-    }
+}
 
 window.submitVoteMain = function (rowIndex) {
     if(!metaMaskExtension.install) {
@@ -584,7 +584,7 @@ jQuery(document).ready(function($) {
         web3.eth.getBalance(metaMaskExtension.address,function(er, balance){
             let amountOfEther = web3.fromWei(balance.toNumber(), 'ether');
             console.log('amountOfEther', amountOfEther);
-        });//basicTokenUrl   tokenContractUrl
+        });
         loadContract(tokenContractUrl, function(data){
             var tokenContractObjData = data;
             let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
