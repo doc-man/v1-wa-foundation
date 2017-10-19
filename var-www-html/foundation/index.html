@@ -61,16 +61,15 @@
 
 </head>
 <body>
-
-    <nav class="navbar navbar-inverse-hlt" style="border-radius:0px;text-align: center;">
+    <nav class="navbar navbar-inverse-hlt" style="border-radius:0px;text-align: center;position: fixed;z-index: 1000;width: 100% !important;">
         <div class="container-fluid">
             <div class="navbar-header logoIcon" style="margin: 0px">
                 <a href="/"><img src=logo_for-white-bg_250x108px.png width="116px"></a>
             </div>
-            <div class="nav navbar-nav fnd-div">
+            <div id="foundationDashbortNavText" class="nav navbar-nav fnd-div-2">
                 <h1 class="txt-c fnd-d"><span>Foundation Dashboard</span></h1>
             </div>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" style="border-left: 1px solid #ccc;padding-left: 10px;">
             <li style="padding-right: 5px;">
                 <a style="padding: 0px;" class="network-txt"> Address: <span id="showAdress"></span></a>
                 <a style="padding: 0px;" class="network-txt"> Network: <span id="showNetwork" style="color:#7fda7f"></span></a>
@@ -79,7 +78,10 @@
             </ul>
         </div>
     </nav>
-
+<br style="clear: both;" />
+<br style="clear: both;" />
+<br style="clear: both;" />
+<br style="clear: both;" />
   <!-- Modal -->
   <div id="bodyPart">
     <div class="modal fade" id="pieChartModel" role="dialog">

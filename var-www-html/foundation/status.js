@@ -28,6 +28,8 @@ window.addEventListener('load', function() {
         web3.eth.getAccounts(function(error, address){
             metaMaskExtension.address = address[0];
             if(metaMaskExtension.address){
+                $('#foundationDashbortNavText').removeClass('fnd-div-2');
+                $('#foundationDashbortNavText').addClass('fnd-div-1');
                 $('#showAdress').text(metaMaskExtension.address);
             } else {
                 $('#showAdress').html('<span style="color:#da7b7b !important">Not detected</span>');
@@ -784,10 +786,24 @@ jQuery(document).ready(function($) {
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        var x = document.getElementById("changeDebatingPeriodFormDiv");
-        x.style.display = "block";
-        var dBtn = document.getElementById("changeDebatingPeriodBtn");
-        dBtn.style.display = "none";
+        loadContract(tokenContractUrl, function(data){
+            var tokenContractObjData = data;
+            let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+            let tokenContractInstance = tokenContractObj.at(foundation);
+            tokenContractInstance.balanceOf(
+                metaMaskExtension.address,
+                function(error, hltToken){
+                    if(hltToken == 0){
+                        bottomAlerMessage('Since a user without HLT token cannot change debating.', 'alert-danger-hlt', 5000);
+                        return false;
+                    }
+                    var x = document.getElementById("changeDebatingPeriodFormDiv");
+                    x.style.display = "block";
+                    var dBtn = document.getElementById("changeDebatingPeriodBtn");
+                    dBtn.style.display = "none";
+                }
+            );
+        });
     });
     $('#cancleChangeVotingRules').click(function(){
         var x = document.getElementById("changeDebatingPeriodFormDiv");
@@ -803,32 +819,47 @@ jQuery(document).ready(function($) {
             bottomAlerMessage("Please change your MetaMask network to 'Rinkeby'", 'alert-danger-hlt', 5000);
             return false;
         }
-        loadContract(votingContractUrl, function(data){
-            votingContract = data;
-            var mainForm = $('#dashboardForm');
-            let votingAddress = $('input[name=votingContract]', mainForm).val();
-            console.log('votingAddress:', votingAddress);
-            
-            let votesNumber = $('input[name=votesNumber]').val();
-            let votingDeadline = $('input[name=votingDeadline]').val();
-
-            let contractObj = web3.eth.contract(votingContract.abi);
-            let contractInstance = contractObj.at(votingAddress);
-            console.log('Calling '+votingContract.contract_name+'.changeVotingRules() with parameters:\n', 
-                    votesNumber, votingDeadline,
-                    'ABI', JSON.stringify(votingContract.abi));
-            contractInstance.changeVotingRules(
-                votesNumber, votingDeadline,
-                function(error, result){
-                    if(!error){
-                        console.log("Execute voting tx: ",result);
-                        var x = document.getElementById("changeDebatingPeriodFormDiv");
-                        x.style.display = "none";
-                        var dBtn = document.getElementById("changeDebatingPeriodBtn");
-                        dBtn.style.display = "inline";
-                    } else {
-                        console.error(error)
+        
+        loadContract(tokenContractUrl, function(data){
+            var tokenContractObjData = data;
+            let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+            let tokenContractInstance = tokenContractObj.at(foundation);
+            tokenContractInstance.balanceOf(
+                metaMaskExtension.address,
+                function(error, hltToken){
+                    if(hltToken == 0){
+                        bottomAlerMessage('Since a user without HLT token cannot change debating.', 'alert-danger-hlt', 5000);
+                        return false;
                     }
+                    loadContract(votingContractUrl, function(data){
+                        votingContract = data;
+                        var mainForm = $('#dashboardForm');
+                        let votingAddress = $('input[name=votingContract]', mainForm).val();
+                        console.log('votingAddress:', votingAddress);
+                        
+                        let votesNumber = $('input[name=votesNumber]').val();
+                        let votingDeadline = $('input[name=votingDeadline]').val();
+            
+                        let contractObj = web3.eth.contract(votingContract.abi);
+                        let contractInstance = contractObj.at(votingAddress);
+                        console.log('Calling '+votingContract.contract_name+'.changeVotingRules() with parameters:\n', 
+                                votesNumber, votingDeadline,
+                                'ABI', JSON.stringify(votingContract.abi));
+                        contractInstance.changeVotingRules(
+                            votesNumber, votingDeadline,
+                            function(error, result){
+                                if(!error){
+                                    console.log("Execute voting tx: ",result);
+                                    var x = document.getElementById("changeDebatingPeriodFormDiv");
+                                    x.style.display = "none";
+                                    var dBtn = document.getElementById("changeDebatingPeriodBtn");
+                                    dBtn.style.display = "inline";
+                                } else {
+                                    console.error(error)
+                                }
+                            }
+                        );
+                    });
                 }
             );
         });
