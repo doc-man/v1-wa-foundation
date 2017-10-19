@@ -279,3 +279,6 @@ a > input:hover {
     cursor: pointer;
     font-size: 25px;
 }
+.popover {
+    left: 0px !important;
+}

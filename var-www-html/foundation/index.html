@@ -73,6 +73,7 @@
             <li style="padding-right: 5px;">
                 <a style="padding: 0px;" class="network-txt"> Address: <span id="showAdress"></span></a>
                 <a style="padding: 0px;" class="network-txt"> Network: <span id="showNetwork" style="color:#7fda7f"></span></a>
+                <a style="padding: 0px;" class="network-txt"> Token Balance: <span id="showTokenBalance"></span></a>
             </li>
             </ul>
         </div>
@@ -107,9 +108,9 @@
     <div class="row">
         <form id="dashboardForm" class="table-responsive col-sm-8 col-sm-offset-2">
             <table id="dashboardMainTable" border=0 class="table table-sm" style="border-bottom: 1px solid #ababab;">
-                <tr><td id="addressTool"><span data-toggle="tooltip" data-placement="bottom" title="Hooray!">1. Foundation address:</span> </td><td>
+                <tr><td id="foundtionAddress"><span id="foundtionAddressPopover" data-toggle="popover" data-placement="bottom" data-content="Owner address"><span id="foundtionAddressTooltip" data-toggle="tooltip" data-placement="right" title="Owner address">1. Foundation address:</span></span> </td><td>
                     <a id="foundationAddressLink" target="_blank"><input type="text" readonly name="foundation" value="" size=100></a>
-                    <span id="gitGubSrcCodeFun" style="display:none">
+                    <span id="gitHubSrcCodeFun" style="display:none">
                         <a class="header-logo-invertocat" href="https://github.com/healthchain/token/blob/master/contracts/FoundationContract.sol" target="_blank" title="Source code">
                             <svg aria-hidden="true" class="octicon octicon-mark-github" height="20" version="1.1" viewBox="0 0 16 16" width="32"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
                         </a>
@@ -180,13 +181,16 @@
   <div id="bottomMessage"></div>
   
     <script src="./canvasjs.js"></script>
-    <!-- <script>
+    <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
-            $('#addressTool').click(function(){
-                $('[data-toggle="tooltip"]').tooltip('show');
+            // $('[data-toggle="tooltip"]').tooltip();   
+            $('#foundtionAddress').click(function(){
+                // $('[data-toggle="tooltip"]').tooltip('show');
+                // $('[data-toggle="popover"]').popover(); 
+                // $('[data-toggle="popover"]').popover('show');
             });
+            $('[data-toggle="popover"]').popover();  
         });
-    </script> -->
+    </script>
 </body>
 </html>

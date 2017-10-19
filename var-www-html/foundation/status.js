@@ -3,8 +3,19 @@ var $ = jQuery;
 var metaMaskExtension = {install:false};
 var canUserInteractWithContract = false;
 let web3;
-var basicTokenContract;
-// Ref: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#partly_sunny-web3---ethereum-browser-environment-check     
+var basicTokenContract;  
+var tokenContractUrl       = './build/contracts/HealthToken.json';
+var foundationContractUrl  = './build/contracts/FoundationContract.json';
+var votingContractUrl      = './build/contracts/SimpleVoting.json';
+
+let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
+// let foundation  = "0x297296245d04749F5be29c0988Bb0e08D85f2Dd6";    
+let votingContractAddress; // this value is retrieved from foundation
+
+function loadContract(url, callback){
+    $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
+}
+
 window.addEventListener('load', function() {
     console.log("inside window addevent listerner load");
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -57,6 +68,25 @@ window.addEventListener('load', function() {
             } else {
                 canUserInteractWithContract = true;
             }
+            
+            loadContract(tokenContractUrl, function(data){
+                var tokenContractObjData = data;
+                let tokenContractObj = web3.eth.contract(tokenContractObjData.abi);
+                let tokenContractInstance = tokenContractObj.at(foundation);
+                tokenContractInstance.balanceOf(
+                    metaMaskExtension.address,
+                    function(error, hltToken){
+                        let tokeBalance = web3.fromWei(hltToken.toString(10), 'ether');
+                        // console.log('My hltToken:', tokeBalance);
+                        let colorCode = '#ff8282';
+                        if(tokeBalance != 0){
+                            colorCode = '#7fda7f';
+                        }
+                        $('#showTokenBalance').text(tokeBalance);
+                        document.getElementById("showTokenBalance").style.color = colorCode;
+                    }
+                );
+            });
             // Now you can start your app & access web3 freely:
             startApp();
         });
@@ -102,17 +132,7 @@ window.addEventListener('load', function() {
 
 });    
 
-var tokenContractUrl       = './build/contracts/HealthToken.json';
-var foundationContractUrl  = './build/contracts/FoundationContract.json';
-var votingContractUrl      = './build/contracts/SimpleVoting.json';
 
-let foundation  = "0xfc7acfda96972316725512b6109441621ebd2d28";    
-// let foundation  = "0x297296245d04749f5be29c0988bb0e08d85f2dd6";    
-let votingContractAddress; // this value is retrieved from foundation
-
-function loadContract(url, callback){
-    $.ajax(url,{'dataType':'json', 'cache':'false', 'data':{'t':Date.now()}}).done(callback);
-}
 var setTimeObjOfBtnAlertMsg;
 function bottomAlerMessage(messageText, messageClass, time) {
     messageClass = messageClass || 'alert-danger-hlt';
@@ -239,9 +259,6 @@ function startApp(){
     let foundationContract;
     let votingContract;
     let ownableContract;
-    loadContract(tokenContractUrl, function(data){
-        tokenContract = data;
-    });
 
     loadContract(foundationContractUrl, function(data){
         foundationContract = data;
@@ -249,14 +266,25 @@ function startApp(){
 
         $('input[name=foundation]','#dashboardForm').val(foundation);
         document.getElementById("foundationAddressLink").href="https://rinkeby.etherscan.io/address/"+foundation;
-        var x = document.getElementById("gitGubSrcCodeFun");
+        var x = document.getElementById("gitHubSrcCodeFun");
         x.style.display = "";
         pContractInstance = contractObj.at(foundation);
         pContractInstance.owner(function(error, result) {
-            console.log('Foundation', result);
+            $("#foundtionAddressPopover").attr("data-content", 'Owner address: '+result);
+            
+            console.log('Foundation owner: '+result);
         });
         pContractInstance.token(function(error, result){
             if(!error){
+                loadContract(tokenContractUrl, function(data){
+                    tokenContract = data;
+                    let tokenContractObj = web3.eth.contract(tokenContract.abi);
+                    let tokenContractInstance = tokenContractObj.at(result);
+                    console.log(result);
+                    tokenContractInstance.owner(function(error, result) {
+                        console.log('Token owner', result);
+                    });
+                });
                 document.getElementById("tokenAddressLick").href="https://rinkeby.etherscan.io/address/"+result;
                 $('input[name=token]','#dashboardForm').val(result);
                 var pc = document.getElementById("pieChart");
@@ -313,7 +341,7 @@ function startApp(){
                     pContractInstance = contractObj.at(votingContractAddress);
                     
                     pContractInstance.owner(function(error, result) {
-                        console.log('Voting', result);
+                        console.log('Voting owner', result);
                     });
                     pContractInstance.minimumQuorum(function(error, result){
                         if(!error){
